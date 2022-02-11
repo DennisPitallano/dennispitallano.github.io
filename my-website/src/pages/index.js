@@ -17,8 +17,8 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className={styles.glowonhover +" button button--secondary button--lg"}
-            to="/docs/intro">
-            🅷🅸🆁🅴 🅼🅴 ⏱️
+            to="/oragon">
+             ᗰOᖇE ᗩᗷOᑌT 🅼🅴 ⏱️
           </Link>
         </div>
       </div>

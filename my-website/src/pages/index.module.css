@@ -22,8 +22,14 @@
   justify-content: center;
 }
 
+.imgborder:hover {
+  filter:none;
+}
+
 .imgborder{
   border-radius: 50%; border: 10px solid #ffffff;
+  filter: blur(5px);
+  webkit-filter: blur(5px);
 }
 
 .glowonhover {

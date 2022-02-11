@@ -5,6 +5,12 @@
  */
 
 /* You can override the default Infima variables here. */
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url('/static/fonts/JetBrainsMono-Regular.woff2') format('woff');
+}
+
 :root {
   --ifm-color-primary: #2e8555;
   --ifm-color-primary-dark: #29784c;
@@ -36,4 +42,8 @@ html[data-theme='dark'] {
 
 html[data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+.fontFace{
+  font-family: 'JetBrains Mono';
 }
