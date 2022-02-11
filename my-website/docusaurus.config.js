@@ -6,8 +6,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: '🅳🅴🅽🅽🅸🆂 🅿🅸🆃🅰🅻🅻🅰🅽🅾',
+  tagline: 'Just another 🅱🅸🅲🅾🅻🅰🅽🅾 Developer!',
   url: 'https://dennispitallano.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -15,7 +15,8 @@ const config = {
   favicon: 'img/favicon.ico',
   organizationName: 'dennispitallano', // Usually your GitHub org/user name.
   projectName: 'dennispitallano.github.io', // Usually your repo name.
-
+  trailingSlash: false,
+  deploymentBranch:'main',
   presets: [
     [
       'classic',
@@ -43,21 +44,21 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'My Site',
+        title: 'Oragon',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'oragon',
           src: 'img/logo.svg',
         },
         items: [
           {
             type: 'doc',
             docId: 'intro',
-            position: 'left',
+            position: 'right',
             label: 'Tutorial',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          {to: '/blog', label: 'Blog', position: 'right'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/DennisPitallano/dennispitallano.github.io',
             label: 'GitHub',
             position: 'right',
           },
