@@ -44,7 +44,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: '🅾🆁🅰🅶🅾🅽',
+        title: '<🅾🆁🅰🅶🅾🅽 />',
         logo: {
           alt: 'oragon',
           src: 'img/logo.svg',
