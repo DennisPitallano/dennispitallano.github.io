@@ -1,0 +1,110 @@
+---
+sidebar_position: 2
+
+---
+
+# 🎯Accounts API Endpoints
+
+:::success Requirements
+Endpoints with 🅿🆁🅾 are under the API Pro subscription. To upgrade your API plan, browse through the BscScan APIs page.
+:::
+
+```shell
+//imports
+using BscScan.NetCore.Contracts;
+using BscScan.NetCore.Models.Request.Accounts;
+
+//inject
+private readonly IBscScanContractsService _bscScanContractsService;
+```
+
+
+## 💰Get BNB Balance for a Single Address
+
+#### Returns the BNB balance of a given address.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```js
+//Sample Request 🍎
+var balance = await _bscScanAccountsService.GetBnbBalanceAsync(new BnbBalanceRequest
+                {
+                    Address = "0x70F657164e5b75689b64B7fd1fA275F334f28e18",
+                    Tag = Tag.Latest
+                });
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//This will return a new object BnbBalance with  values: 🍊
+var balance = new BnbBalance {
+     Staus="1",
+     Message="OK",
+     Result="154476596514118000947297331"
+};
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" href="https://docs.bscscan.com/api-endpoints/accounts#get-bnb-balance-for-a-single-address">Get BNB Balance for a Single Address</a>
+  </TabItem>
+</Tabs>
+
+
+## 💰Get BNB Balance for **Multiple Addresses in a Single Call**
+
+#### Returns the balance of the accounts from a list of addresses.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```js
+//Sample Request 🍎
+string[] addresses =
+    	{"0x70F657164e5b75689b64B7fd1fA275F334f28e18","0x3f349bBaFEc1551819B8be1EfEA2fC46cA749aA1" };
+
+var balances = await _bscScanAccountsService.GetMultipleBnbBalanceAsync(new MultipleBnbBalanceRequest
+              {
+                    Addresses = addresses
+              });
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//This will return a new object BnbMultipleBalances with  values: 🍊
+var balances = new BnbMultipleBalances
+                {
+                    Message = "OK",
+                    Status = "1",
+                    Result = new List<BnbMultipleBalanceData>
+                    {
+                        new()
+                        {
+                            Account = "0x3f349bBaFEc1551819B8be1EfEA2fC46cA749aA1",
+                            Balance = "37700000000000001"
+                        },
+                        new()
+                        {
+                            Account = "0x4bF01a5A576bE1254C5E19fbE5EB195D6cFBeBdD",
+                            Balance = "4999777740000000000"
+                        },
+                        new()
+                        {
+                            Account = "0x70F657164e5b75689b64B7fd1fA275F334f28e18",
+                            Balance = "57443177693229716"
+                        }
+                    }    
+                };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out <a target="_blank" href="https://docs.bscscan.com/api-endpoints/accounts#get-bnb-balance-for-multiple-addresses-in-a-single-call">
+   Get BNB Balance for Multiple Addresses in a Single Call</a>
+  </TabItem>
+</Tabs>

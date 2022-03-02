@@ -3,7 +3,7 @@ sidebar_position: 1
 
 ---
 
-# Get Started
+# 🐲Get Started
 
 :::info Requirements
 
@@ -26,15 +26,15 @@ You have a knowledge in `.NET Core/ASP.NET Core` , you can read [ASP.NET Core fu
 Download and Install the latest `BscScan.NetCore` from [NuGet](https://www.nuget.org/packages/BscScan.NetCore/) using Package Manager, CLI or by adding it to Package Reference:
 
 ```powershell
-PM> Install-Package BscScan.NetCore -Version 1.0.1
+PM> Install-Package BscScan.NetCore -Version 1.0.2
 ```
 
 ```shell
-> dotnet add package BscScan.NetCore --version 1.0.1
+> dotnet add package BscScan.NetCore --version 1.0.2
 ```
 
 ```svg
-<PackageReference Include="BscScan.NetCore" Version="1.0.1" />
+<PackageReference Include="BscScan.NetCore" Version="1.0.2" />
 ```
 
 Add **Markdown or React** files to `src/pages` to create a **standalone page**:
