@@ -7,8 +7,7 @@ sidebar_position: 1
 
 :::info Requirements
 
-You have a knowledge in `.NET Core/ASP.NET Core` , you can read [ASP.NET Core fundamentals | Microsoft Docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0&tabs=windows)
-
+You have a knowledge in `.NET Core/ASP.NET Core` , you can start here [ASP.NET Core fundamentals | Microsoft Docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0&tabs=windows).
 :::
 
 ## Add New **WebApp Project**
@@ -23,7 +22,7 @@ You have a knowledge in `.NET Core/ASP.NET Core` , you can read [ASP.NET Core fu
 
 ![New Web App](/img/tutorial/bscscan/new-web-project-2.png)
 
-Download and Install the latest `BscScan.NetCore` from [NuGet](https://www.nuget.org/packages/BscScan.NetCore/) using Package Manager, CLI or by adding it to Package Reference:
+Download and Install the latest `BscScan.NetCore` from [NuGet](https://www.nuget.org/packages/BscScan.NetCore/) using Package Manager, CLI or by adding it to the Package Reference:
 
 ```powershell
 PM> Install-Package BscScan.NetCore -Version 1.0.2
@@ -41,9 +40,7 @@ PM> Install-Package BscScan.NetCore -Version 1.0.2
 
 BscScan Api-Key Token is required to use the API.
 If you don't have one, you can create one at [bscscan.com](https://bscscan.com/register).
-
 Or you can follow the [tutorial](https://docs.bscscan.com/getting-started/creating-an-account)) to create an account.
-
 :::
 
 ### Configure BscScanOptions in `appsettings.json` file of the **WebApp Project**
@@ -52,7 +49,7 @@ Update the file `appsettings.Development.json` for development environment and `
 
 ```jsx
  "BscScanOptions": {
-    "Token": "ZXD3CX98EJ2C5MIDYFPQJB6SK******", // Api-Key Token from bscscan.com
+    "Token": "ZXD3CX98EJ2C5MIDYFPQJB6SK******", // Api-Key Token from bscscan.com 
     "Uri": "https://api.bscscan.com/api" // or https://api-testnet.bscscan.com/ for testnet
   }
 ```
@@ -77,6 +74,7 @@ builder.Services.AddSingleton(bscScanConfiguration);
 builder.Services.AddBscScan(bscScanConfiguration);
 
 ```
+
 Now you are ready to use the `BscScan.NetCore API`.
 <img src="/img/logo.svg" width="50"/>
 
