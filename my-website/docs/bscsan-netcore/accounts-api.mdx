@@ -457,7 +457,7 @@ var internalTransactions = new InternalTransactionsByAddress
                             To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
                             Value = "100000000000000",
                             ContractAddress = "",
-                            Cnput = "",
+                            Input = "",
                             Type = "call",
                             Gas = "12300",
                             GasUsed = "0",
@@ -474,7 +474,7 @@ var internalTransactions = new InternalTransactionsByAddress
                             To = "0x0000000000000000000000000000000000001005",
                             Value = "100000000000000",
                             ContractAddress = "",
-                            Cnput = "",
+                            Input = "",
                             Type = "call",
                             Gas = "12300",
                             GasUsed = "0",
@@ -491,7 +491,7 @@ var internalTransactions = new InternalTransactionsByAddress
                             To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
                             Value = "100000000000000",
                             ContractAddress = "",
-                            Cnput = "",
+                            Input = "",
                             Type = "call",
                             Gas = "12300",
                             GasUsed = "0",
@@ -508,7 +508,7 @@ var internalTransactions = new InternalTransactionsByAddress
                             To = "0x0000000000000000000000000000000000001005",
                             Value = "100000000000000",
                             ContractAddress = "",
-                            Cnput = "",
+                            Input = "",
                             Type = "call",
                             Gas = "2300",
                             GasUsed = "55",
@@ -525,7 +525,7 @@ var internalTransactions = new InternalTransactionsByAddress
                             To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
                             Value = "50000000000000000",
                             ContractAddress = "",
-                            Cnput = "",
+                            Input = "",
                             Type = "call",
                             Gas = "12300",
                             GasUsed = "0",
@@ -542,7 +542,7 @@ var internalTransactions = new InternalTransactionsByAddress
                             To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
                             Value = "1000000000000000",
                             ContractAddress = "",
-                            Cnput = "",
+                            Input = "",
                             Type = "call",
                             Gas = "12300",
                             GasUsed = "0",
@@ -559,7 +559,7 @@ var internalTransactions = new InternalTransactionsByAddress
                             To = "0x0000000000000000000000000000000000001005",
                             Value = "1000000000000000",
                             ContractAddress = "",
-                            Cnput = "",
+                            Input = "",
                             Type = "call",
                             Gas = "2300",
                             GasUsed = "55",
@@ -576,7 +576,7 @@ var internalTransactions = new InternalTransactionsByAddress
                             To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
                             Value = "1000000000000000",
                             ContractAddress = "",
-                            Cnput = "",
+                            Input = "",
                             Type = "call",
                             Gas = "12300",
                             GasUsed = "0",
@@ -593,7 +593,7 @@ var internalTransactions = new InternalTransactionsByAddress
                             To = "0x0000000000000000000000000000000000001005",
                             Value = "1000000000000000",
                             ContractAddress = "",
-                            Cnput = "",
+                            Input = "",
                             Type = "call",
                             Gas = "2300",
                             GasUsed = "55",
@@ -608,5 +608,629 @@ var internalTransactions = new InternalTransactionsByAddress
   <TabItem value="..." label="...">
    🍌 For more information Check out <a target="_blank" href="https://docs.bscscan.com/api-endpoints/accounts#get-a-list-of-internal-transactions-by-address">
    Get a list of 'Internal' Transactions by Address</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get 'Internal Transactions' by Transaction Hash
+#### Returns the list of internal transactions performed within a transaction.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+ var internalTransactions = await _bscScanAccountsService
+                .GetInternalTransactionsByTransactionHashAsync("0x4d74a6fc84d57f18b8e1dfa07ee517c4feb296d16a8353ee41adc03669982028");
+
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object InternalTransactionsByHash with  values: 🍊
+var internalTransactions = new InternalTransactionsByHash
+                {
+                  Status = "1",
+                  Message ="OK",
+                  Result = new List<InternalTransactionDataByHash>
+                    {
+                        new()
+                        {
+                            BlockNumber =  "958",
+                            TimeStamp =  "1598674477",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "12300",
+                            GasUsed = "0",
+                            IsError = "0",
+                            ErrCode = ""
+                        },
+                        new()
+                        {
+                            BlockNumber =  "958",
+                            TimeStamp =  "1598674477",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x0000000000000000000000000000000000001005",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "2300",
+                            GasUsed = "55",
+                            IsError = "0",
+                            ErrCode = ""
+                        }
+                    }  
+                };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out <a target="_blank" href="https://docs.bscscan.com/api-endpoints/accounts#get-internal-transactions-by-transaction-hash">
+   Get 'Internal Transactions' by Transaction Hash</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get "Internal Transactions" by Block Range
+#### Returns the list of internal transactions performed within a block range, with optional pagination.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+ var parameters = new InternalTransactionsByBlockRangeRequest
+            {
+                StartBlock = 0,
+                EndBlock = 2702578,
+                Page = 1,
+                OffSet = 10,
+                Sort = Sort.Asc
+            };
+
+            var internalTransactions = await _bscScanAccountsService
+                .GetInternalTransactionsByBlockRangeAsync(parameters);           
+
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object InternalTransactionsByBlockRange with  values: 🍊
+var internalTransactions = new InternalTransactionsByBlockRange
+                {
+                  Status = "1",
+                  Message ="OK",
+                  Result = new List<InternalTransactionDataByBlockRange>
+                    {
+                        new()
+                        {
+                            BlockNumber =  "958",
+                            TimeStamp =  "1598674477",
+                            Hash = "0x4d74a6fc84d57f18b8e1dfa07ee517c4feb296d16a8353ee41adc03669982028",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "12300",
+                            GasUsed = "0",
+                            TraceId = "0_1_1",
+                            IsError = "0",
+                            ErrCode = ""
+                        },
+                        new()
+                        {
+                            BlockNumber =  "958",
+                            TimeStamp =  "1598674477",
+                            Hash = "0x4d74a6fc84d57f18b8e1dfa07ee517c4feb296d16a8353ee41adc03669982028",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x0000000000000000000000000000000000001005",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "2300",
+                            GasUsed = "55",
+                            TraceId = "0_1_1",
+                            IsError = "0",
+                            ErrCode = ""
+                        },
+                        new()
+                        {
+                            BlockNumber =  "1084",
+                            TimeStamp =  "1598674855",
+                            Hash = "0x86657b250b6f129f6ba5d249f717c20b05f899a80ce440696a468c702be9a642",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "12300",
+                            GasUsed = "0",
+                            TraceId = "0_1_1",
+                            IsError = "0",
+                            ErrCode = ""
+                        },
+                        new()
+                        {
+                            BlockNumber =  "1084",
+                            TimeStamp =  "1598674855",
+                            Hash = "0x86657b250b6f129f6ba5d249f717c20b05f899a80ce440696a468c702be9a642",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x0000000000000000000000000000000000001005",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "2300",
+                            GasUsed = "55",
+                            TraceId = "0_1_1",
+                            IsError = "0",
+                            ErrCode = ""
+                        },
+                        new()
+                        {
+                            BlockNumber =  "3192",
+                            TimeStamp =  "1598681179",
+                            Hash = "0x79575ff791606ef2c7d69f430d1fee1c25ef8d56275da94e6ac49c9c4cc5f433",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "12300",
+                            GasUsed = "0",
+                            TraceId = "0_1_1",
+                            IsError = "0",
+                            ErrCode = ""
+                        },
+                        new()
+                        {
+                            BlockNumber =  "3192",
+                            TimeStamp =  "1598681179",
+                            Hash = "0x79575ff791606ef2c7d69f430d1fee1c25ef8d56275da94e6ac49c9c4cc5f433",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x0000000000000000000000000000000000001005",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "2300",
+                            GasUsed = "55",
+                            TraceId = "0_1_1",
+                            IsError = "0",
+                            ErrCode = ""
+                        },
+                        new()
+                        {
+                            BlockNumber =  "4777",
+                            TimeStamp =  "1598686111",
+                            Hash = "0xaa2a09992a60371307300538863f1efcd15d1e52830b866ca44cbd8d58e477b1",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "12300",
+                            GasUsed = "0",
+                            TraceId = "0_1_1",
+                            IsError = "0",
+                            ErrCode = ""
+                        },
+                        new()
+                        {
+                            BlockNumber =  "4777",
+                            TimeStamp =  "1598686111",
+                            Hash = "0xaa2a09992a60371307300538863f1efcd15d1e52830b866ca44cbd8d58e477b1",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x0000000000000000000000000000000000001005",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "2300",
+                            GasUsed = "55",
+                            TraceId = "0_1_1",
+                            IsError = "0",
+                            ErrCode = ""
+                        },
+                        new()
+                        {
+                            BlockNumber =  "5561",
+                            TimeStamp =  "1598688463",
+                            Hash = "0x329148b72b4bde1fb77fb3d27bca0e451f2879e5dfd7bb7027dbd9eb7bbf067b",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x4e656459ed25bf986eea1196bc1b00665401645d",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "12300",
+                            GasUsed = "0",
+                            TraceId = "0_1_1",
+                            IsError = "0",
+                            ErrCode = ""
+                        },
+                        new()
+                        {
+                            BlockNumber =  "5561",
+                            TimeStamp =  "1598688463",
+                            Hash = "0x329148b72b4bde1fb77fb3d27bca0e451f2879e5dfd7bb7027dbd9eb7bbf067b",
+                            From = "0x0000000000000000000000000000000000001004",
+                            To = "0x0000000000000000000000000000000000001005",
+                            Value = "100000000000000",
+                            ContractAddress = "",
+                            Input = "",
+                            Type = "call",
+                            Gas = "2300",
+                            GasUsed = "55",
+                            TraceId = "0_1_1",
+                            IsError = "0",
+                            ErrCode = ""
+                        }
+                    }  
+                };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out <a target="_blank" href="https://docs.bscscan.com/api-endpoints/accounts#get-internal-transactions-by-block-range">
+   Get "Internal Transactions" by Block Range</a>
+  </TabItem>
+</Tabs>
+
+
+### 💰Get a list of 'BEP-20 Token Transfer Events' by Address
+#### Returns the list of BEP-20 tokens transferred by an address, with optional filtering by token contract.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+var parameters = new Bep20TokenTransferEventsRequest
+            {
+                ContractAddress = "0xc9849e6fdb743d08faee3e34dd2d1bc69ea11a51",
+                Address = "0x7bb89460599dbf32ee3aa50798bbceae2a5f7f6a",
+                StartBlock = 0,
+                EndBlock = 999999999,
+                Page = 1,
+                OffSet = 5,
+                Sort = Sort.Asc
+            };
+
+            var bep20TokenTransferEvents = await _bscScanAccountsService
+                .GetBep20TokenTransferEventsByAddressAsync(parameters);
+
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object Bep20TokenTransferEvents with  values: 🍊
+var bep20TokenTransferEvents = new Bep20TokenTransferEvents
+                {
+                  Status = "1",
+                  Message ="OK",
+                  Result = new List<Bep20TokenTransferEventData>
+                    {
+                        new()
+                        {
+                            BlockNumber =  "2304192",
+                            TimeStamp =  "1605585978",
+                            Hash = "0x7a5abf86c82d3f97a40dd841a9f2089fbe3ac1332157c01bd1a1d89f575c45fc",
+                            Nonce = "57",
+                            BlockHash= "0x703438fd8ba435996895a6b9b711934cc590c3e9297a7066419aa88dd9d83acc",                            
+                            From = "0x641414e2a04c8f8ebbf49ed47cc87dccba42bf07",
+                            ContractAddress = "0xc9849e6fdb743d08faee3e34dd2d1bc69ea11a51",
+                            To = "0x7bb89460599dbf32ee3aa50798bbceae2a5f7f6a",
+                            Value = "27605634758857128698365",
+                            TokenName = "Bunny Token",
+                            TokenSymbol = "BUNNY",
+                            TokenDecimal = "18",
+                            TransactionIndex = "2",
+                            Gas = "5000000",
+                            GasPrice = "20000000000",
+                            GasUsed = "2312130",
+                            CumulativeGasUsed = "2475576",
+                            Input = "deprecated",
+                            Confirmations = "13579579"
+                        },
+                        new()
+                        {
+                            BlockNumber =  "2304275",
+                            TimeStamp =  "1605586227",
+                            Hash = "0x2712bc982d2486ed87e48965d87b8087695472dcd394a4e31fd182e3e8fb0193",
+                            Nonce = "830",
+                            BlockHash= "0x1715a97b8333aa91cd495dc19a495402683256f85faf13f4545b629844920faa",                            
+                            From = "0x7bb89460599dbf32ee3aa50798bbceae2a5f7f6a",
+                            ContractAddress = "0xc9849e6fdb743d08faee3e34dd2d1bc69ea11a51",
+                            To = "0xfb2b1ff4a80af6d4f2798e34426e7766626d8f88",
+                            Value = "500000000000000000",
+                            TokenName = "Bunny Token",
+                            TokenSymbol = "BUNNY",
+                            TokenDecimal = "18",
+                            TransactionIndex = "0",
+                            Gas = "208132",
+                            GasPrice = "20000000000",
+                            GasUsed = "163927",
+                            CumulativeGasUsed = "163927",
+                            Input = "deprecated",
+                            Confirmations = "13579496"
+                        },
+                        new()
+                        {
+                            BlockNumber =  "2304280",
+                            TimeStamp =  "1605586242",
+                            Hash = "0x9b4e67f42d2ba35b5804d9d1af8de1181dd132238cdae1976515f186da130471",
+                            Nonce = "1375",
+                            BlockHash= "0x05e8a2c625c9cd67cf08ab8ca051ea709f445f7faf459a4c4f629e93a6f2c978",                            
+                            From = "0x7bb89460599dbf32ee3aa50798bbceae2a5f7f6a",
+                            ContractAddress = "0xc9849e6fdb743d08faee3e34dd2d1bc69ea11a51",
+                            To = "0xf38a409da2823585b66d1164d2520b78d4fab049",
+                            Value = "1995783323472865824",
+                            TokenName = "Bunny Token",
+                            TokenSymbol = "BUNNY",
+                            TokenDecimal = "18",
+                            TransactionIndex = "1",
+                            Gas = "153052",
+                            GasPrice = "20000000000",
+                            GasUsed = "125930",
+                            CumulativeGasUsed = "323098",
+                            Input = "deprecated",
+                            Confirmations = "13579491"
+                        },
+                        new()
+                        {
+                            BlockNumber =  "2304293",
+                            TimeStamp =  "1605586281",
+                            Hash = "0x32fab5316875f73e6bcb10cc82a5cae703b79606b1d7dbdeebaa374b292f078a",
+                            Nonce = "216",
+                            BlockHash= "0x144fb6e795678fe6f2418b35ee0d186346f34a629dab8213ac0b9e72de5e7997",                            
+                            From = "0x7bb89460599dbf32ee3aa50798bbceae2a5f7f6a",
+                            ContractAddress = "0xc9849e6fdb743d08faee3e34dd2d1bc69ea11a51",
+                            To = "0xb1c0d822e2cd6d564d71b50aa02fdee9d198943e",
+                            Value = "1995494474791264035",
+                            TokenName = "Bunny Token",
+                            TokenSymbol = "BUNNY",
+                            TokenDecimal = "18",
+                            TransactionIndex = "1",
+                            Gas = "166655",
+                            GasPrice = "23000000000",
+                            GasUsed = "125930",
+                            CumulativeGasUsed = "173082",
+                            Input = "deprecated",
+                            Confirmations = "13579478"
+                        },
+                        new()
+                        {
+                            BlockNumber =  "2304303",
+                            TimeStamp =  "1605586311",
+                            Hash = "0xc9c999d7573fbcf70429b4c0d8ce01ef996a92f0c23bc07ac0adfb5cd9559bb0",
+                            Nonce = "66",
+                            BlockHash= "0x10b242b417becafd5d7dbdba3ed6377134870147de476c3ac4d9b33190b228c8",                            
+                            From = "0xe87f02606911223c2cf200398ffaf353f60801f7",
+                            ContractAddress = "0xc9849e6fdb743d08faee3e34dd2d1bc69ea11a51",
+                            To = "0x7bb89460599dbf32ee3aa50798bbceae2a5f7f6a",
+                            Value = "27596643935905551037808",
+                            TokenName = "Bunny Token",
+                            TokenSymbol = "BUNNY",
+                            TokenDecimal = "18",
+                            TransactionIndex = "3",
+                            Gas = "5000000",
+                            GasPrice = "20000000000",
+                            GasUsed = "200227",
+                            CumulativeGasUsed = "527144",
+                            Input = "deprecated",
+                            Confirmations = "13579468"
+                        }                        
+                    }  
+                };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out <a target="_blank" href="https://docs.bscscan.com/api-endpoints/accounts#get-a-list-of-bep-20-token-transfer-events-by-address">
+   Get a list of 'BEP-20 Token Transfer Events' by Address</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get a list of 'BEP-721 Token Transfer Events' by Address
+#### Returns the list of BEP-721 ( NFT ) tokens transferred by an address, with optional filtering by token contract.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+var parameters = new Bep721TokenTransferEventsRequest
+            {
+                ContractAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                Address = "0xcd4ee0a77e09afa8d5a6518f7cf8539bef684e6c",
+                StartBlock = 0,
+                EndBlock = 999999999,
+                Page = 1,
+                OffSet = 3,
+                Sort = Sort.Asc
+            };
+
+var bep721TokenTransferEvents = await _bscScanAccountsService
+            .GetBep721TokenTransferEventsByAddressAsync(parameters);
+
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object Bep721TokenTransferEvents with  values: 🍊
+var bep721TokenTransferEvents = new Bep721TokenTransferEvents
+                {
+                  Status = "1",
+                  Message ="OK",
+                  Result = new List<Bep721TokenTransferEventData>
+                    {
+                        new()
+                        {
+                            BlockNumber =  "2657100",
+                            TimeStamp =  "1606646313",
+                            Hash = "0x43485c443c235156777148dddcc1483a1c8f46cccf5ab185cfc4bd678f247b6b",
+                            Nonce = "6",
+                            BlockHash= "0x20b6e2e67e74badc19b225a0aa4febe2382569c99842e32bc9d5dc94631a349d",                            
+                            From = "0x0000000000000000000000000000000000000000",
+                            ContractAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                            To = "0xcd4ee0a77e09afa8d5a6518f7cf8539bef684e6c",
+                            TokenId = "384552",
+                            Value = "27605634758857128698365",
+                            TokenName = "Pancake Lottery Ticket",
+                            TokenSymbol = "PLT",
+                            TokenDecimal = "0",
+                            TransactionIndex = "2",
+                            Gas = "27000000",
+                            GasPrice = "20000000000",
+                            GasUsed = "22547256",
+                            CumulativeGasUsed = "22947060",
+                            Input = "deprecated",
+                            Confirmations = "13227172"
+                        },
+                        new()
+                        {
+                            BlockNumber =  "2657100",
+                            TimeStamp =  "1606646313",
+                            Hash = "0x43485c443c235156777148dddcc1483a1c8f46cccf5ab185cfc4bd678f247b6b",
+                            Nonce = "6",
+                            BlockHash= "0x20b6e2e67e74badc19b225a0aa4febe2382569c99842e32bc9d5dc94631a349d",                            
+                            From = "0x0000000000000000000000000000000000000000",
+                            ContractAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                            To = "0xcd4ee0a77e09afa8d5a6518f7cf8539bef684e6c",
+                            TokenId = "384553",
+                            Value = "27605634758857128698365",
+                            TokenName = "Pancake Lottery Ticket",
+                            TokenSymbol = "PLT",
+                            TokenDecimal = "0",
+                            TransactionIndex = "2",
+                            Gas = "27000000",
+                            GasPrice = "20000000000",
+                            GasUsed = "22547256",
+                            CumulativeGasUsed = "22947060",
+                            Input = "deprecated",
+                            Confirmations = "13227172"
+                        },
+                        new()
+                        {
+                           BlockNumber =  "2657100",
+                            TimeStamp =  "1606646313",
+                            Hash = "0x43485c443c235156777148dddcc1483a1c8f46cccf5ab185cfc4bd678f247b6b",
+                            Nonce = "6",
+                            BlockHash= "0x20b6e2e67e74badc19b225a0aa4febe2382569c99842e32bc9d5dc94631a349d",                            
+                            From = "0x0000000000000000000000000000000000000000",
+                            ContractAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                            To = "0xcd4ee0a77e09afa8d5a6518f7cf8539bef684e6c",
+                            TokenId = "384554",
+                            Value = "27605634758857128698365",
+                            TokenName = "Pancake Lottery Ticket",
+                            TokenSymbol = "PLT",
+                            TokenDecimal = "0",
+                            TransactionIndex = "2",
+                            Gas = "27000000",
+                            GasPrice = "20000000000",
+                            GasUsed = "22547256",
+                            CumulativeGasUsed = "22947060",
+                            Input = "deprecated",
+                            Confirmations = "13227172"
+                        }                                             
+                    }  
+                };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out <a target="_blank" href="https://docs.bscscan.com/api-endpoints/accounts#get-a-list-of-bep-721-token-transfer-events-by-address">
+   Get a list of 'BEP-721 Token Transfer Events' by Address</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get list of Blocks Validated by Address
+#### Returns the list of blocks validated by an address.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+var parameters = new BlocksValidatedRequest
+            {
+                Address = "0x78f3adfc719c99674c072166708589033e2d9afe",
+                Page = 1,
+                OffSet = 5,
+                BlockType = "blocks"
+            };
+
+var blocksValidatedByAddress = await _bscScanAccountsService
+                .GetBlocksValidatedByAddressAsync(parameters);
+
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object BlocksValidated with  values: 🍊
+var blocksValidatedByAddress = new BlocksValidated
+                {
+                  Status = "1",
+                  Message ="OK",
+                  Result = new List<BlocksValidatedData>
+                    {
+                        new()
+                        {
+                            BlockNumber =  "5428195",
+                            TimeStamp =  "1614988862",
+                            BlockReward = "106809335800031367"
+                        },
+                        new()
+                        {
+                            BlockNumber =  "5428174",
+                            TimeStamp =  "1614988799",
+                            BlockReward = "93803140610000000"
+                        },
+                        new()
+                        {
+                            BlockNumber =  "5428153",
+                            TimeStamp =  "1614988736",
+                            BlockReward = "41095458150219995"
+                        },
+                        new()
+                        {
+                            BlockNumber =  "5428132",
+                            TimeStamp =  "1614988673",
+                            BlockReward = "56214237200119969"
+                        } ,
+                        new()
+                        {
+                            BlockNumber =  "5428111",
+                            TimeStamp =  "1614988610",
+                            BlockReward = "59449100000000000"
+                        }                                             
+                    }  
+                };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out <a target="_blank" href="https://docs.bscscan.com/api-endpoints/accounts#get-list-of-blocks-validated-by-address">
+   Get list of Blocks Validated by Address</a>
   </TabItem>
 </Tabs>

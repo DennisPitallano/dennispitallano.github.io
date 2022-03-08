@@ -44,7 +44,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: '<🅾🆁🅰🅶🅾🅽 />',
+        title: '〈🅾🆁🅰🅶🅾🅽 ／〉',
         logo: {
           alt: 'oragon',
           src: 'img/logo.svg',
@@ -107,7 +107,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Oragon. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} 〈🅾🆁🅰🅶🅾🅽 ／〉⏎`,
       },
       prism: {
         theme: lightCodeTheme,
