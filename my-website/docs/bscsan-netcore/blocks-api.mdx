@@ -16,3 +16,327 @@ using BscScan.NetCore.Contracts;
 //inject
 private readonly IBscScanBlocksService _bscScanBlocksService;
 ```
+### 📦Get Block Rewards by BlockNo
+#### Returns the block reward awarded for validating a certain block.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+ var blockRewards =
+                await _bscScanBlocksService.GetBlockRewardsByBlockNoAsync("2170000");
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object BlockRewards with values: 🍊
+var blockRewards = new BlockRewards {
+     Staus="1",
+     Message="OK",
+     Result= new BlockRewardData{
+         BlockNumber = "2170000",
+         TimeStamp ="1605182836",
+         BlockMiner ="0x68bf0b8b6fb4e317a0f9d6f03eaf8ce6675bc60d",
+         BlockReward ="13657915000000000",
+         Uncles = null, // List<string> 
+         UncleInclusionReward = "0"
+     }
+};
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/blocks#get-block-rewards-by-blockno"> Get Block Rewards by BlockNo</a>
+  </TabItem>
+</Tabs>
+
+### 📦Get Estimated Block Countdown Time by BlockNo
+#### Returns the estimated time remaining, in seconds, until a certain block is validated.
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+ var estimatedBlockCountdownTime =
+                await _bscScanBlocksService.GetEstimatedBlockCountdownTimeByBlockNoAsync("119268990");
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object EstimatedBlockCountdownTime with values: 🍊
+var estimatedBlockCountdownTime = new EstimatedBlockCountdownTime {
+     Staus="1",
+     Message="OK",
+     Result= new EstimatedBlockCountdownTimeData{
+         CurrentBlock = "15911100",
+         CountdownBlock ="119268990",
+         RemainingBlock ="103357890",
+         EstimateTimeInSec ="10073685.0"
+     }
+};
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/blocks#get-estimated-block-countdown-time-by-blockno"> Get Estimated Block Countdown Time by BlockNo</a>
+  </TabItem>
+</Tabs>
+
+### 📦Get Block Number by Timestamp
+#### Returns the block number that was validated at a certain timestamp.
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+ var blockNumber =
+            await _bscScanBlocksService.GetBlockNumberByTimestampAsync(1601510400);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object BlockNumber with values: 🍊
+var blockNumber = new BlockNumber {
+     Staus="1",
+     Message="OK",
+     Result= "946206"
+};
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/blocks#get-block-number-by-timestamp"> Get Block Number by Timestamp</a>
+  </TabItem>
+</Tabs>
+
+### 📦Get Daily Average Block Size `🅿🆁🅾`
+#### Returns the daily average block size within a date range.
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+var parameters = new DailyAverageBlockSizeRequest
+            {
+                StartDate = new DateOnly(2021,8,1),
+                EndDate = new DateOnly(2021,8,31),
+                Sort = Sort.Asc
+            };
+var avgBlockSize =
+            await _bscScanBlocksService.GetDailyAverageBlockSizeAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object DailyAverageBlockSize with values: 🍊
+var avgBlockSize = new DailyAverageBlockSize {
+     Staus="1",
+     Message="OK",
+     Result= new List<DailyAverageBlockSizeData>
+        {
+            new()
+            {
+                UTCDate = "2021-08-01",
+                UnixTimeStamp = "1627776000",
+                BlockSizeBytes = 96364
+            },
+            new()
+            {
+                UTCDate = "2021-08-02",
+                UnixTimeStamp = "1627862400",
+                BlockSizeBytes = 94832
+            },
+            new()
+            {
+                UTCDate = "2021-08-31",
+                UnixTimeStamp = "1630368000",
+                BlockSizeBytes = 90159
+            }
+        }
+};
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/blocks#get-daily-average-block-size"> Get Daily Average Block Size `🅿🆁🅾`</a>
+  </TabItem>
+</Tabs>
+
+### 📦Get Daily Block Count and Rewards `🅿🆁🅾`
+#### Returns the number of blocks validated daily and the amount of block rewards.
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+var parameters = new DailyBlockCountAndRewardRequest
+            {
+                StartDate = new DateOnly(2021,8,1),
+                EndDate = new DateOnly(2021,8,31),
+                Sort = Sort.Asc
+            };
+var dailyBlockCountAndRewards =
+                await _bscScanBlocksService.GetDailyBlockCountsAndRewardsAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object DailyBlockCountAndRewards with values: 🍊
+var dailyBlockCountAndRewards = new DailyBlockCountAndRewards {
+     Staus="1",
+     Message="OK",
+     Result= new List<DailyBlockCountAndRewardsData>
+        {
+            new()
+            {
+                UTCDate = "2021-08-01",
+                UnixTimeStamp = "1627776000",
+                BlockCount = 27783,
+                BlockRewardsEth = "9216.309553593894910979"
+            },
+            new()
+            {
+                UTCDate = "2021-08-02",
+                UnixTimeStamp = "1627862400",
+                BlockCount = 27941,
+                BlockRewardsEth = "8474.944904178535758101"
+            },
+            new()
+            {
+                UTCDate = "2021-08-31",
+                UnixTimeStamp = "1630368000",
+                BlockCount = 28357,
+                BlockRewardsEth = "7213.736543000372715456"
+            }
+        }
+};
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/blocks#get-daily-block-count-and-rewards"> Get Daily Block Count and Rewards `🅿🆁🅾`</a>
+  </TabItem>
+</Tabs>
+
+### 📦Get Daily Block Rewards `🅿🆁🅾`
+#### Returns the amount of block rewards distributed to validators daily.
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+ var parameters = new DailyBlockRequest
+            {
+                StartDate = new DateOnly(2021,8,1),
+                EndDate = new DateOnly(2021,8,31),
+                Sort = Sort.Asc
+            };
+var dailyBlockRewards =
+                await _bscScanBlocksService.GetDailyBlockRewardsAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object DailyBlockRewards with values: 🍊
+var dailyBlockRewards = new DailyBlockRewards {
+     Staus="1",
+     Message="OK",
+     Result= new List<DailyBlockRewardsData>
+        {
+            new()
+            {
+                UTCDate = "2021-08-01",
+                UnixTimeStamp = "1627776000",
+                BlockRewardsEth = "9216.309553593894910979"
+            },
+            new()
+            {
+                UTCDate = "2021-08-02",
+                UnixTimeStamp = "1627862400",
+                BlockRewardsEth = "8474.944904178535758101"
+            },
+            new()
+            {
+                UTCDate = "2021-08-31",
+                UnixTimeStamp = "1630368000",
+                BlockRewardsEth = "7213.736543000372715456"
+            }
+        }
+};
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/blocks#get-daily-block-rewards"> Get Daily Block Rewards `🅿🆁🅾`</a>
+  </TabItem>
+</Tabs>
+
+### 📦Get Daily Average Time for A Block to be Included in the BNB Smart Chain `🅿🆁🅾`
+#### Returns the daily average of time needed for a block to be successfully validated.
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+var parameters = new DailyBlockRequest
+            {
+                StartDate = new DateOnly(2021,8,1),
+                EndDate = new DateOnly(2021,8,31),
+                Sort = Sort.Asc
+            };
+var dailyAvgBlockRewards =
+                await _bscScanBlocksService.GetDailyAverageTimeForABlockAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object DailyAverageTimeForBlock with values: 🍊
+var dailyAvgBlockRewards = new DailyAverageTimeForBlock {
+     Staus="1",
+     Message="OK",
+     Result= new List<DailyAverageTimeForBlockData>
+        {
+            new()
+            {
+                UTCDate = "2021-08-01",
+                UnixTimeStamp = "1627776000",
+                BlockTimeSec = "3.11"
+            },
+            new()
+            {
+                UTCDate = "2021-08-02",
+                UnixTimeStamp = "1627862400",
+                BlockTimeSec = "3.09"
+            },
+            new()
+            {
+                UTCDate = "2021-08-31",
+                UnixTimeStamp = "1630368000",
+                BlockTimeSec = "3.05"
+            }
+        }
+};
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/blocks#get-daily-average-time-for-a-block-to-be-included-in-the-bnb-smart-chain"> Get Daily Average Time for A Block to be Included in the BNB Smart Chain `🅿🆁🅾`</a>
+  </TabItem>
+</Tabs>
