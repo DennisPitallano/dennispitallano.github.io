@@ -16,3 +16,38 @@ using BscScan.NetCore.Contracts;
 //inject
 private readonly IBscScanTransactionService _bscScanTransactionService;
 ```
+### 💰Check Transaction Receipt Status
+#### Returns the status code of a transaction execution.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+
+ var transactionReceiptStatus =
+                await _bscScanTransactionService.CheckTransactionReceiptStatusAsync(
+                    "0xe9975702518c79caf81d5da65dea689dcac701fcdd063f848d4f03c85392fd00");
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object TransactionReceiptStatus with  values: 🍊
+var transactionReceiptStatus = new TransactionReceiptStatus {
+     Staus="1",
+     Message="OK",
+     Result= new TransactionReceiptStatusData{
+         Status = true,
+         NumericStatus ="1"
+     }
+};
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/stats#check-transaction-receipt-status"> Check Transaction Receipt Status</a>
+  </TabItem>
+</Tabs>
