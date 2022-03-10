@@ -16,5 +16,481 @@ using BscScan.NetCore.Contracts;
 //inject
 private readonly IBscScanTokensService _bscScanTokensService;
 ```
+### 💰Get BEP-20 Token TotalSupply by ContractAddress
+#### Returns the total supply of a BEP-20 token.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-.... inprogress
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+ var bep20TokenTotalSupply =
+                await _bscScanTokensService.GetBep20TokenTotalSupplyByContractAddressAsync("0xe9e7cea3dedca5984780bafc599bd69add087d56");
+
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object TokenTotalSupply with values: 🍊
+var bep20TokenTotalSupply = new TokenTotalSupply
+    {   
+        Status="1",
+        Message="Ok",
+        Result= "4850999388629409465655005527"
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/tokens#get-bep-20-token-totalsupply-by-contractaddress"> Get BEP-20 Token TotalSupply by ContractAddress</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get BEP-20 Token CirculatingSupply by ContractAddress
+#### Returns the current circulating supply of a BEP-20 token.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+ var bep20TokenCirculatingSupply =
+                await _bscScanTokensService
+                    .GetBep20TokenCirculatingSupplyByContractAddressAsync("0xe9e7cea3dedca5984780bafc599bd69add087d56");
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object TokenCirculatingSupply with values: 🍊
+var bep20TokenCirculatingSupply = new TokenCirculatingSupply
+    {   
+        Status="1",
+        Message="Ok",
+        Result= "4746460241010889509591673721"
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/tokens#get-bep-20-token-circulatingsupply-by-contractaddress"> Get BEP-20 Token CirculatingSupply by ContractAddress</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get BEP-20 Token Account Balance by ContractAddress
+#### Returns the current balance of a BEP-20 token of an address.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+ var bep20TokenAccountBalance =
+      await _bscScanTokensService
+            .GetBep20TokenAccountBalanceByContractAddressAsync(contractAddress:"0xe9e7cea3dedca5984780bafc599bd69add087d56",
+                                                                address:"0x89e73303049ee32919903c09e8de5629b84f59eb");
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object TokenAccountBalance with values: 🍊
+var bep20TokenAccountBalance = new TokenAccountBalance
+    {   
+        Status="1",
+        Message="Ok",
+        Result= "10999999999999961606"
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/tokens#get-bep-20-token-account-balance-by-contractaddress"> Get BEP-20 Token Account Balance by ContractAddress</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get Token Holder List by Contract Address`🅿🆁🅾`
+#### Return the current token holders and number of tokens held.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var parameters = new TokenHolderListRequest
+            {
+                ContractAddress = "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                Page = 1,
+                OffSet = 10
+            };
+var tokenHolderList = await _bscScanTokensService.GetTokenHolderListByContractAddressAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object TokenHolderList with values: 🍊
+var tokenHolderList = new TokenHolderList
+    {   
+        Status="1",
+        Message="Ok",
+        Result= new List<TokenHolderListItem>
+            {
+                new()
+                {
+                    TokenHolderAddress="0x0000000000000000000000000000000000000000",
+                    TokenHolderQuantity="0"
+                },
+                new()
+                {
+                    TokenHolderAddress="0x0000000000000000000000000000000000000001",
+                    TokenHolderQuantity="1136630046187908600061"
+                },
+                new()
+                {
+                    TokenHolderAddress="0x0000000000000000000000000000000000001004",
+                    TokenHolderQuantity="385642396146098637680574"
+                },
+                new()
+                {
+                    TokenHolderAddress="0x00000000100f9d75535cbf23f82e23db5558e8c1",
+                    TokenHolderQuantity="25536632618506"
+                }
+            }
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/tokens#get-token-holder-list-by-contract-address"> Get Token Holder List by Contract Address `🅿🆁🅾` </a>
+  </TabItem>
+</Tabs>
+
+### 💰Get Historical BEP-20 Token TotalSupply by ContractAddress & BlockNo`🅿🆁🅾`
+#### Returns the historical amount of a BEP-20 token in circulation at a certain block height.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+  var historicalBep20TokenTotalSupply =
+                await _bscScanTokensService
+                    .GetHistoricalBep20TokenTotalSupplyByContractAddressAndBlockNoAsync
+                                        (contractAddress:"0xc9849e6fdb743d08faee3e34dd2d1bc69ea11a51",
+                                         blockNo:4000000);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object HistoricalBep20TokenTotalSupply with values: 🍊
+var historicalBep20TokenTotalSupply = new HistoricalBep20TokenTotalSupply
+    {   
+        Status="1",
+        Message="Ok",
+        Result= "21265524714464"
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/tokens#get-historical-bep-20-token-totalsupply-by-contractaddress-and-blockno"> Get Historical BEP-20 Token TotalSupply by ContractAddress & BlockNo `🅿🆁🅾` </a>
+  </TabItem>
+</Tabs>
+
+### 💰Get Historical BEP-20 Token Account Balance by ContractAddress & BlockNo`🅿🆁🅾`
+#### Returns the balance of a BEP-20 token of an address at a certain block height.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var parameters = new HistoricalBep20TokenAccountBalanceRequest
+            {
+                ContractAddress = "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                Address ="0x7bb89460599dbf32ee3aa50798bbceae2a5f7f6a",
+                BlockNo = 4000000
+            };
+var historicalBep20AccountBalance =
+                await _bscScanTokensService
+                    .GetHistoricalBep20TokenAccountBalanceByContractAddressAndBlockNoAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object HistoricalBep20TokenAccountBalance with values: 🍊
+var historicalBep20AccountBalance = new HistoricalBep20TokenAccountBalance
+    {   
+        Status="1",
+        Message="Ok",
+        Result= "135499"
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/tokens#get-historical-bep-20-token-account-balance-by-contractaddress-and-blockno"> Get Historical BEP-20 Token Account Balance by ContractAddress & BlockNo`🅿🆁🅾` </a>
+  </TabItem>
+</Tabs>
+
+### 💰Get Token Info by ContractAddress`🅿🆁🅾`
+#### Returns project information and social media links of a BEP-20/BEP-721 token.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var tokenInfo = await _bscScanTokensService
+                 .GetTokenInfoByContractAddressAsync("0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82");
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object TokenInfo with values: 🍊
+var tokenInfo = new TokenInfo
+            {
+                Status = "1",
+                Message = "Ok",
+                Result = new List<TokenInfoData>
+                {
+                    new()
+                    {
+                        ContractAddress = "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                        TokenName = "PancakeSwap Token",
+                        Symbol = "Cake",
+                        Divisor = "18",
+                        TokenType = "ERC20",
+                        TotalSupply = "431889535.843059000000000000",
+                        BlueCheckmark = "true",
+                        Description = "PancakeSwap is a yield farming project whereby users can get FLIP (LP token) for staking and get CAKE token as reward. CAKE holders can swap CAKE for SYRUP for additional incentivized staking.",
+                        Website = "https://pancakeswap.finance/",
+                        Email = "PancakeSwap@gmail.com",
+                        Blog = "https://medium.com/@pancakeswap",
+                        Reddit = "",
+                        Slack = "",
+                        Facebook = "",
+                        Twitter = "https://twitter.com/pancakeswap",
+                        BitcoinTalk = "",
+                        Github = "https://github.com/pancakeswap",
+                        Telegram = "https://t.me/PancakeSwap",
+                        WeChat = "",
+                        LinkedIn = "",
+                        Discord = "",
+                        WhitePaper = "",
+                       TokenPriceUsd = "23.9300000000"
+                    }
+                }
+            };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/tokens#get-token-info-by-contractaddress"> Get Token Info by ContractAddress `🅿🆁🅾` </a>
+  </TabItem>
+</Tabs>
+
+### 💰Get Address BEP20 Token Holding`🅿🆁🅾`
+#### Returns the BEP-20 tokens and amount held by an address.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var parameters = new AddressBep20TokenHoldingRequest
+            {
+                Address ="0x99817ce62abf5b17f58e71071e590cf958e5a1bf",
+                Page = 1,
+                OffSet = 100
+            };
+var tokenHolding = await _bscScanTokensService.GetAddressBep20TokenHoldingAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object AddressBep20TokenHolding with values: 🍊
+var tokenHolding = new AddressBep20TokenHolding
+            {
+                Status = "1",
+                Message = "OK",
+                Result = new List<AddressBep20TokenHoldingData>
+                {
+                    new()
+                    {
+                        TokenAddress = "0xfcb5DF42e06A39E233dc707bb3a80311eFD11576",
+                        TokenName = "www.METH.co.in",
+                        TokenSymbol = "METH",
+                        TokenQuantity = "1337000",
+                        TokenDivisor = "18"
+                    },
+                    new()
+                    {
+                        TokenAddress = "0x78e1936f065fd4082387622878c7d11c9f05ecf4",
+                        TokenName = "JNTR/b",
+                        TokenSymbol = "JNTR/b",
+                        TokenQuantity = "163000000000000000000",
+                        TokenDivisor = "18"
+                    },
+                    new()
+                    {
+                        TokenAddress = "0xdf1f0026374d4bcc490be5e316963cf6df2fff19",
+                        TokenName = "InnovativeBioresearchCoin",
+                        TokenSymbol = "INNBC",
+                        TokenQuantity = "2000000000",
+                        TokenDivisor = "6"
+                    },
+                    new()
+                    {
+                        TokenAddress = "0x12e34cdf6a031a10fe241864c32fb03a4fdad739",
+                        TokenName = "FREE coin BSC",
+                        TokenSymbol = "FREE",
+                        TokenQuantity = "21144000000000000000000",
+                        TokenDivisor = "18"
+                    },
+                    new()
+                    {
+                        TokenAddress = "0xef5ceb00ae3eb617773016b4ca886b61fa4e027e",
+                        TokenName = "BURNING",
+                        TokenSymbol = "BURN",
+                        TokenQuantity = "50000000000000000",
+                        TokenDivisor = "18"
+                    }
+                }
+            };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/tokens#get-address-bep20-token-holding"> Get Address BEP20 Token Holding`🅿🆁🅾` </a>
+  </TabItem>
+</Tabs>
+
+### 💰Get Address BEP721 Token Holding`🅿🆁🅾`
+#### Returns the BEP-721 tokens and amount held by an address. 
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+ var parameters = new AddressBep721TokenHoldingRequest
+            {
+                Address ="0x99817ce62abf5b17f58e71071e590cf958e5a1bf",
+                Page = 1,
+                OffSet = 100
+            };
+var tokenHolding =await _bscScanTokensService.GetAddressBep721TokenHoldingAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object AddressBep721TokenHolding with values: 🍊
+var tokenHolding = new AddressBep721TokenHolding
+            {
+                Status = "1",
+                Message = "OK",
+                Result = new List<AddressBep721TokenHoldingData>
+                {
+                    new()
+                    {
+                        TokenAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                        TokenName = "Pancake Lottery Ticket",
+                        TokenSymbol = "PLT",
+                        TokenQuantity = "18",
+                    },
+                    new()
+                    {
+                        TokenAddress = "0xdf7952b35f24acf7fc0487d01c8d5690a60dba07",
+                        TokenName = "Pancake Bunnies",
+                        TokenSymbol = "PB",
+                        TokenQuantity = "1",
+                    }
+                }
+            };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/tokens#get-address-bep721-token-holding"> Get Address BEP721 Token Holding`🅿🆁🅾` </a>
+  </TabItem>
+</Tabs>
+
+### 💰Get Address BEP721 Token Inventory By Contract Address`🅿🆁🅾`
+#### Returns the BEP-721 token inventory of an address, filtered by contract address.  
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+ var parameters = new AddressBep721TokenInventoryRequest
+            {
+                Address ="0x99817ce62abf5b17f58e71071e590cf958e5a1bf",
+                ContractAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                Page = 1,
+                OffSet = 100
+            };
+var tokenInventory =
+                await _bscScanTokensService
+                    .GetAddressBep721TokenInventoryByContractAddressAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object AddressBep721TokenInventory with values: 🍊
+var tokenInventory = new AddressBep721TokenInventory
+            {
+                Status = "1",
+                Message = "OK",
+                Result = new List<AddressBep721TokenInventoryData>
+                {
+                    new()
+                    {
+                        TokenAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                        TokenId = "5077"
+                    },
+                    new()
+                    {
+                        TokenAddress = "0xdf7952b35f24acf7fc0487d01c8d5690a60dba07",
+                        TokenId = "7543"
+                    },
+                    new()
+                    {
+                        TokenAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                        TokenId = "7544"
+                    },
+                    new()
+                    {
+                        TokenAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                        TokenId = "7545"
+                    },
+                    new()
+                    {
+                        TokenAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                        TokenId = "121878"
+                    },
+                    new()
+                    {
+                        TokenAddress = "0x5e74094cd416f55179dbd0e45b1a8ed030e396a1",
+                        TokenId = "121879"
+                    }
+                }
+            };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/tokens#get-address-bep721-token-inventory-by-contract-address"> Get Address BEP721 Token Inventory By Contract Address`🅿🆁🅾` </a>
+  </TabItem>
+</Tabs>
