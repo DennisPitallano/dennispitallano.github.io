@@ -334,3 +334,284 @@ var sendRawTransaction = new SendRawTransaction
    <a target="_blank" href="https://docs.bscscan.com/api-endpoints/geth-parity-proxy#eth_sendrawtransaction"> eth_sendRawTransaction</a>
   </TabItem>
 </Tabs>
+
+### 🔶eth_getTransactionReceipt
+#### Returns the receipt of a transaction that has been validated.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var transactionReceipt =
+      await _bscScanGethProxyService
+           .EthGetTransactionReceiptAsync("0x2122b2317d6cf409846f80e829c1e45ecb30306907ba0a00a02730c78890739f");
+
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object TransactionReceipt with values: 🍊
+var transactionReceipt = new TransactionReceipt
+            {
+                Result = new TransactionReceiptData
+                {
+                    BlockHash = "0x552853a401a7faa54ff6f26059a1eee86323bd2140ccfaa16209679277264ddb",
+                    BlockNumber = "0xa11605",
+                    ContractAddress = null,
+                    CumulativeGasUsed = "0x264dd36",
+                    From = "0x8c0191f0e4ed98f1f72c96d06a4a207495c5e4a5",
+                    GasUsed = "0x1b348",
+                    Logs = new List<TransactionReceiptLog>
+                    {
+                        new()
+                        {
+                            Address = "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                            Topics = new List<string>
+                            {
+                                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                                "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                "0x0000000000000000000000008488cb2f54ecb9aa1cdc1bc83bc1d200bb2f216b"
+                            },
+                            Data = "0x00000000000000000000000000000000000000000000000006c637d7bfdd83fd",
+                            BlockNumber ="0xa11605",
+                            TransactionHash = "0x2122b2317d6cf409846f80e829c1e45ecb30306907ba0a00a02730c78890739f",
+                            TransactionIndex = "0xe7",
+                            BlockHash = "0x552853a401a7faa54ff6f26059a1eee86323bd2140ccfaa16209679277264ddb",
+                            LogIndex = "0x340",
+                            Removed = false
+                        },
+                        new()
+                        {
+                            Address = "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                            Topics = new List<string>
+                            {
+                                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                                "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                "0x000000000000000000000000009cf7bc57584b7998236eff51b98a168dcea9b0"
+                            },
+                            Data = "0x00000000000000000000000000000000000000000000000043be2e6d7ea727ea",
+                            BlockNumber ="0xa11605",
+                            TransactionHash = "0x2122b2317d6cf409846f80e829c1e45ecb30306907ba0a00a02730c78890739f",
+                            TransactionIndex = "0xe7",
+                            BlockHash = "0x552853a401a7faa54ff6f26059a1eee86323bd2140ccfaa16209679277264ddb",
+                            LogIndex = "0x341",
+                            Removed = false
+                        },
+                        new()
+                        {
+                            Address = "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                            Topics = new List<string>
+                            {
+                                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                                "0x0000000000000000000000000000000000000000000000000000000000000000",
+                                "0x0000000000000000000000008c0191f0e4ed98f1f72c96d06a4a207495c5e4a5"
+                            },
+                            Data = "0x000000000000000000000000000000000000000000000000009913aad1eb6e16",
+                            BlockNumber ="0xa11605",
+                            TransactionHash = "0x2122b2317d6cf409846f80e829c1e45ecb30306907ba0a00a02730c78890739f",
+                            TransactionIndex = "0xe7",
+                            BlockHash = "0x552853a401a7faa54ff6f26059a1eee86323bd2140ccfaa16209679277264ddb",
+                            LogIndex = "0x342",
+                            Removed = false
+                        },
+                        new()
+                        {
+                            Address = "0x73feaa1ee314f8c655e354234017be2193c9e24e",
+                            Topics = new List<string>
+                            {
+                                "0x90890809c654f11d6e72a28fa60149770a0d11ec6c92319d6ceb2bb0a4ea1a15",
+                                "0x0000000000000000000000008c0191f0e4ed98f1f72c96d06a4a207495c5e4a5",
+                                "0x00000000000000000000000000000000000000000000000000000000000001a7"
+                            },
+                            Data = "0x0000000000000000000000000000000000000000000000000000000000000000",
+                            BlockNumber ="0xa11605",
+                            TransactionHash = "0x2122b2317d6cf409846f80e829c1e45ecb30306907ba0a00a02730c78890739f",
+                            TransactionIndex = "0xe7",
+                            BlockHash = "0x552853a401a7faa54ff6f26059a1eee86323bd2140ccfaa16209679277264ddb",
+                            LogIndex = "0x343",
+                            Removed = false
+                        }
+                    },
+                    LogsBloom = "0x00000000100000000000000000000000000000000400000000004000000000000000000000000000000000000008000008000000000002000000000000000000008000000000000000000008000000000000000010000002000000000010000000000000020000000000000000002800000000000000020000000410000000000000000000000000000000000000000000000000000080002000000000000000000000000040000000000000000000000000000000000000000000000000000000000002000200000000000000000000000000000000000000000000000024000000000000000000000000000000000000000008400000000000000000000000",
+                    Status = "0x1",
+                    To = "0x73feaa1ee314f8c655e354234017be2193c9e24e",
+                    TransactionHash = "0x2122b2317d6cf409846f80e829c1e45ecb30306907ba0a00a02730c78890739f",
+                    TransactionIndex = "0xe7",
+                    Type = "0x0"
+                }
+            };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/geth-parity-proxy#eth_gettransactionreceipt"> eth_getTransactionReceipt</a>
+  </TabItem>
+</Tabs>
+
+### 🔶eth_call
+#### Executes a new message call immediately without creating a transaction on the block chain.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var call = await _bscScanGethProxyService
+              .EthCallAsync(to:"0xAEEF46DB4855E25702F8237E8f403FddcaF931C0",
+                            data:"0x70a08231000000000000000000000000e16359506c028e51f16be38986ec5746251e9724");
+
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object EthCall with values: 🍊
+var call = new EthCall
+    {   
+        JsonRpc="2.0",
+        Id=1,
+        Result= "0x00000000000000000000000000000000000000000000000000601d8888141c00"
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/geth-parity-proxy#eth_call"> eth_call</a>
+  </TabItem>
+</Tabs>
+
+### 🔶eth_getCode
+#### Returns code at a given address.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+  var code = await _bscScanGethProxyService
+              .EthGetCodeAsync(address:"0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82");
+
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object EthCode with values: 🍊
+var code = new EthCode
+    {   
+        JsonRpc="2.0",
+        Id=1,
+        Result= "x608060405234801561001057600080fd5b50600436106101b95760003560e01c8063782d6fe1116100f9578063a9059cbb11610097578063dd62ed3e11610071578063dd62ed3e1461056c578063e7a324dc1461059a578063f1127ed8146105a2578063f2fde38b146105f4576101b9565b8063a9059cbb14610......."
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/geth-parity-proxy#eth_getcode"> eth_getCode</a>
+  </TabItem>
+</Tabs>
+
+### 🔶eth_getStorageAt
+#### Returns the value from a storage position at a given address.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var storageAt = await _bscScanGethProxyService
+                .EthGetStorageAtAsync(address:"0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                                      position:"0x0");
+
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object EthStorageAt with values: 🍊
+var storageAt = new EthStorageAt
+    {   
+        JsonRpc="2.0",
+        Id=1,
+        Result= "0x00000000000000000000000073feaa1ee314f8c655e354234017be2193c9e24e"
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/geth-parity-proxy#eth_getstorageat"> eth_getStorageAt</a>
+  </TabItem>
+</Tabs>
+
+### 🔶eth_gasPrice
+#### Returns the current price per gas in wei.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var gasPrice = await _bscScanGethProxyService
+                    .EthGasPriceAsync();
+
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object EthGasPrice with values: 🍊
+var gasPrice = new EthGasPrice
+    {   
+        JsonRpc="2.0",
+        Id=1,
+        Result= "0x12a05f200"
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/geth-parity-proxy#eth_gasprice"> eth_gasPrice</a>
+  </TabItem>
+</Tabs>
+
+### 🔶eth_estimateGas
+#### Makes a call or transaction, which won't be added to the blockchain and returns the gas used.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var parameters = new EthEstimateGasRequest
+            {
+                Data = "0x4e71d92d",
+                To = "0xEeee7341f206302f2216e39D715B96D8C6901A1C",
+                Value = "0xff22",
+                GasPrice = "0x51da038cc",
+                Gas = "0x5f5e0ff"
+            };
+
+var estimateGas = await _bscScanGethProxyService
+                    .EthEstimateGasAsync(parameters);
+
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object EthEstimateGas with values: 🍊
+var estimateGas = new EthEstimateGas
+    {   
+        JsonRpc="2.0",
+        Id=1,
+        Result= "0x5248"
+    };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/geth-parity-proxy#eth_estimategas"> eth_estimateGas</a>
+  </TabItem>
+</Tabs>
