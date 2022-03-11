@@ -16,5 +16,212 @@ using BscScan.NetCore.Contracts;
 //inject
 private readonly IBscScanGasTrackerService _bscScanGasTrackerService;
 ```
+### ⛽️Get Gas Oracle
+#### Returns the current Safe, Proposed and Fast gas prices.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-.... inprogress
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+  var gasOracle = await _bscScanGasTrackerService.GetGasOracleAsync();
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object GasOracle with values: 🍊
+var gasOracle = new GasOracle
+            {
+                Status = "1",
+                Message = "OK",
+                Result = new GasOracleData
+                {
+                    LastBlock = "15939320",
+                    SafeGasPrice = "5",
+                    ProposeGasPrice = "5.5",
+                    FastGasPrice = "27.5",
+                    UsdPrice = "371.25"
+                }
+            };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/gas-tracker#get-gas-oracle"> Get Gas Oracle</a>
+  </TabItem>
+</Tabs>
+
+### ⛽️Get Daily Average Gas Limit`🅿🆁🅾`
+#### Returns the historical daily average gas limit of the BNB Smart Chain network.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+ var parameters = new DailyAverageGasLimitRequest
+            {
+                StartDate = new DateOnly(2021,8,1),
+                EndDate = new DateOnly(2021,8,28),
+                Sort = Sort.Asc
+            };
+var dailyAverageGasLimit = await _bscScanGasTrackerService.GetDailyAverageGasLimitAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object DailyAverageGasLimit with values: 🍊
+var dailyAverageGasLimit= new DailyAverageGasLimit
+            {
+                Status = "1",
+                Message = "OK",
+                Result =new List<DailyAverageGasLimitData>
+                {
+                    new()
+                    {
+                        UtcDate = "2021-08-01",
+                        UnixTimeStamp = "1627776000",
+                        GasLimit = "77995057"
+                    },
+                    new()
+                    {
+                        UtcDate = "2021-08-02",
+                        UnixTimeStamp = "1627862400",
+                        GasLimit = "77477220"
+                    },
+                    new()
+                    {
+                        UtcDate = "2021-08-03",
+                        UnixTimeStamp = "1627948800",
+                        GasLimit = "77163193"
+                    }
+                }
+            };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/gas-tracker#get-daily-average-gas-limit"> Get Daily Average Gas Limit`🅿🆁🅾`</a>
+  </TabItem>
+</Tabs>
+
+### ⛽️Get BNB Smart Chain Daily Total Gas Used`🅿🆁🅾`
+#### Returns the total amount of gas used daily for transctions on the BNB Smart Chain network.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var parameters = new BnbSmartChainDailyTotalGasUsedRequest
+            {
+                StartDate = new DateOnly(2021,8,1),
+                EndDate = new DateOnly(2021,8,28),
+                Sort = Sort.Asc
+            };
+var bnbSmartChainDailyTotalGasUsed = await _bscScanGasTrackerService
+                    .GetBnbSmartChainDailyTotalGasUsedAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object BnbSmartChainDailyTotalGasUsed with values: 🍊
+var bnbSmartChainDailyTotalGasUsed= new BnbSmartChainDailyTotalGasUsed
+            {
+                Status = "1",
+                Message = "OK",
+                Result =new List<BnbSmartChainDailyTotalGasUsedData>
+                {
+                    new()
+                    {
+                        UtcDate = "2021-02-01",
+                        UnixTimeStamp = "1612137600",
+                        GasUsed = "70672744503"
+                    },
+                    new()
+                    {
+                        UtcDate = "2021-02-02",
+                        UnixTimeStamp = "1612224000",
+                        GasUsed = "73905877156"
+                    },
+                    new()
+                    {
+                        UtcDate = "2021-02-03",
+                        UnixTimeStamp = "1612310400",
+                        GasUsed = "75696419315"
+                    }
+                }
+            };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/gas-tracker#get-bnb-smart-chain-daily-total-gas-used"> Get BNB Smart Chain Daily Total Gas Used`🅿🆁🅾`</a>
+  </TabItem>
+</Tabs>
+
+### ⛽️Get Daily Average Gas Price`🅿🆁🅾`
+#### Returns the daily average gas price used on the BNB Smart Chain network.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+ var parameters = new DailyAverageGasPriceRequest
+            {
+                StartDate = new DateOnly(2021,8,1),
+                EndDate = new DateOnly(2021,8,28),
+                Sort = Sort.Asc
+            };
+var dailyAverageGasPrice = await _bscScanGasTrackerService.GetDailyAverageGasPriceAsync(parameters);
+```
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```js
+//will return a new object DailyAverageGasPrice with values: 🍊
+var dailyAverageGasPricea= new DailyAverageGasPrice
+            {
+                Status = "1",
+                Message = "OK",
+                Result =new List<DailyAverageGasPriceData>
+                {
+                    new()
+                    {
+                        UtcDate = "2021-02-01",
+                        UnixTimeStamp = "1612137600",
+                        MaxGasPriceWei = "4557272900001",
+                        MinGasPriceWei = "20000000000",
+                        AvgGasPriceWei = "26264086210"
+                    },
+                    new()
+                    {
+                        UtcDate = "2021-02-02",
+                        UnixTimeStamp = "1612224000",
+                        MaxGasPriceWei = "5449370028101",
+                        MinGasPriceWei = "20000000000",
+                        AvgGasPriceWei = "26877628667"
+                    },
+                    new()
+                    {
+                        UtcDate = "2021-02-03",
+                        UnixTimeStamp = "1612310400",
+                        MaxGasPriceWei = "5440938161363",
+                        MinGasPriceWei = "20000000000",
+                        AvgGasPriceWei = "24451656852"
+                    }
+                }
+            };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  
+   <a target="_blank" href="https://docs.bscscan.com/api-endpoints/gas-tracker#get-daily-average-gas-price"> Get Daily Average Gas Price`🅿🆁🅾`</a>
+  </TabItem>
+</Tabs>
