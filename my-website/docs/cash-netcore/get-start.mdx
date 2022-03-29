@@ -1,0 +1,72 @@
+---
+sidebar_position: 1
+id: cashgetstarted
+title: 🐲Get Started
+---
+
+:::info Requirements
+
+You have a knowledge in `.NET Core/ASP.NET Core` , you can start here [ASP.NET Core fundamentals | Microsoft Docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-6.0&tabs=windows).
+:::
+
+## Add New **WebApp Project**
+
+![New Web App](/img/tutorial/bscscan/new-web-project.png)
+
+## Configure the **WebApp Project**
+
+![New Web App](/img/tutorial/bscscan/new-web-project-1.png)
+
+## Add the Nuget package to the **WebApp Project**
+
+![New Web App](/img/tutorial/cash/install-cash.png)
+
+Download and Install the latest `Cash.NetCore` from [NuGet](https://www.nuget.org/packages/Cash.NetCore/) using Package Manager, CLI or by adding it to the Package Reference:
+
+```powershell
+PM> Install-Package Cash.NetCore -Version 1.0.0
+```
+
+```shell
+> dotnet add package Cash.NetCore --version 1.0.0
+```
+
+```svg
+<PackageReference Include="Cash.NetCore" Version="1.0.0" />
+```
+
+:::caution Requirements
+
+For more details, visit [BCH API](https://fullstack.cash/login).
+:::
+
+### Configure CashOptions in `appsettings.json` file of the **WebApp Project**
+
+Update the file `appsettings.Development.json` for development environment and `appsettings.json` for production environment:
+
+```jsx
+ "CashOptions": {
+    "Token": "",  //(Optional, can be blank)  Api-Key Token from BCH API
+    "Uri": "https://api.fullstack.cash/" // BCH API URI Testnet or Mainnet
+  }
+```
+
+### Add the Configuration to the **WebApp Project** `Program.cs`
+
+Update `Program.cs file`:
+
+```jsx
+//imports
+using Cash.NetCore;
+
+
+var builder = WebApplication.CreateBuilder(args);
+
+//read the configuration from appsettings.json and add it to the builder
+builder.Services.AddCashServices(builder.Configuration);
+
+```
+
+Now you are ready to use the `Cash.NetCore API`.
+<img src="/img/logo.svg" width="50"/>
+

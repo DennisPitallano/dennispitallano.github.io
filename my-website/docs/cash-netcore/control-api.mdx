@@ -1,0 +1,85 @@
+---
+sidebar_position: 3
+id: control-api
+title: 🎯Control API
+---
+
+:::success Notes
+For more details visit [BCH APIs](https://api.fullstack.cash/docs/#api-Control) page.
+:::
+
+```jsx
+//imports
+using Cash.NetCore.Contracts;
+using Cash.NetCore.Models.Response.Control;
+
+//inject
+private readonly IControlService _controlService;
+```
+
+### 💰Get Network Info
+#### RPC call which gets basic full node information.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var networkInfo = await _controlService!.GetNetworkInfoAsync();
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```jsx
+//will return a current blockCount: 🍊
+var networkInfo = new NetworkInfo
+        {
+            Version = 23000000,
+            Subversion = "/Bitcoin Cash Node:23.0.0(EB32.0)/",
+            ProtocolVersion = 70015,
+            LocalServices = "0000000000000425",
+            LocalRelay = true,
+            TimeOffSet = 0,
+            NetworkActive = true,
+            Connections = 84,
+            Networks = new List<Network>
+            {
+                new()
+                {
+                    Name = "ipv4",
+                    Limited = false,
+                    Reachable = true,
+                    Proxy = "",
+                    ProxyRandomizeCredentials = false
+                },
+                new()
+                {
+                    Name = "ipv6",
+                    Limited = false,
+                    Reachable = true,
+                    Proxy = "",
+                    ProxyRandomizeCredentials = false
+                },
+                new()
+                {
+                    Name = "onion",
+                    Limited = true,
+                    Reachable = false,
+                    Proxy = "",
+                    ProxyRandomizeCredentials = false
+                }
+            },
+            RelayFee = (decimal) 0.00001,
+            ExcessUTxoCharge = 0,
+            LocalAddresses = null,
+            Warnings = ""
+        };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" href="https://api.fullstack.cash/docs/#api-Blockchain-GetBlockCount">Blockchain - Get Block Count</a>
+  </TabItem>
+</Tabs>
