@@ -297,7 +297,7 @@ var blockHeaders = new BlockHeaderHeightsCounts
   <TabItem value="response" label="Response">    
 
 ```jsx
-//will return a current TransactionDetails: 🍊
+//will return TransactionDetails: 🍊
 var transactionDetails = new TransactionDetails
         {
             Success = true,
@@ -397,6 +397,634 @@ var transactionDetails = new TransactionDetails
    🍌 For more information Check out  <a target="_blank" 
    href="https://api.fullstack.cash/docs/#api-ElectrumX_/_Fulcrum-transaction_details_for_a_TXID">
   Get transaction details for a TXID
+</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get transaction details for an array of TXIDs
+#### Returns an array of objects with transaction details of an array of TXIDs. Limited to 20 items per request.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+ var transactionsDetail = await _electrumXService!.GetElectrumXTransactionDetailsAsync(
+            new[]
+            {
+                "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251",
+                "ff03401fd979bd980b8dce8410d875048b437054e6b2df3f49379eac34df8110"
+            });
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```jsx
+//will return TransactionsDetail: 🍊
+ var transactionsDetail = new TransactionsDetail
+        {
+            Success = true,
+            Transactions = new List<TransactionsDetailData>
+            {
+                new()
+                {
+                    Details = new TransactionDetailData
+                    {
+                        BlockHash = "0000000000000000002aaf94953da3b487317508ebd1003a1d75d6d6ec2e75cc",
+                        BlockTime = 1578327094,
+                        Confirmations = 116993,
+                        Hash = "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251",
+                        Hex =
+                            "020000000265d13ef402840c8a51f39779afb7ae4d49e4b0a3c24a3d0e7742038f2c679667010000006441dd1dd72770cadede1a7fd0363574846c48468a398ddfa41a9677c74cac8d2652b682743725a3b08c6c2021a629011e11a264d9036e9d5311e35b5f4937ca7b4e4121020797d8fd4d2fa6fd7cdeabe2526bfea2b90525d6e8ad506ec4ee3c53885aa309ffffffff65d13ef402840c8a51f39779afb7ae4d49e4b0a3c24a3d0e7742038f2c679667000000006441347d7f218c11c04487c1ad8baac28928fb10e5054cd4494b94d078cfa04ccf68e064fb188127ff656c0b98e9ce87f036d183925d0d0860605877d61e90375f774121028a53f95eb631b460854fc836b2e5d31cad16364b4dc3d970babfbdcc3f2e4954ffffffff035ac355000000000017a914189ce02e332548f4804bac65cba68202c9dbf822878dfd0800000000001976a914285bb350881b21ac89724c6fb6dc914d096cd53b88acf9ef3100000000001976a91445f1f1c4a9b9419a5088a3e9c24a293d7a150e6488ac00000000",
+                        LockTime = 0,
+                        Size = 392,
+                        Time = 1578327094,
+                        TxId = "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251",
+                        Version = 2,
+                        Vin = new List<TransactionDetailVin>
+                        {
+                            new()
+                            {
+                                ScriptSig = new ScriptSig
+                                {
+                                    Asm =
+                                        "dd1dd72770cadede1a7fd0363574846c48468a398ddfa41a9677c74cac8d2652b682743725a3b08c6c2021a629011e11a264d9036e9d5311e35b5f4937ca7b4e[ALL|FORKID] 020797d8fd4d2fa6fd7cdeabe2526bfea2b90525d6e8ad506ec4ee3c53885aa309",
+                                    Hex =
+                                        "41dd1dd72770cadede1a7fd0363574846c48468a398ddfa41a9677c74cac8d2652b682743725a3b08c6c2021a629011e11a264d9036e9d5311e35b5f4937ca7b4e4121020797d8fd4d2fa6fd7cdeabe2526bfea2b90525d6e8ad506ec4ee3c53885aa309"
+                                },
+                                Sequence = 4294967295,
+                                Txid = "6796672c8f0342770e3d4ac2a3b0e4494daeb7af7997f3518a0c8402f43ed165",
+                                Vout = 1
+                            },
+                            new()
+                            {
+                                ScriptSig = new ScriptSig
+                                {
+                                    Asm =
+                                        "347d7f218c11c04487c1ad8baac28928fb10e5054cd4494b94d078cfa04ccf68e064fb188127ff656c0b98e9ce87f036d183925d0d0860605877d61e90375f77[ALL|FORKID] 028a53f95eb631b460854fc836b2e5d31cad16364b4dc3d970babfbdcc3f2e4954",
+                                    Hex =
+                                        "41347d7f218c11c04487c1ad8baac28928fb10e5054cd4494b94d078cfa04ccf68e064fb188127ff656c0b98e9ce87f036d183925d0d0860605877d61e90375f774121028a53f95eb631b460854fc836b2e5d31cad16364b4dc3d970babfbdcc3f2e4954"
+                                },
+                                Sequence = 4294967295,
+                                Txid = "6796672c8f0342770e3d4ac2a3b0e4494daeb7af7997f3518a0c8402f43ed165",
+                                Vout = 0
+                            }
+                        },
+                        Vout = new List<TransactionDetailVout>
+                        {
+                            new()
+                            {
+                                N = 0,
+                                ScriptPubKey = new ScriptPubKey
+                                {
+                                    Asm = "OP_HASH160 189ce02e332548f4804bac65cba68202c9dbf822 OP_EQUAL",
+                                    Hex = "a914189ce02e332548f4804bac65cba68202c9dbf82287",
+                                    ReqSigs = 1,
+                                    Type = "scripthash",
+                                    Addresses = new List<string>
+                                    {
+                                        "bitcoincash:pqvfecpwxvj53ayqfwkxtjaxsgpvnklcyg8xewk9hl"
+                                    }
+                                },
+                                Value = 0.0562057
+                            },
+                            new()
+                            {
+                                N = 1,
+                                ScriptPubKey = new ScriptPubKey
+                                {
+                                    Asm =
+                                        "OP_DUP OP_HASH160 285bb350881b21ac89724c6fb6dc914d096cd53b OP_EQUALVERIFY OP_CHECKSIG",
+                                    Hex = "76a914285bb350881b21ac89724c6fb6dc914d096cd53b88ac",
+                                    ReqSigs = 1,
+                                    Type = "pubkeyhash",
+                                    Addresses = new List<string>
+                                    {
+                                        "bitcoincash:qq59hv6s3qdjrtyfwfxxldkuj9xsjmx48vrz882knz"
+                                    }
+                                },
+                                Value = 0.00589197
+                            },
+                            new()
+                            {
+                                N = 2,
+                                ScriptPubKey = new ScriptPubKey
+                                {
+                                    Asm =
+                                        "OP_DUP OP_HASH160 45f1f1c4a9b9419a5088a3e9c24a293d7a150e64 OP_EQUALVERIFY OP_CHECKSIG",
+                                    Hex = "76a91445f1f1c4a9b9419a5088a3e9c24a293d7a150e6488ac",
+                                    ReqSigs = 1,
+                                    Type = "pubkeyhash",
+                                    Addresses = new List<string>
+                                    {
+                                        "bitcoincash:qpzlruwy4xu5rxjs3z37nsj29y7h59gwvsu4ddp0u4"
+                                    }
+                                },
+                                Value = 0.03272697
+                            }
+                        }
+                    },
+                    Txid = "4db095f34d632a4daf942142c291f1f2abb5ba2e1ccac919d85bdc2f671fb251"
+                },
+                new()
+                {
+                    Details = new TransactionDetailData
+                    {
+                        BlockHash = "0000000000000000018dde4ae5e0a65231f3e0847888d23c30aab8867554afaa",
+                        BlockTime = 1648655328,
+                        Confirmations = 1,
+                        Hash = "ff03401fd979bd980b8dce8410d875048b437054e6b2df3f49379eac34df8110",
+                        Hex =
+                            "0200000002bb076f278fb6da0d4139db44d6b39bb0075ee39067e8e59c913e2ce364bbefd4010000006a473044022078125597cc2d68c2d3f4d11a7252a8804b69e6ce80abebc027edcf6fde8eef8602201bad60058d7f14dbc5be714c76fc958d97eaa78fae7c6ea4ff3eab9ccaf5949341210270c976d907dd0d5e25ff16addc4b99d06edf279c9a04637c8bd6c18d5859fe2effffffffc8522523ff01f5f49a5e9759abdbe3d00e9046fbf52be7547095c50c455ba949010000006b483045022100ea5cb9a4dd44367d52d2ca063d4afd3d11299d0e55cdc5d917c8efd265f2bc80022077fc930aecdd830930fff75fc9d87ac9f2bdce5a468433658ccee8a27c88bee1412102886cce80857360fce1dda8956813952989eba7d9a3077008c22953ca78af0e6fffffffff024b49d300000000001976a9143a06fc7cc97302b3f0d60a3a09bdf7c78833447188aca70f0000000000001976a9149710b0ebd2c9ce0cae7a90841652389bcfed946888ac00000000",
+                        LockTime = 0,
+                        Size = 373,
+                        Time = 1648655328,
+                        TxId = "ff03401fd979bd980b8dce8410d875048b437054e6b2df3f49379eac34df8110",
+                        Version = 2,
+                        Vin = new List<TransactionDetailVin>
+                        {
+                            new()
+                            {
+                                ScriptSig = new ScriptSig
+                                {
+                                    Asm =
+                                        "3044022078125597cc2d68c2d3f4d11a7252a8804b69e6ce80abebc027edcf6fde8eef8602201bad60058d7f14dbc5be714c76fc958d97eaa78fae7c6ea4ff3eab9ccaf59493[ALL|FORKID] 0270c976d907dd0d5e25ff16addc4b99d06edf279c9a04637c8bd6c18d5859fe2e",
+                                    Hex =
+                                        "473044022078125597cc2d68c2d3f4d11a7252a8804b69e6ce80abebc027edcf6fde8eef8602201bad60058d7f14dbc5be714c76fc958d97eaa78fae7c6ea4ff3eab9ccaf5949341210270c976d907dd0d5e25ff16addc4b99d06edf279c9a04637c8bd6c18d5859fe2e"
+                                },
+                                Sequence = 4294967295,
+                                Txid = "d4efbb64e32c3e919ce5e86790e35e07b09bb3d644db39410ddab68f276f07bb",
+                                Vout = 1
+                            },
+                            new()
+                            {
+                                ScriptSig = new ScriptSig
+                                {
+                                    Asm =
+                                        "3045022100ea5cb9a4dd44367d52d2ca063d4afd3d11299d0e55cdc5d917c8efd265f2bc80022077fc930aecdd830930fff75fc9d87ac9f2bdce5a468433658ccee8a27c88bee1[ALL|FORKID] 02886cce80857360fce1dda8956813952989eba7d9a3077008c22953ca78af0e6f",
+                                    Hex =
+                                        "483045022100ea5cb9a4dd44367d52d2ca063d4afd3d11299d0e55cdc5d917c8efd265f2bc80022077fc930aecdd830930fff75fc9d87ac9f2bdce5a468433658ccee8a27c88bee1412102886cce80857360fce1dda8956813952989eba7d9a3077008c22953ca78af0e6f"
+                                },
+                                Sequence = 4294967295,
+                                Txid = "49a95b450cc5957054e72bf5fb46900ed0e3dbab59975e9af4f501ff232552c8",
+                                Vout = 1
+                            }
+                        },
+                        Vout = new List<TransactionDetailVout>
+                        {
+                            new()
+                            {
+                                N = 0,
+                                ScriptPubKey = new ScriptPubKey
+                                {
+                                    Asm = "OP_DUP OP_HASH160 3a06fc7cc97302b3f0d60a3a09bdf7c788334471 OP_EQUALVERIFY OP_CHECKSIG",
+                                    Hex = "76a9143a06fc7cc97302b3f0d60a3a09bdf7c78833447188ac",
+                                    ReqSigs = 1,
+                                    Type = "pubkeyhash",
+                                    Addresses = new List<string>
+                                    {
+                                        "bitcoincash:qqaqdlrue9es9vls6c9r5zda7lrcsv6ywyq2mt0wuf"
+                                    }
+                                },
+                                Value = 0.13846859
+                            },
+                            new()
+                            {
+                                N = 1,
+                                ScriptPubKey = new ScriptPubKey
+                                {
+                                    Asm =
+                                        "OP_DUP OP_HASH160 9710b0ebd2c9ce0cae7a90841652389bcfed9468 OP_EQUALVERIFY OP_CHECKSIG",
+                                    Hex = "76a9149710b0ebd2c9ce0cae7a90841652389bcfed946888ac",
+                                    ReqSigs = 1,
+                                    Type = "pubkeyhash",
+                                    Addresses = new List<string>
+                                    {
+                                        "bitcoincash:qzt3pv8t6tyuur9w02ggg9jj8zdulmv5dqzvlf63s4"
+                                    }
+                                },
+                                Value = 0.00004007
+                            }
+                        }
+                    },
+                    Txid = "ff03401fd979bd980b8dce8410d875048b437054e6b2df3f49379eac34df8110"
+                },
+            }
+        };       
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" 
+   href="https://api.fullstack.cash/docs/#api-ElectrumX_/_Fulcrum-Transaction_details_for_an_array_of_TXIDs">
+  Get transaction details for an array of TXIDs
+</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get transaction history for a single address.
+#### Returns an array of historical transactions associated with an address.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+ var transactionHistory = await _electrumXService!.GetElectrumXTransactionHistoryAsync(
+            "bitcoincash:qr69kyzha07dcecrsvjwsj4s6slnlq4r8c30lxnur3");
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```jsx
+//will return TransactionHistorySingle: 🍊
+ var transactionHistory = new TransactionHistorySingle
+        {
+            Success = true,
+            Transactions = new List<TransactionHistoryData>
+            {
+                new()
+                {
+                    Height = 603416,
+                    TxHash = "eef683d236d88e978bd406419f144057af3fe1b62ef59162941c1a9f05ded62c"
+                },
+                new()
+                {
+                    Height = 646894,
+                    TxHash = "4c695fae636f3e8e2edc571d11756b880ccaae744390f3950d798ce7b5e25754"
+                }
+            }
+        };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" 
+   href="https://api.fullstack.cash/docs/#api-ElectrumX_/_Fulcrum-Transaction_history_for_a_single_address">
+ Get transaction history for a single address.
+</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get unconfirmed utxos for a single address.
+#### Returns an object with unconfirmed UTXOs associated with an address.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+var utxos = await _electrumXService!.GetUnConfirmedAsync(
+            "bitcoincash:qp2ejsu4zt3k42723zh06az2s5rqjmrvhqp74tlslr");
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```jsx
+//will return UnconfirmedSingleUtxos: 🍊
+var utxos = new UnconfirmedSingleUtxos
+        {
+            Success = true,
+            Utxos = new List<Utxos>
+            {
+                new()
+                {
+                    Fee = 219,
+                    Height = 0,
+                    TxHash = "0fc11070429e563a0e12338511f7014d2ffa6dadf0dd13827045ef2a8b4246d6"
+                },
+                new()
+                {
+                    Fee = 219,
+                    Height = -1,
+                    TxHash = "aad0b34ecb9abf20684400cc36ddc910745d02aaf7b2041e7bd789998d48afc7"
+                }
+            }
+        };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" 
+   href="https://api.fullstack.cash/docs/#api-ElectrumX_/_Fulcrum-Unconfirmed_UTXOs_for_a_single_address">
+Get unconfirmed utxos for a single address.
+</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get unconfirmed utxos for an array of addresses.
+#### Returns an array of objects with unconfirmed UTXOs associated with an address. Limited to 20 items per request.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+  var utxos = await _electrumXService!.GetUnConfirmedAsync(
+            new[]
+            {
+                "bitcoincash:qp2ejsu4zt3k42723zh06az2s5rqjmrvhqp74tlslr",
+                "bitcoincash:qq78sq7ugu0kfuc4nlp4wxsqawfaf8z3vyf0lcn7l0"
+            });
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```jsx
+//will return UnconfirmedUtxos: 🍊
+ var utxos = new UnconfirmedUtxos
+        {
+            Success = true,
+            Utxos = new List<UtxosData>
+            {
+                new()
+                {
+                    Utxos = new List<Utxos>
+                    {
+                        new()
+                        {
+                            Fee = 219,
+                            Height = 0,
+                            TxHash = "0fc11070429e563a0e12338511f7014d2ffa6dadf0dd13827045ef2a8b4246d6"
+                        },
+                        new()
+                        {
+                            Fee = 219,
+                            Height = -1,
+                            TxHash = "aad0b34ecb9abf20684400cc36ddc910745d02aaf7b2041e7bd789998d48afc7"
+                        }
+                    },
+                    Address = "bitcoincash:qp2ejsu4zt3k42723zh06az2s5rqjmrvhqp74tlslr"
+                },
+                new()
+                {
+                    Utxos = new List<Utxos>
+                    {
+                        new()
+                        {
+                            Fee = 220,
+                            Height = 0,
+                            TxHash = "0bca5ef42d63b46876bb2a87e94efd3ed35269d86b60b1e3048f09f8474bfa26"
+                        },
+                    },
+                    Address = "bitcoincash:qq78sq7ugu0kfuc4nlp4wxsqawfaf8z3vyf0lcn7l0"
+                }
+            }
+        };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" 
+   href="https://api.fullstack.cash/docs/#api-ElectrumX_/_Fulcrum-Unconfirmed_UTXOs_for_an_array_of_addresses">
+Get unconfirmed utxos for an array of addresses.
+</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get utxos for a single address.
+#### Returns an object with UTXOs associated with an address.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+   var transactions = await _electrumXService!.GetUTxosAsync(
+            "bitcoincash:qp6v49705kspvke4h05djauds96d659pduzj3mud0e");
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```jsx
+//will return SingleUtxos: 🍊
+   var transactions = new SingleUtxos
+        {
+            Success = true,
+            Utxos = new List<UtxosDetail>
+            {
+                new()
+                {
+                    Height = 734231,
+                    TxHash = "fda94cd08e11f74ec1f70ac5aec4f83a648ff6488fae87f90182481f7685ed03",
+                    TxPos = 0,
+                    Value = 15374
+                },
+                new()
+                {
+                    Height = 734232,
+                    TxHash = "c79ca3e77e1091126eca7658430f028c9457db9503625b60d4f03dc30d787a6f",
+                    TxPos = 0,
+                    Value = 1330
+                },
+                new()
+                {
+                    Height = 734233,
+                    TxHash = "0c1c3ef092a276af6710aa9e9840e1448039daf76419b62e86fae942c7c1a65b",
+                    TxPos = 0,
+                    Value = 1331
+                },
+                new()
+                {
+                    Height = 734233,
+                    TxHash = "1f8e602f95f04b4ca4ea820609679783d08803d76ff988b1f0414f027509fe0e",
+                    TxPos = 0,
+                    Value = 2662
+                },
+                new()
+                {
+                    Height = 734233,
+                    TxHash = "70c1c938f95196742d393c60d1ece9fdba5d05109bf7cf79e4c34540fb108038",
+                    TxPos = 0,
+                    Value = 1331
+                },
+                new()
+                {
+                    Height = 734233,
+                    TxHash = "a330b1c599718a9cdf18d11b587b959e1d185069b2f95260e8a4e495b0e8a08d",
+                    TxPos = 0,
+                    Value = 1065
+                },
+                new()
+                {
+                    Height = 734233,
+                    TxHash = "fc1b98a5ea8a10b38c4a761ea04ab1734c546532069d29aacba254081f0bb2e9",
+                    TxPos = 0,
+                    Value = 1996
+                },
+                new()
+                {
+                    Height = 0,
+                    TxHash = "2576e213f12ce6a64badc5498e74a9891cb2f9314047f0cb087812ae53ab8809",
+                    TxPos = 0,
+                    Value = 2662
+                },
+                new()
+                {
+                    Height = 0,
+                    TxHash = "465dc5d80417f243aac066febc45fecb05feda658ad45bed814b1152e774193e",
+                    TxPos = 0,
+                    Value = 1597
+                },
+                new()
+                {
+                    Height = 0,
+                    TxHash = "6675789f1d5320ec7a279f3685c5e1f6ca18bd99ab9a32849ebc06ce7c16281e",
+                    TxPos = 0,
+                    Value = 2661
+                },
+                new()
+                {
+                    Height = 0,
+                    TxHash = "f63d70a3da7d6a18344aab31cac78c79eaaf4641ee8f30169a48032d05361166",
+                    TxPos = 0,
+                    Value = 2663
+                }
+            }
+        };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" 
+   href="https://api.fullstack.cash/docs/#api-ElectrumX_/_Fulcrum-UTXOs_for_a_single_address">
+Get utxos for a single address.
+</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get utxos for an array of addresses.
+#### Returns an array of objects with UTXOs associated with an address. Limited to 20 items per request.
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+    var transactions = await _electrumXService!.GetUTxosAsync(
+            new[]
+            {
+                "bitcoincash:qp6v49705kspvke4h05djauds96d659pduzj3mud0e",
+                "bitcoincash:qq74tkwnqzvsu9gady9ndskwd9fa565tas8yzjs8ve"
+            });
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```jsx
+//will return UtxosInfo: 🍊
+   var transactions = new UtxosInfo
+        {
+            Success = true,
+            Utxos = new List<UtxosInfoData>
+            {
+                new()
+                {
+                    Utxos = new List<UtxosDetail>
+                    {
+                        new()
+                        {
+                            Height = 734231,
+                            TxHash = "fda94cd08e11f74ec1f70ac5aec4f83a648ff6488fae87f90182481f7685ed03",
+                            TxPos = 0,
+                            Value = 15374
+                        },
+                        new()
+                        {
+                            Height = 734232,
+                            TxHash = "c79ca3e77e1091126eca7658430f028c9457db9503625b60d4f03dc30d787a6f",
+                            TxPos = 0,
+                            Value = 1330
+                        },
+                        new()
+                        {
+                            Height = 734233,
+                            TxHash = "0c1c3ef092a276af6710aa9e9840e1448039daf76419b62e86fae942c7c1a65b",
+                            TxPos = 0,
+                            Value = 1331
+                        },
+                        new()
+                        {
+                            Height = 734233,
+                            TxHash = "1f8e602f95f04b4ca4ea820609679783d08803d76ff988b1f0414f027509fe0e",
+                            TxPos = 0,
+                            Value = 2662
+                        },
+                        new()
+                        {
+                            Height = 734233,
+                            TxHash = "70c1c938f95196742d393c60d1ece9fdba5d05109bf7cf79e4c34540fb108038",
+                            TxPos = 0,
+                            Value = 1331
+                        },
+                        new()
+                        {
+                            Height = 734233,
+                            TxHash = "a330b1c599718a9cdf18d11b587b959e1d185069b2f95260e8a4e495b0e8a08d",
+                            TxPos = 0,
+                            Value = 1065
+                        },
+                        new()
+                        {
+                            Height = 734233,
+                            TxHash = "fc1b98a5ea8a10b38c4a761ea04ab1734c546532069d29aacba254081f0bb2e9",
+                            TxPos = 0,
+                            Value = 1996
+                        },
+                        new()
+                        {
+                            Height = 0,
+                            TxHash = "2576e213f12ce6a64badc5498e74a9891cb2f9314047f0cb087812ae53ab8809",
+                            TxPos = 0,
+                            Value = 2662
+                        },
+                        new()
+                        {
+                            Height = 0,
+                            TxHash = "465dc5d80417f243aac066febc45fecb05feda658ad45bed814b1152e774193e",
+                            TxPos = 0,
+                            Value = 1597
+                        },
+                        new()
+                        {
+                            Height = 0,
+                            TxHash = "6675789f1d5320ec7a279f3685c5e1f6ca18bd99ab9a32849ebc06ce7c16281e",
+                            TxPos = 0,
+                            Value = 2661
+                        },
+                        new()
+                        {
+                            Height = 0,
+                            TxHash = "f63d70a3da7d6a18344aab31cac78c79eaaf4641ee8f30169a48032d05361166",
+                            TxPos = 0,
+                            Value = 2663
+                        }
+                    },
+                    Address = "bitcoincash:qp6v49705kspvke4h05djauds96d659pduzj3mud0e"
+                },
+                new()
+                {
+                    Utxos = new List<UtxosDetail>
+                    {
+                        new()
+                        {
+                            Height = 0,
+                            TxHash = "3fa0f70f3f338b3b69f12608be1050fe7cdf28eac28d733fe944b079736b1114",
+                            TxPos = 1,
+                            Value = 18597047
+                        }
+                    },
+                    Address = "bitcoincash:qq74tkwnqzvsu9gady9ndskwd9fa565tas8yzjs8ve"
+                }
+            }
+        };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" 
+   href="https://api.fullstack.cash/docs/#api-ElectrumX_/_Fulcrum-UTXOs_for_an_array_of_addresses">
+Get utxos for an array of addresses.
 </a>
   </TabItem>
 </Tabs>

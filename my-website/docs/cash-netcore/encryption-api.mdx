@@ -1,0 +1,51 @@
+---
+sidebar_position: 5
+id: encryption-api
+title: 🎯Encryption API
+---
+
+:::success Notes
+For more details visit [BCH APIs](https://api.fullstack.cash/docs/#api-Encryption) page.
+:::
+
+```jsx
+//imports
+using Cash.NetCore.Contracts;
+using Cash.NetCore.Models.Response.Encryption;
+
+//inject
+private readonly IEncryptionService _encryptionService;
+```
+
+### 💰Get public key for a BCH address.
+#### Searches the blockchain for a public key associated with a BCH address. Returns an object. If successful, the publicKey property will contain a hexidecimal representation of the public key.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+ var publicKey = await _encryptionService!.GetPublicKeyAsync(
+            "bitcoincash:qrdka2205f4hyukutc2g0s6lykperc8nsu5u2ddpqf");
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```jsx
+//will return AddressPublicKey: 🍊
+  var publicKey = new AddressPublicKey
+        {
+            Success = true,
+            PublicKey = "03b0208e675505d457ef20f9b7605e5d27f85cf6e3a95eadffd8badf80f0c6f604"
+        };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" 
+   href="https://api.fullstack.cash/docs/#api-Encryption-Get_encryption_key_for_bch_address">
+   Get public key for a BCH address.</a>
+  </TabItem>
+</Tabs>

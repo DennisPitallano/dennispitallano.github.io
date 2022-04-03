@@ -1,0 +1,80 @@
+---
+sidebar_position: 6
+id: mining-api
+title: 🎯Mining API
+---
+
+:::success Notes
+For more details visit [BCH APIs](https://api.fullstack.cash/docs/#api-Mining) page.
+:::
+
+```jsx
+//imports
+using Cash.NetCore.Contracts;
+using Cash.NetCore.Models.Response.Mining;
+
+//inject
+private readonly IMiningService _miningService;
+```
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+### 💰Get Estimated network hashes per second.
+#### Returns the estimated network hashes per second based on the last n blocks. Pass in [blocks] to override # of blocks, -1 specifies since last difficulty change. Pass in [height] to estimate the network speed at the time when a certain block was found.
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+   var networkHash = await _miningService!.GetNetworkHashpsAsync(120, -1);
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```jsx
+//will return networkHash: 🍊
+  var networkHash = 9273.324192503671
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" 
+   href="https://api.fullstack.cash/docs/#api-Mining-Estimated_network_hashes_per_second.">
+   Get Estimated network hashes per second.</a>
+  </TabItem>
+</Tabs>
+
+### 💰Get Mining Info.
+#### Returns a json object containing mining-related information.
+<Tabs>
+  <TabItem value="request" label="Request" default>
+
+```jsx
+//Sample Request 🍎
+   var miningInfo = await _miningService!.GetMiningInfoAsync();
+```
+
+  </TabItem>
+  <TabItem value="response" label="Response">    
+
+```jsx
+//will return MiningInfo: 🍊
+var miningInfo = new MiningInfo
+        {
+            Blocks = 734236,
+            CurrentBlockSize = 0,
+            CurrentBlockTx = 0,
+            Difficulty = 227336239671.5679,
+            Networkhashps = 1579123811663756000,
+            Pooledtx = 2,
+            Chain = "main",
+            Warnings=""
+        };
+```
+  </TabItem>
+  <TabItem value="..." label="...">
+   🍌 For more information Check out  <a target="_blank" 
+   href="https://api.fullstack.cash/docs/#api-Mining-Mining_info.">
+   Get Mining Info.</a>
+  </TabItem>
+</Tabs>
