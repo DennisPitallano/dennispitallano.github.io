@@ -1,12 +1,18 @@
 /* The Oragon Gazette — Service Worker
    Strategy: stale-while-revalidate for same-origin GET requests.
    Bump VERSION when shipping major changes to bust the cache. */
-const VERSION = 'gazette-v2';
+const VERSION = 'gazette-v3';
 const CORE = [
   '/',
   '/index.html',
   '/assets/newsprint/styles.css',
   '/assets/newsprint/main.js',
+  '/assets/fonts/fonts.css',
+  '/assets/fonts/playfair-latin.woff2',
+  '/assets/fonts/oldstandard-400-latin.woff2',
+  '/assets/fonts/oldstandard-700-latin.woff2',
+  '/assets/fonts/specialelite-latin.woff2',
+  '/assets/fonts/unifrakturcook-latin.woff2',
   '/img/favicon.svg',
   '/img/pita.jpg',
   '/img/pita.avif',
