@@ -1590,3 +1590,117 @@ html[data-edition="evening"] .searchbar__results .sr mark { background: #5a4520;
   margin: 32px 0 18px;
   padding-right: 14px; /* compensate for right-side letter-spacing */
 }
+
+/* =========================================================
+   Print stylesheet — a proper printable Gazette
+   ========================================================= */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 14mm 18mm;
+  }
+
+  :root, html, body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 10.5pt;
+  }
+
+  /* Hide interactive chrome */
+  .ticker,
+  .mobilebar,
+  .drawer,
+  .sectionbar,
+  .edition-toggle,
+  .searchbar__results,
+  #searchInput,
+  .modal,
+  .snake-ctrl,
+  #snakeStart,
+  #comicNext,
+  .link-btn,
+  #vintageAd,
+  #puzzle,
+  #comic,
+  #horoscope,
+  .mobilebar__btn {
+    display: none !important;
+  }
+
+  /* Remove paper texture/halftones for toner economy */
+  .paper,
+  body,
+  html {
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Single-column flow for print */
+  .grid {
+    display: block !important;
+  }
+  .col {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  /* Articles: prevent awkward breaks */
+  article {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 10mm;
+  }
+  h1, h2, h3, .kicker, .masthead h1 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Masthead scale for print */
+  .masthead h1 {
+    font-size: 48pt !important;
+    line-height: 1 !important;
+    margin: 4mm 0 2mm !important;
+  }
+  .masthead__top,
+  .masthead__sub {
+    font-size: 9pt !important;
+  }
+
+  /* Photo: show but no halftone overlay */
+  .photo--img::after { display: none !important; }
+  .photo img { filter: grayscale(1) contrast(1.05); max-width: 60mm; }
+
+  /* Make links readable on paper: print URL next to external links */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    font-style: italic;
+    word-break: break-all;
+  }
+  /* Skip URL printout for internal anchors and data-article modal links */
+  a[href^="#"]::after,
+  a[data-article]::after {
+    content: "";
+  }
+
+  /* Dividers print as thin rules */
+  .rule-divider {
+    letter-spacing: 8px;
+    font-size: 14pt;
+    opacity: 1;
+  }
+
+  /* Colophon sits at the bottom */
+  .colophon {
+    border-top: 1px solid #000;
+    padding-top: 4mm;
+    font-size: 9pt;
+  }
+
+  /* Typewriter intro — skip animation when printing */
+  .masthead h1 .tw-ch.tw-hidden { opacity: 1 !important; width: auto !important; max-width: none !important; }
+  .masthead h1 .tw-cursor { display: none !important; }
+
+  /* Expose the full article bodies (unmodaled) is out of scope — printing shows the front page */
+}
+
