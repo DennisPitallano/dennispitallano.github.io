@@ -38,6 +38,53 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Old+Standard+TT:wght@400;700&family=UnifrakturCook:wght@700&family=Special+Elite&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/newsprint/styles.css" />
+
+  <!-- Structured data: Person + WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://dennispitallano.github.io/#person",
+        "name": "Dennis Pitallano",
+        "givenName": "Dennis",
+        "familyName": "Pitallano",
+        "jobTitle": "Full-Stack Developer",
+        "url": "https://dennispitallano.github.io/",
+        "image": "https://dennispitallano.github.io/img/pita.jpg",
+        "email": "mailto:dpitallano@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "Camarines Norte",
+          "addressCountry": "PH"
+        },
+        "knowsAbout": [".NET", "C#", "TypeScript", "React", "Node.js", "Azure", "SQL", "Distributed Systems", "Clean Architecture"],
+        "sameAs": [
+          "https://github.com/DennisPitallano",
+          "https://www.linkedin.com/in/dennispitallano/",
+          "https://stackoverflow.com/users/story/dennispitallano"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://dennispitallano.github.io/#website",
+        "url": "https://dennispitallano.github.io/",
+        "name": "The Oragon Gazette",
+        "alternateName": "Dennis Pitallano · Portfolio",
+        "description": "A classic-newspaper portfolio for Dennis Pitallano, full-stack developer from the Philippines.",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://dennispitallano.github.io/#person" }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Privacy-friendly analytics (GoatCounter). Sign up at https://goatcounter.com
+       then replace the data-goatcounter URL with your own and uncomment.
+  <script data-goatcounter="https://dennispitallano.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+  -->
 </head>
 <body>
 
@@ -455,6 +502,18 @@
           </div>
         </div>
 
+        <div class="box reveal" id="letters">
+          <h5>Letters to the Editor</h5>
+          <p class="small center letters__intro">Correspondence from our faithful readers</p>
+          <ol class="letters__list" id="lettersList" aria-live="polite">
+            <li class="letters__loading">Awaiting the morning post…</li>
+          </ol>
+          <p class="small center letters__foot">
+            <a href="https://github.com/DennisPitallano/dennispitallano.github.io/issues/new?labels=letter&amp;title=To+the+Editor%3A+&amp;body=Dear+Editor%2C%0A%0A"
+               target="_blank" rel="noopener">✉ Post a letter</a>
+          </p>
+        </div>
+
         <div class="box reveal" id="puzzle">
           <h5>The Puzzle Page</h5>
           <p class="small center" style="margin:0 0 6px">Classic diversion · use arrow keys or tap</p>
@@ -484,8 +543,10 @@
       <div style="margin-top:6px">
         <a href="#archives" data-article="archives">Archives</a> ·
         <a href="#manuals" data-article="manuals">Manuals</a> ·
+        <a href="/comics/">Comics Archive</a> ·
         <a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">GitHub</a> ·
-        <a href="/blog/rss.xml">RSS</a>
+        <a href="/blog/rss.xml">RSS</a> ·
+        <button id="sfxToggle" class="link-btn" type="button" aria-pressed="true">🔊 Sound</button>
       </div>
       <div style="margin-top:10px">© <span id="yr"></span> The Oragon Gazette — All Rights Reserved · Made with 🌶 in the Philippines</div>
       <div class="small" style="margin-top:6px;opacity:.6">Psst. Try the ↑↑↓↓←→←→BA on your keyboard.</div>

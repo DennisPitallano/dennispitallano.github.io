@@ -4,6 +4,15 @@
 (function () {
   'use strict';
 
+  /* ---------- Sound preferences ---------- */
+  const SFX_KEY = 'gazette.sfx';
+  const isSfxOn = () => {
+    try { return localStorage.getItem(SFX_KEY) !== 'off'; } catch (e) { return true; }
+  };
+  const setSfx = (on) => {
+    try { localStorage.setItem(SFX_KEY, on ? 'on' : 'off'); } catch (e) {}
+  };
+
   /* ---------- Date in masthead ---------- */
   const dateEl = document.getElementById('todayDate');
   const volumeEl = document.getElementById('volumeNo');
@@ -56,6 +65,7 @@
       return ctx;
     };
     const tick = (isBell = false) => {
+      if (!isSfxOn()) return;
       const ac = ensureCtx();
       if (!ac) return;
       try {
@@ -551,6 +561,48 @@
   renderStrip();
   document.getElementById('comicNext') && document.getElementById('comicNext').addEventListener('click', () => { stripIdx++; renderStrip(); });
 
+  /* ---------- Letters to the Editor (GitHub Issues API) ---------- */
+  (function letters() {
+    const list = document.getElementById('lettersList');
+    if (!list) return;
+    const REPO = 'DennisPitallano/dennispitallano.github.io';
+    const fallback = [
+      { title: 'On Semicolons', body: 'Sir — I maintain that the semicolon is a punctuation mark of distinction, not decoration. Yours in ASCII, R. Braces.' },
+      { title: 'In Defense of Vim', body: 'Madam — I wish to register my dissent with your recent editorial. My fingers know not otherwise. — A. Vimmer' },
+      { title: 'Re: The Deployment', body: 'To the Editor — The deployment went fine. It is the aftermath I wish to discuss. — DevOps Correspondent' }
+    ];
+    const truncate = (s, n) => (s || '').replace(/\s+/g, ' ').trim().slice(0, n) + ((s || '').length > n ? '…' : '');
+    const render = (items) => {
+      list.innerHTML = items.map(it => `
+        <li class="letters__item">
+          <div class="letters__title">${it.title}</div>
+          <div class="letters__body">${truncate(it.body, 160)}</div>
+          ${it.user ? `<div class="letters__sig">— ${it.user}${it.url ? ` · <a href="${it.url}" target="_blank" rel="noopener">read on</a>` : ''}</div>` : ''}
+        </li>
+      `).join('');
+    };
+    const showFallback = () => render(fallback);
+
+    // Only try API on http(s); file:// will fail CORS
+    if (!/^https?:/i.test(location.protocol)) { showFallback(); return; }
+
+    fetch(`https://api.github.com/repos/${REPO}/issues?labels=letter&state=all&per_page=5`, {
+      headers: { 'Accept': 'application/vnd.github+json' }
+    })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(issues => {
+        if (!Array.isArray(issues) || issues.length === 0) { showFallback(); return; }
+        const items = issues.slice(0, 5).map(i => ({
+          title: i.title.replace(/^To the Editor:\s*/i, ''),
+          body: i.body || '',
+          user: i.user && i.user.login,
+          url: i.html_url
+        }));
+        render(items);
+      })
+      .catch(() => showFallback());
+  })();
+
   /* ---------- Snake (The Puzzle Page) ---------- */
   (function snake() {
     const canvas = document.getElementById('snake');
@@ -939,6 +991,7 @@
   if (mast && window.AudioContext) {
     let ac = null;
     const ding = () => {
+      if (!isSfxOn()) return;
       try {
         ac = ac || new AudioContext();
         const t0 = ac.currentTime;
@@ -965,6 +1018,30 @@
     mast.style.cursor = 'pointer';
     mast.title = 'Ding!';
     mast.addEventListener('click', ding);
+  }
+
+  /* ---------- Sound toggle button ---------- */
+  (function sfxToggle() {
+    const btn = document.getElementById('sfxToggle');
+    if (!btn) return;
+    const render = () => {
+      const on = isSfxOn();
+      btn.textContent = on ? '🔊 Sound' : '🔈 Muted';
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.title = on ? 'Click to mute typewriter & bell' : 'Click to un-mute';
+    };
+    render();
+    btn.addEventListener('click', () => {
+      setSfx(!isSfxOn());
+      render();
+    });
+  })();
+
+  /* ---------- Service worker registration ---------- */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => { /* silent */ });
+    });
   }
 
 })();

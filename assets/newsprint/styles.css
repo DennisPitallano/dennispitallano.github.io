@@ -1704,3 +1704,141 @@ html[data-edition="evening"] .searchbar__results .sr mark { background: #5a4520;
   /* Expose the full article bodies (unmodaled) is out of scope — printing shows the front page */
 }
 
+
+/* =========================================================
+   Evening Edition — refined palette + warm glow
+   ========================================================= */
+html[data-edition="evening"] {
+  --ink: #efe3c6;
+  --ink-soft: #b5a37f;
+  --paper: #1a1511;
+  --paper-dark: #241d17;
+  --paper-edge: #3a2e23;
+  --accent: #e0b86e;
+}
+html[data-edition="evening"] body {
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(224, 184, 110, 0.08), transparent 55%),
+    radial-gradient(ellipse at 80% 90%, rgba(224, 184, 110, 0.06), transparent 60%),
+    var(--paper);
+}
+html[data-edition="evening"] .paper {
+  box-shadow: 0 0 0 1px rgba(224, 184, 110, 0.12), 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+html[data-edition="evening"] a {
+  border-bottom-color: rgba(224, 184, 110, 0.35);
+}
+html[data-edition="evening"] .photo--img::after {
+  /* softer halftone overlay at night */
+  opacity: 0.35;
+}
+html[data-edition="evening"] .box {
+  border-color: rgba(239, 227, 198, 0.65);
+}
+html[data-edition="evening"] .ticker {
+  border-color: rgba(239, 227, 198, 0.3);
+}
+html[data-edition="evening"] mark {
+  background: rgba(224, 184, 110, 0.35);
+  color: inherit;
+}
+
+/* =========================================================
+   Footer sound toggle — styled like the footer links
+   ========================================================= */
+.colophon .link-btn {
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  border-bottom: 1px dotted currentColor;
+}
+.colophon .link-btn:hover { color: var(--accent); border-bottom-style: solid; text-decoration: none; }
+.colophon .link-btn[aria-pressed="false"] { opacity: 0.6; }
+
+/* =========================================================
+   Letters to the Editor
+   ========================================================= */
+#letters .letters__intro {
+  margin: 0 0 10px;
+  font-style: italic;
+  opacity: 0.75;
+}
+.letters__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--ink);
+}
+.letters__item {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--ink-soft);
+}
+.letters__loading {
+  padding: 10px 0;
+  font-style: italic;
+  opacity: 0.6;
+}
+.letters__title {
+  font-family: var(--serif-head, 'Playfair Display', Georgia, serif);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+.letters__body {
+  font-family: var(--serif-body, 'Old Standard TT', Georgia, serif);
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+.letters__sig {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  opacity: 0.7;
+}
+.letters__foot {
+  margin: 12px 0 0;
+  font-style: italic;
+}
+
+/* =========================================================
+   Comics Archive page
+   ========================================================= */
+.comic-archive {
+  margin-top: 20px;
+  display: grid;
+  gap: 28px;
+}
+.comic-archive__issue {
+  border-top: 2px solid var(--ink);
+  padding-top: 16px;
+}
+.comic-archive__title {
+  font-family: var(--serif-head, 'Playfair Display', Georgia, serif);
+  font-weight: 900;
+  font-size: 22px;
+  text-align: center;
+  letter-spacing: 1px;
+  margin: 0 0 12px;
+}
+.comic-archive .comic {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  .comic-archive .comic {
+    grid-template-columns: 1fr;
+  }
+}
+

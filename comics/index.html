@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" data-edition="morning">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Comics Archive · The Oragon Gazette</title>
+  <meta name="description" content="The complete comics morgue of The Oragon Gazette — a three-panel chronicle of developer woes and small triumphs." />
+  <meta name="theme-color" content="#f1e7cf" />
+  <link rel="canonical" href="https://dennispitallano.github.io/comics/" />
+  <meta property="og:title" content="The Comics Archive · The Oragon Gazette" />
+  <meta property="og:description" content="Three-panel dispatches from the developer’s desk." />
+  <meta property="og:url" content="https://dennispitallano.github.io/comics/" />
+  <meta property="og:image" content="https://dennispitallano.github.io/img/og-card.png" />
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate icon" href="/img/favicon.ico" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+  <link rel="manifest" href="/img/site.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Old+Standard+TT:wght@400;700&family=UnifrakturCook:wght@700&family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/newsprint/styles.css" />
+</head>
+<body>
+
+  <div class="paper">
+    <header class="masthead">
+      <div class="masthead__top">
+        <span>The Comics Morgue</span>
+        <span id="todayDate">—</span>
+        <span>Est. MMXIV · Camarines Norte Edition</span>
+      </div>
+      <h1>The Comics Archive</h1>
+      <div class="masthead__sub">
+        <span><a href="/">← Back to the Front Page</a></span>
+        <span>All Back Issues of the Funny Pages</span>
+        <span><a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">GitHub</a></span>
+      </div>
+    </header>
+
+    <article class="article">
+      <div class="kicker">— The Funny Pages, in Full —</div>
+      <h3>Three Panels at a Time, Since Forever</h3>
+      <p class="body">A complete archive of our modest comic dispatches. Each strip is a small drama of the developer’s life — with, where possible, a moral buried between panels two and three.</p>
+
+      <div id="comicArchive" class="comic-archive"></div>
+
+      <p class="small center" style="margin-top:20px">
+        <a href="/">← Return to the front page</a>
+        &nbsp;·&nbsp;
+        <a href="/blog/">Op-Eds &amp; Essays</a>
+      </p>
+    </article>
+
+    <div class="rule-divider">❦ ❦ ❦</div>
+
+    <footer class="colophon">
+      <div>© <span id="yr"></span> The Oragon Gazette — Printed in Newsprint Ink &amp; Good Humour</div>
+    </footer>
+  </div>
+
+  <script>
+  (function () {
+    const strips = [
+      { title: 'Issue No. 1 — "It Works on My Machine"', panels: [
+        ['It works on my machine.', '◔_◔', 'PANEL 1 — THE CLAIM', false],
+        ['Then we shall ship your machine.', '⊙▂⊙', 'PANEL 2 — THE ULTIMATUM', true],
+        ['…I’ll write a Dockerfile.', '◉︵◉', 'PANEL 3 — THE COMPROMISE', false]
+      ]},
+      { title: 'Issue No. 2 — "The Flaky Tests"', panels: [
+        ['The tests are flaky.', '⊙_⊙', 'PANEL 1 — DENIAL', false],
+        ['They run once, then refuse.', '╥﹏╥', 'PANEL 2 — BARGAINING', true],
+        ['I renamed them "integration".', '¬_¬', 'PANEL 3 — ACCEPTANCE', false]
+      ]},
+      { title: 'Issue No. 3 — "Push to Main"', panels: [
+        ['I’ll just push to main.', '◉‿◉', 'PANEL 1 — CONFIDENCE', false],
+        ['The build went red.', '⊙△⊙', 'PANEL 2 — CONSEQUENCE', true],
+        ['The blame is now distributed.', '◔ ‿◔', 'PANEL 3 — GIT', false]
+      ]},
+      { title: 'Issue No. 4 — "Just Five Minutes"', panels: [
+        ['This will only take five minutes.', '◕‿◕', 'PANEL 1 — PROLOGUE', false],
+        ['Three hours later…', '◉_◉', 'PANEL 2 — INTERLUDE', true],
+        ['I have rewritten the framework.', '⊙﹏⊙', 'PANEL 3 — EPILOGUE', false]
+      ]},
+      { title: 'Issue No. 5 — "The Refactor"', panels: [
+        ['Why does this work?', '⊙_⊙', 'PANEL 1 — CURIOSITY', false],
+        ['I refactored it — now it doesn’t.', '╥_╥', 'PANEL 2 — CLARITY', true],
+        ['I put it back. Do not ask.', '◉_◉', 'PANEL 3 — WISDOM', false]
+      ]}
+    ];
+
+    const root = document.getElementById('comicArchive');
+    root.innerHTML = strips.map((strip) => `
+      <section class="comic-archive__issue">
+        <h4 class="comic-archive__title">${strip.title}</h4>
+        <div class="comic" aria-label="${strip.title}">
+          ${strip.panels.map(p => `
+            <div class="comic__panel">
+              <div class="comic__bubble${p[3] ? ' comic__bubble--r' : ''}">${p[0]}</div>
+              <div class="comic__figure">${p[1]}</div>
+              <div class="comic__label">${p[2]}</div>
+            </div>
+          `).join('')}
+        </div>
+      </section>
+    `).join('');
+
+    // Date + year
+    const dEl = document.getElementById('todayDate');
+    if (dEl) dEl.textContent = new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    const yEl = document.getElementById('yr');
+    if (yEl) yEl.textContent = new Date().getFullYear();
+
+    // Apply saved edition preference
+    try {
+      const ed = localStorage.getItem('gazette.edition');
+      if (ed) document.documentElement.setAttribute('data-edition', ed);
+    } catch (e) {}
+
+    // Service worker (offline support)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+    }
+  })();
+  </script>
+</body>
+</html>
