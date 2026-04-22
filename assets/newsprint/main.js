@@ -1339,20 +1339,16 @@
       if (loc) loc.textContent = placeName;
     };
 
-    // Try geolocation, fall back to Camarines Norte (the correspondent's desk)
+    // Try geolocation, fall back to Camarines Norte (the correspondent's desk).
+    // NOTE: Open-Meteo has no reverse-geocoding endpoint, so we just label the
+    // reader's coordinates generically and skip the extra round-trip.
     const fallback = () => fetchWeather(14.1396, 122.7632, 'Camarines Norte Bureau');
     if (!('geolocation' in navigator)) return fallback();
-    // Quick reverse-label helper using Open-Meteo reverse geocoding
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const { latitude, longitude } = pos.coords;
-      const rg = 'https://geocoding-api.open-meteo.com/v1/reverse?latitude=' + latitude +
-                 '&longitude=' + longitude + '&count=1&language=en&format=json';
-      fetch(rg).then(r => r.ok ? r.json() : null).then(j => {
-        const first = j && j.results && j.results[0];
-        const name = first ? (first.name + (first.country_code ? ', ' + first.country_code : '')) : 'Reader\u2019s desk';
-        fetchWeather(latitude, longitude, name);
-      }).catch(() => fetchWeather(latitude, longitude, 'Reader\u2019s desk'));
-    }, () => fallback(), { timeout: 5000, maximumAge: 600000 });
+    navigator.geolocation.getCurrentPosition(
+      (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude, 'Reader\u2019s desk'),
+      () => fallback(),
+      { timeout: 5000, maximumAge: 600000 }
+    );
   })();
 
   /* ---------- Dead Drop (anonymous tips) ---------- */
@@ -1595,6 +1591,15 @@
     });
   })();
 
+  /* ---------- Favicon fallback for works__ico (gstatic 404s) ---------- */
+  (function faviconFallback(){
+    const FALLBACK = '/img/favicon-32x32.png';
+    document.querySelectorAll('img.works__ico').forEach(img => {
+      if (img.src === location.origin + FALLBACK) return;
+      img.addEventListener('error', () => { img.src = FALLBACK; }, { once: true });
+    });
+  })();
+
   /* ---------- Press clipboard toast (shared tiny notifier) ---------- */
   function pressToast(msg){
     const t = document.getElementById('pressToast');
@@ -1656,10 +1661,15 @@
     });
   })();
 
-  /* ---------- Readers Today (public GoatCounter counter) ---------- */
+  /* ---------- Readers Today (public GoatCounter counter) ----------
+     Requires GoatCounter dashboard setting "Allow anyone to view statistics"
+     to be enabled. If disabled (403 + CORS), the Circulation pill stays
+     on its default text and the error is swallowed silently.              */
   (function readersToday(){
     const el = document.getElementById('readersToday');
     if (!el) return;
+    // Skip on localhost/file: the endpoint needs a real origin anyway.
+    if (!/^https?:/i.test(location.protocol) || /^(localhost|127\.)/.test(location.hostname)) return;
     const base = 'https://dennispitallano.goatcounter.com/counter/';
     const path = encodeURIComponent(location.pathname || '/');
     const fmt = (n) => {
@@ -1667,7 +1677,7 @@
       if (n >= 10000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'k';
       return n.toLocaleString('en-US');
     };
-    fetch(base + path + '.json', { cache: 'no-store' })
+    fetch(base + path + '.json', { cache: 'no-store', mode: 'cors' })
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (!data) return;
@@ -1675,7 +1685,7 @@
         if (n == null) return;
         el.textContent = 'Circulation: ' + fmt(n) + ' reader' + (n === 1 ? '' : 's');
       })
-      .catch(() => {});
+      .catch(() => { /* public stats disabled \u2014 silent */ });
   })();
 
   /* ---------- Keyboard shortcuts (? opens reference desk) ---------- */
