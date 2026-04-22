@@ -520,7 +520,16 @@
           <h5>Dispatch Desk</h5>
           <p class="small center">Hire the correspondent:</p>
           <p class="center"><a href="mailto:dpitallano@gmail.com" data-article="contact"><strong>dpitallano@gmail.com</strong></a></p>
-          <p class="center"><a href="/assets/files/DennisPitallano-075c9661c81f9100d8c00b8e7016059c.pdf" target="_blank" rel="noopener">📜 Curriculum Vitae</a></p>
+          <p class="center"><a href="/resume.html">📰 Curriculum Vitae — Read Online</a></p>
+          <p class="center small"><a href="/assets/files/DennisPitallano-075c9661c81f9100d8c00b8e7016059c.pdf" target="_blank" rel="noopener">📜 Download PDF</a></p>
+        </div>
+
+        <div class="box reveal hiring" id="hiring" data-status="available">
+          <h5>Hiring Signal</h5>
+          <div class="hiring__light" aria-hidden="true"></div>
+          <div class="hiring__status" id="hiringStatus">AVAILABLE FOR COMMISSIONS</div>
+          <p class="small center u-m0" id="hiringSub">Accepting: interesting problems &middot; freelance dispatches &middot; polite arguments about semicolons</p>
+          <p class="small center u-mt-8"><a href="mailto:dpitallano@gmail.com">✉ Send a telegram ›</a></p>
         </div>
 
         <div class="box reveal" id="horoscope">
@@ -649,7 +658,7 @@
       </div>
       <div class="u-mt-10">© <span id="yr"></span> The Oragon Gazette — All Rights Reserved · Made with 🌶 in the Philippines</div>
       <div class="colophon__edition">Edition <code id="editionHash">———————</code> · printed <span id="editionDate">—</span></div>
-      <div class="small u-mt-6 u-muted">Psst. Try the ↑↑↓↓←→←→BA on your keyboard.</div>
+      <div class="small u-mt-6 u-muted">Psst. Try the ↑↑↓↓←→←→BA on your keyboard. Or press <kbd>?</kbd> for shortcuts.</div>
     </footer>
 
   </div>
@@ -660,6 +669,38 @@
       <button class="modal__close" id="modalClose" aria-label="Close article">✕</button>
       <div id="modalBody"></div>
     </article>
+  </div>
+
+  <!-- Keyboard shortcuts modal -->
+  <div class="modal" id="kbModal" role="dialog" aria-modal="true" aria-labelledby="kbTitle" hidden>
+    <article class="modal__paper kb-modal">
+      <button class="modal__close" id="kbClose" aria-label="Close shortcuts">✕</button>
+      <div class="kicker">Reference Desk · Typesetters’ Manual</div>
+      <h3 id="kbTitle" class="headline">Keyboard Shortcuts</h3>
+      <div class="byline">Compiled for the modern correspondent.</div>
+      <dl class="kb-list">
+        <dt><kbd>?</kbd></dt><dd>Open this reference desk.</dd>
+        <dt><kbd>/</kbd></dt><dd>Focus the Gazette search bar.</dd>
+        <dt><kbd>e</kbd></dt><dd>Flip between Morning &amp; Evening Edition.</dd>
+        <dt><kbd>g</kbd> &nbsp;<kbd>h</kbd></dt><dd>Go to the Front Page.</dd>
+        <dt><kbd>g</kbd> &nbsp;<kbd>b</kbd></dt><dd>Go to the Editorial Desk (blog).</dd>
+        <dt><kbd>g</kbd> &nbsp;<kbd>c</kbd></dt><dd>Go to the Comics Archive.</dd>
+        <dt><kbd>g</kbd> &nbsp;<kbd>r</kbd></dt><dd>Read the Curriculum Vitae.</dd>
+        <dt><kbd>Esc</kbd></dt><dd>Close any open article or dialog.</dd>
+        <dt><kbd>↑↑↓↓←→←→BA</kbd></dt><dd>Summon a newsflash. Try it.</dd>
+      </dl>
+      <p class="small u-muted-2"><em>Shortcuts are disabled while typing in form fields.</em></p>
+    </article>
+  </div>
+
+  <!-- Newsflash overlay (konami + manual) -->
+  <div class="newsflash" id="newsflash" role="alert" aria-live="assertive" hidden>
+    <div class="newsflash__paper">
+      <div class="newsflash__kicker">★ STOP THE PRESSES ★ SPECIAL EDITION ★</div>
+      <div class="newsflash__head" id="newsflashHead">KONAMI SEQUENCE DETECTED</div>
+      <div class="newsflash__deck" id="newsflashDeck">The Editor salutes you. A cup of digital coffee has been poured — see the Classifieds for details.</div>
+      <button class="newsflash__close" id="newsflashClose">Continue reading</button>
+    </div>
   </div>
 
   <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>

@@ -534,6 +534,8 @@
         idx = 0;
         const secret = document.getElementById('secretAd');
         if (secret) { secret.classList.remove('u-hide'); secret.scrollIntoView({behavior:'smooth'}); }
+        // Also trigger the newsflash overlay for extra drama
+        try { window.__gazetteNewsflash && window.__gazetteNewsflash(); } catch(e) {}
       }
     } else {
       idx = 0;
@@ -1475,51 +1477,206 @@
       });
   })();
 
-  /* ---------- i18n Tagalog Edition toggle ---------- */
-  (function i18n(){
-    const btn = document.getElementById('langToggle');
-    if (!btn) return;
-    const dict = {
-      'tagline':       'Lahat ng Koda na Karapat-dapat Ipadala',
-      'motto':         'Malaya \u00b7 May-Opinyon \u00b7 May-Indent',
-      'nav.front':     'Pahinang Pangharap',
-      'nav.tech':      'Teknolohiya',
-      'nav.field':     'Ulat sa Larangan',
-      'nav.annals':    'Mga Kasaysayan',
-      'nav.editorial': 'Editoryal',
-      'nav.archives':  'Mga Lumang Isyu',
-      'nav.manuals':   'Manwal',
-      'nav.dispatch':  'Padala'
-    };
-    const origs = {};
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      origs[el.getAttribute('data-i18n')] = el.textContent;
-    });
+  /* ---------- Module-level typewriter SFX (shared) ---------- */
+  let _sfxCtx = null;
+  const sfxClack = (variant) => {
+    if (!isSfxOn()) return;
+    try {
+      if (!_sfxCtx) _sfxCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (_sfxCtx.state === 'suspended') _sfxCtx.resume().catch(() => {});
+      const now = _sfxCtx.currentTime;
+      const o = _sfxCtx.createOscillator();
+      const g = _sfxCtx.createGain();
+      o.type = variant === 'bell' ? 'triangle' : 'square';
+      o.frequency.setValueAtTime(variant === 'bell' ? 1760 : 900 + Math.random() * 600, now);
+      const peak = variant === 'bell' ? 0.07 : 0.025;
+      const dur = variant === 'bell' ? 0.4 : 0.05;
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(peak, now + 0.005);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+      o.connect(g).connect(_sfxCtx.destination);
+      o.start(now);
+      o.stop(now + dur + 0.02);
+    } catch (e) {}
+  };
 
-    const setLang = (lang) => {
-      document.documentElement.setAttribute('lang', lang);
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (lang === 'tl' && dict[key]) {
-          el.textContent = dict[key];
-        } else if (origs[key] != null) {
-          el.textContent = origs[key];
-        }
+  /* ---------- Typewriter SFX on search input ---------- */
+  (function searchSfx(){
+    const input = document.getElementById('searchInput');
+    if (!input) return;
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { sfxClack('bell'); return; }
+      if (e.key.length === 1 || e.key === 'Backspace' || e.key === ' ') sfxClack();
+    });
+  })();
+
+  /* ---------- Hiring Signal toggle (shift-click to flip) ---------- */
+  (function hiring(){
+    const box = document.getElementById('hiring');
+    if (!box) return;
+    const status = document.getElementById('hiringStatus');
+    const sub = document.getElementById('hiringSub');
+    const STATES = {
+      available: {
+        label: 'AVAILABLE FOR COMMISSIONS',
+        sub: 'Accepting: interesting problems \u00b7 freelance dispatches \u00b7 polite arguments about semicolons'
+      },
+      booked: {
+        label: 'BOOKED \u2014 TAKING SHORT DISPATCHES',
+        sub: 'Currently on assignment. Brief consultations and interesting problems still considered.'
+      },
+      quiet: {
+        label: 'OFF THE BEAT \u2014 REPLY SLOWLY',
+        sub: 'The correspondent is on furlough. Telegrams will be answered as soon as the coffee permits.'
+      }
+    };
+    const order = ['available', 'booked', 'quiet'];
+    const read = () => { try { return localStorage.getItem('gazette.hiring') || 'available'; } catch(e) { return 'available'; } };
+    const write = (s) => { try { localStorage.setItem('gazette.hiring', s); } catch(e) {} };
+    const render = (s) => {
+      box.setAttribute('data-status', s);
+      if (status) status.textContent = STATES[s].label;
+      if (sub) sub.textContent = STATES[s].sub;
+    };
+    render(read());
+    // Owner-only flip: shift-click (avoids random visitors tripping it)
+    box.addEventListener('click', (e) => {
+      if (!e.shiftKey) return;
+      const cur = read();
+      const next = order[(order.indexOf(cur) + 1) % order.length];
+      write(next);
+      render(next);
+      sfxClack('bell');
+    });
+  })();
+
+  /* ---------- "Clip this article" share buttons ---------- */
+  (function clipArticles(){
+    const articles = document.querySelectorAll('article.article[id]');
+    articles.forEach(art => {
+      const head = art.querySelector('.headline');
+      if (!head) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'clip-btn';
+      btn.setAttribute('aria-label', 'Clip this article');
+      btn.title = 'Clip this article (copy link)';
+      btn.innerHTML = '<span class="clip-btn__icon">\u2702</span><span class="clip-btn__label">Clip</span>';
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const url = location.origin + location.pathname + '#' + art.id;
+        const title = head.textContent.trim();
+        const shareText = '\u201C' + title + '\u201D \u2014 from The Oragon Gazette';
+        try {
+          if (navigator.share) {
+            await navigator.share({ title: title, text: shareText, url: url });
+          } else if (navigator.clipboard) {
+            await navigator.clipboard.writeText(shareText + '\n' + url);
+            btn.classList.add('clip-btn--copied');
+            btn.querySelector('.clip-btn__label').textContent = 'Copied';
+            sfxClack('bell');
+            setTimeout(() => {
+              btn.classList.remove('clip-btn--copied');
+              btn.querySelector('.clip-btn__label').textContent = 'Clip';
+            }, 1800);
+          } else {
+            window.prompt('Copy this link:', url);
+          }
+        } catch (err) { /* user cancelled or denied */ }
       });
-      btn.textContent = lang === 'tl' ? '\ud83c\uddec\ud83c\udde7 English Ed.' : '\ud83c\uddf5\ud83c\udded Tagalog Ed.';
-      btn.setAttribute('aria-pressed', lang === 'tl' ? 'true' : 'false');
-      try { localStorage.setItem('gazette.lang', lang); } catch(e) {}
-      // Update edition button text too (it reads the lang attribute)
-      try { updateBtn && updateBtn(); } catch(e) {}
+      head.insertAdjacentElement('afterend', btn);
+    });
+  })();
+
+  /* ---------- Keyboard shortcuts (? opens reference desk) ---------- */
+  (function shortcuts(){
+    const modal = document.getElementById('kbModal');
+    const closeBtn = document.getElementById('kbClose');
+    if (!modal) return;
+
+    const open = () => { modal.hidden = false; modal.classList.add('open'); };
+    const close = () => { modal.hidden = true; modal.classList.remove('open'); };
+    closeBtn && closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+
+    const isTyping = (e) => {
+      const t = e.target;
+      return t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
     };
 
-    const savedLang = (() => { try { return localStorage.getItem('gazette.lang'); } catch(e) { return null; } })();
-    if (savedLang === 'tl') setLang('tl');
+    let gBuffer = null;
+    let gTimer = null;
+    const clearG = () => { gBuffer = null; if (gTimer) { clearTimeout(gTimer); gTimer = null; } };
+    document.addEventListener('keydown', (e) => {
+      if (isTyping(e)) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
 
-    btn.addEventListener('click', () => {
-      const cur = document.documentElement.getAttribute('lang') || 'en';
-      setLang(cur === 'tl' ? 'en' : 'tl');
+      // Chained g-<key>
+      if (gBuffer === 'g') {
+        const k = e.key.toLowerCase();
+        if (k === 'h') { location.href = '/'; clearG(); return; }
+        if (k === 'b') { location.href = '/blog/'; clearG(); return; }
+        if (k === 'c') { location.href = '/comics/'; clearG(); return; }
+        if (k === 'r') { location.href = '/resume.html'; clearG(); return; }
+        clearG();
+        return;
+      }
+      if (e.key === 'g') {
+        gBuffer = 'g';
+        gTimer = setTimeout(clearG, 900);
+        return;
+      }
+
+      if (e.key === '?') {
+        e.preventDefault();
+        open();
+      } else if (e.key === 'Escape') {
+        if (!modal.hidden) close();
+      } else if (e.key === '/') {
+        const si = document.getElementById('searchInput');
+        if (si) { e.preventDefault(); si.focus(); si.select && si.select(); }
+      } else if (e.key.toLowerCase() === 'e') {
+        const btn = document.getElementById('editionToggle');
+        if (btn) btn.click();
+      }
     });
+  })();
+
+  /* ---------- Newsflash overlay ---------- */
+  (function newsflash(){
+    const root = document.getElementById('newsflash');
+    if (!root) return;
+    const closeBtn = document.getElementById('newsflashClose');
+    const show = () => {
+      root.hidden = false;
+      void root.offsetWidth;
+      root.classList.add('open');
+      sfxClack('bell');
+    };
+    const hide = () => {
+      root.classList.remove('open');
+      setTimeout(() => { root.hidden = true; }, 320);
+    };
+    closeBtn && closeBtn.addEventListener('click', hide);
+    root.addEventListener('click', (e) => { if (e.target === root) hide(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !root.hidden) hide(); });
+    window.__gazetteNewsflash = show;
+  })();
+
+  /* ---------- Paper-aging on scroll (subtle yellowing) ---------- */
+  (function paperAging(){
+    const root = document.documentElement;
+    let ticking = false;
+    const update = () => {
+      const max = Math.max(1, document.body.scrollHeight - window.innerHeight);
+      const pct = Math.min(1, Math.max(0, window.scrollY / max));
+      root.style.setProperty('--paper-age', pct.toFixed(3));
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
   })();
 
 })();

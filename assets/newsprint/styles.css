@@ -2136,3 +2136,214 @@ html[data-edition="evening"] mark {
   opacity: 0.7;
 }
 html[data-edition="evening"] .ad--featured { background: rgba(224, 184, 110, 0.08); }
+
+
+/* =========================================================
+   Hiring Signal box — availability indicator
+   ========================================================= */
+.hiring {
+  text-align: center;
+  position: relative;
+}
+.hiring__light {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  background: #b45b2e;
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--ink), 0 0 12px currentColor;
+  animation: hiring-pulse 2.4s ease-in-out infinite;
+}
+.hiring[data-status="available"] .hiring__light { background: #2f7a3e; color: #2f7a3e; }
+.hiring[data-status="booked"]    .hiring__light { background: #c4933a; color: #c4933a; animation-duration: 3.6s; }
+.hiring[data-status="quiet"]     .hiring__light { background: #8b2a2a; color: #8b2a2a; animation: none; }
+@keyframes hiring-pulse {
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%      { transform: scale(1.2); opacity: 0.7; }
+}
+.hiring__status {
+  font-family: var(--sans-label, 'Special Elite', monospace);
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.hiring[data-status="available"] .hiring__status { color: #2f7a3e; }
+.hiring[data-status="booked"]    .hiring__status { color: #8a651f; }
+.hiring[data-status="quiet"]     .hiring__status { color: #8b2a2a; }
+html[data-edition="evening"] .hiring[data-status="available"] .hiring__status { color: #7fce8e; }
+html[data-edition="evening"] .hiring[data-status="booked"]    .hiring__status { color: #e3b76a; }
+html[data-edition="evening"] .hiring[data-status="quiet"]     .hiring__status { color: #e58a8a; }
+
+/* =========================================================
+   Clip / share buttons on articles
+   ========================================================= */
+.clip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 10px;
+  padding: 3px 10px 3px 8px;
+  background: var(--paper, #f1e7cf);
+  border: 1px dashed var(--ink, #1a1a1a);
+  color: var(--ink, #1a1a1a);
+  font-family: var(--sans-label, 'Special Elite', monospace);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+}
+.clip-btn:hover { background: var(--ink, #1a1a1a); color: var(--paper, #f1e7cf); transform: translateY(-1px); }
+.clip-btn__icon { transform: rotate(-15deg); font-size: 12px; }
+.clip-btn--copied { background: var(--accent, #8b2a2a); color: var(--paper, #f1e7cf); border-style: solid; }
+
+/* =========================================================
+   Keyboard shortcuts modal
+   ========================================================= */
+.kb-modal { max-width: 560px; }
+.kb-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 18px;
+  margin: 14px 0 10px;
+  font-family: var(--serif-body, 'Old Standard TT', Georgia, serif);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.kb-list dt { white-space: nowrap; }
+.kb-list dd { margin: 0; }
+kbd {
+  display: inline-block;
+  padding: 1px 7px;
+  font-family: var(--sans-label, 'Special Elite', monospace);
+  font-size: 12px;
+  background: var(--paper, #f1e7cf);
+  border: 1px solid var(--ink, #1a1a1a);
+  border-radius: 3px;
+  box-shadow: 1px 1px 0 var(--ink, #1a1a1a);
+  color: var(--ink, #1a1a1a);
+  min-width: 20px;
+  text-align: center;
+}
+
+/* =========================================================
+   Newsflash overlay (konami + ?-triggered)
+   ========================================================= */
+.newsflash {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 15, 10, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 250;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  padding: 20px;
+}
+.newsflash.open { opacity: 1; }
+.newsflash__paper {
+  background: var(--paper, #f1e7cf);
+  color: var(--ink, #1a1a1a);
+  border: 3px double var(--ink, #1a1a1a);
+  padding: 28px 34px;
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+  transform: scale(0.92) rotate(-1.2deg);
+  transition: transform 0.35s cubic-bezier(.2,1.4,.5,1);
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.35);
+}
+.newsflash.open .newsflash__paper { transform: scale(1) rotate(-1.2deg); }
+.newsflash__kicker {
+  font-family: var(--sans-label, 'Special Elite', monospace);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--accent, #8b2a2a);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.newsflash__head {
+  font-family: var(--serif-head, 'Playfair Display', serif);
+  font-weight: 900;
+  font-size: 34px;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  margin: 6px 0 10px;
+  text-transform: uppercase;
+}
+.newsflash__deck {
+  font-family: var(--serif-body, 'Old Standard TT', Georgia, serif);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+.newsflash__close {
+  font-family: var(--sans-label, 'Special Elite', monospace);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  background: var(--ink, #1a1a1a);
+  color: var(--paper, #f1e7cf);
+  border: 1px solid var(--ink, #1a1a1a);
+  cursor: pointer;
+}
+.newsflash__close:hover { background: var(--accent, #8b2a2a); border-color: var(--accent, #8b2a2a); }
+
+/* =========================================================
+   Paper-aging on scroll — subtle yellowing via --paper-age
+   ========================================================= */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 10%, rgba(176, 133, 70, calc(var(--paper-age, 0) * 0.08)) 0%, transparent 65%);
+  mix-blend-mode: multiply;
+  z-index: 1;
+  transition: background 0.18s linear;
+}
+html[data-edition="evening"] body::before {
+  background: radial-gradient(ellipse at 50% 10%, rgba(80, 50, 20, calc(var(--paper-age, 0) * 0.14)) 0%, transparent 65%);
+}
+
+@media print {
+  .clip-btn, .newsflash, #kbModal, .hiring__light { display: none !important; }
+  body::before { display: none; }
+}
+
+
+/* =========================================================
+   404 page specifics
+   ========================================================= */
+.err404 {
+  font-family: var(--serif-head, 'Playfair Display', serif);
+  font-weight: 900;
+  font-size: 92px;
+  line-height: 1;
+  letter-spacing: -2px;
+  text-align: center;
+  margin: 20px 0 10px;
+}
+.err404-sub {
+  text-align: center;
+  font-style: italic;
+  opacity: 0.75;
+  margin-top: -4px;
+}
+.err404-reasons { margin-top: 4px; }
+.err404-lead { margin-top: 18px; }
+.err404-home {
+  margin: 22px 0 10px;
+}
+.err404-home a {
+  font-family: var(--serif-head, 'Playfair Display', serif);
+  font-size: 22px;
+  font-weight: 700;
+  border-bottom: 2px solid currentColor;
+  padding-bottom: 2px;
+}
+.err404-links { margin: 6px 0 20px; }
