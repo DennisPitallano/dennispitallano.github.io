@@ -230,7 +230,7 @@
     about: {
       kicker: 'Cover Story',
       title: 'Bicolano Developer Writes Code by Candlelight, Still Compiles',
-      byline: 'By The Editor · Naga City Bureau',
+      byline: 'By The Editor · Camarines Norte Bureau',
       body: [
         'DENNIS PITALLANO, a full-stack software developer of unremarkable sleeping habits, was observed once more this week assembling web applications from little more than a keyboard, caffeinated conviction, and a long-suffering git repository.',
         'Colleagues describe him as "fluent in .NET, JavaScript, and the ancient art of rescuing production on Friday afternoons." Based in the Philippines, he has spent the better part of a decade converting business requirements into running software — sometimes in that order.',
