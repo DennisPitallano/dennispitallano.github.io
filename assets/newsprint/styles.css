@@ -1842,3 +1842,172 @@ html[data-edition="evening"] mark {
   }
 }
 
+
+/* =========================================================
+   Utility classes (replacing inline styles)
+   ========================================================= */
+.u-mt-4   { margin-top: 4px; }
+.u-mt-6   { margin-top: 6px; }
+.u-mt-8   { margin-top: 8px; }
+.u-mt-10  { margin-top: 10px; }
+.u-mb-6   { margin-bottom: 6px; }
+.u-mb-8   { margin-bottom: 8px; }
+.u-m0     { margin: 0; }
+.u-m0-6   { margin: 0 0 6px; }
+.u-m0-8   { margin: 0 0 8px; }
+.u-m6-0   { margin: 6px 0 0; }
+.u-m8-0   { margin: 8px 0 0; }
+.u-hide   { display: none !important; }
+.u-italic { font-style: italic; }
+.u-muted  { opacity: 0.6; }
+.u-muted-2{ opacity: 0.7; }
+
+.u-list-plain { padding-left: 18px; margin: 8px 0 0; }
+.u-works-small { font-size: 13px; }
+
+/* =========================================================
+   Classifieds extras
+   ========================================================= */
+.classifieds__head {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--accent);
+  margin: 0 0 8px;
+  opacity: 0.85;
+}
+.classifieds__foot {
+  font-family: var(--serif-body, 'Old Standard TT', Georgia, serif);
+  font-style: italic;
+  font-size: 12px;
+  text-align: center;
+  margin: 10px 0 0;
+  opacity: 0.75;
+  border-top: 1px dashed var(--ink-soft);
+  padding-top: 8px;
+}
+
+/* =========================================================
+   Edition / Commit stamp in colophon
+   ========================================================= */
+.colophon__edition {
+  margin-top: 8px;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  opacity: 0.55;
+  text-transform: uppercase;
+}
+.colophon__edition code {
+  font-family: inherit;
+  border-bottom: 1px dotted currentColor;
+  padding-bottom: 1px;
+}
+
+/* =========================================================
+   On This Day source/link
+   ========================================================= */
+.otd__source {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-top: 8px;
+  text-align: right;
+}
+
+/* =========================================================
+   Real mini-crossword
+   ========================================================= */
+#crossword {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+  background: var(--ink);
+  padding: 2px;
+  max-width: 220px;
+  margin: 0 auto 8px;
+  border: 2px solid var(--ink);
+}
+.cw-cell {
+  aspect-ratio: 1;
+  background: var(--paper);
+  position: relative;
+  font-family: var(--serif-head, 'Playfair Display', Georgia, serif);
+  font-weight: 700;
+}
+.cw-cell--block { background: var(--ink); }
+.cw-cell__num {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+.cw-cell input {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: var(--ink);
+  caret-color: var(--accent);
+  padding: 0;
+}
+.cw-cell input:focus {
+  background: rgba(154, 30, 30, 0.08);
+  outline: none;
+}
+.cw-cell--solved input { color: var(--accent); }
+.cw-clues {
+  margin-top: 8px;
+  font-size: 12px;
+  font-family: var(--serif-body, 'Old Standard TT', Georgia, serif);
+}
+.cw-clues dt {
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 6px;
+}
+.cw-clues dd { margin: 2px 0 0; padding: 0; }
+.cw-status {
+  margin-top: 8px;
+  text-align: center;
+  font-family: 'Special Elite', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  min-height: 14px;
+}
+
+
+/* Featured Ad of the Day */
+.ad--featured {
+  border-left: 3px solid var(--accent);
+  padding-left: 8px;
+  background: rgba(154, 30, 30, 0.04);
+  position: relative;
+}
+.ad--featured::before {
+  content: "★";
+  position: absolute;
+  right: 6px;
+  top: 4px;
+  color: var(--accent);
+  font-size: 12px;
+  opacity: 0.7;
+}
+html[data-edition="evening"] .ad--featured { background: rgba(224, 184, 110, 0.08); }

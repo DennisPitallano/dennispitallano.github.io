@@ -200,40 +200,96 @@
   if (fcLabel) fcLabel.textContent = fc.label;
   if (fcDesc) fcDesc.textContent = fc.desc;
 
-  /* ---------- Crossword (click to reveal) ---------- */
-  /* 7x7 grid. '#' = black. Word entries: OR A GON across, DOTNET down, etc. */
-  const grid = [
-    ['#','O','R','A','G','O','N'],
-    ['D','E','V','#','I','#','E'],
-    ['O','#','U','#','T','E','T'],
-    ['T','S','E','R','V','E','R'],
-    ['N','#','#','#','#','#','#'],
-    ['E','L','I','X','I','R','#'],
-    ['T','#','A','P','I','#','S']
-  ];
-  const nums = {'0,1':1,'1,0':2,'2,3':3,'3,0':4,'5,0':5,'6,6':6};
-  const cwEl = document.getElementById('crossword');
-  if (cwEl) {
-    grid.forEach((row, r) => row.forEach((ch, c) => {
-      const cell = document.createElement('div');
-      cell.className = 'cw-cell' + (ch === '#' ? ' black' : '');
-      if (ch !== '#') {
-        cell.dataset.letter = ch;
-        const key = r + ',' + c;
-        if (nums[key]) cell.innerHTML = `<span class="cw-cell__num">${nums[key]}</span>`;
-        cell.addEventListener('click', () => {
-          if (cell.classList.contains('revealed')) {
-            cell.classList.remove('revealed');
-            cell.childNodes.forEach(n => { if (n.nodeType === 3) n.remove(); });
-          } else {
-            cell.classList.add('revealed');
-            cell.appendChild(document.createTextNode(ch));
+  /* ---------- Crossword (real mini, 3 clues) ---------- */
+  /* 5x5 grid. Solution:
+     Row 0: . C O D E  (1-Across: CODE)
+     Row 1: . A . I .
+     Row 2: . B U G S  (2-Down: CAT, 3-Across: BUGS — via grid layout below)
+     Row 3: . L . T .
+     Row 4: . E . . .  (2-Down full: CABLE)
+     Clues: 1A=CODE (what we write), 2D=CABLE (network wire), 3A=BUGS (not a feature) */
+  (function crossword() {
+    const cwEl = document.getElementById('crossword');
+    if (!cwEl) return;
+
+    // '#' = black square; otherwise the solution letter
+    const SOL = [
+      ['#','C','O','D','E'],
+      ['#','A','#','I','#'],
+      ['#','B','U','G','S'],
+      ['#','L','#','I','#'],
+      ['#','E','#','T','#']
+    ];
+    // Cell numbers for clues (row,col -> number)
+    // 1 = 1-Across (CODE) & 1-Down (CABLE), 2 = 2-Down (DIGIT), 3 = 3-Across (BUGS)
+    const NUMS = { '0,1':1, '0,3':2, '2,1':3 };
+
+    // Map row,col to answer letter
+    cwEl.innerHTML = '';
+    const inputs = [];
+    for (let r = 0; r < SOL.length; r++) {
+      for (let c = 0; c < SOL[r].length; c++) {
+        const ch = SOL[r][c];
+        const cell = document.createElement('div');
+        cell.className = 'cw-cell' + (ch === '#' ? ' cw-cell--block' : '');
+        if (ch !== '#') {
+          const key = r + ',' + c;
+          if (NUMS[key]) {
+            const n = document.createElement('span');
+            n.className = 'cw-cell__num';
+            n.textContent = NUMS[key];
+            cell.appendChild(n);
           }
-        });
+          const inp = document.createElement('input');
+          inp.type = 'text';
+          inp.maxLength = 1;
+          inp.setAttribute('aria-label', `Row ${r + 1} Column ${c + 1}`);
+          inp.dataset.answer = ch;
+          inp.dataset.row = r;
+          inp.dataset.col = c;
+          inp.addEventListener('input', () => {
+            inp.value = (inp.value || '').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 1);
+            check();
+            // auto-advance to next input
+            if (inp.value) {
+              const idx = inputs.indexOf(inp);
+              if (idx >= 0 && idx < inputs.length - 1) inputs[idx + 1].focus();
+            }
+          });
+          inp.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !inp.value) {
+              const idx = inputs.indexOf(inp);
+              if (idx > 0) inputs[idx - 1].focus();
+            }
+          });
+          cell.appendChild(inp);
+          inputs.push(inp);
+        }
+        cwEl.appendChild(cell);
       }
-      cwEl.appendChild(cell);
-    }));
-  }
+    }
+
+    const status = document.getElementById('cwStatus');
+    const check = () => {
+      let correct = 0, filled = 0;
+      inputs.forEach(i => {
+        if (i.value) filled++;
+        if (i.value === i.dataset.answer) {
+          correct++;
+          i.parentElement.classList.add('cw-cell--solved');
+        } else {
+          i.parentElement.classList.remove('cw-cell--solved');
+        }
+      });
+      if (correct === inputs.length) {
+        if (status) status.textContent = '✓ Solved! Extra! Extra!';
+      } else if (filled === inputs.length) {
+        if (status) status.textContent = `${correct}/${inputs.length} correct`;
+      } else {
+        if (status) status.textContent = '';
+      }
+    };
+  })();
 
   /* ---------- Article modal ---------- */
   const articles = {
@@ -461,42 +517,104 @@
       if (idx === konami.length) {
         idx = 0;
         const secret = document.getElementById('secretAd');
-        if (secret) { secret.style.display = 'block'; secret.scrollIntoView({behavior:'smooth'}); }
+        if (secret) { secret.classList.remove('u-hide'); secret.scrollIntoView({behavior:'smooth'}); }
       }
     } else {
       idx = 0;
     }
   });
 
+  /* ---------- Classifieds: Ad of the Day ---------- */
+  (function adOfDay() {
+    const box = document.getElementById('classifieds');
+    const tag = document.getElementById('adOfDay');
+    if (!box || !tag) return;
+    const ads = Array.from(box.querySelectorAll('.ad')).filter(a => a.id !== 'secretAd');
+    if (!ads.length) return;
+    // Seed by day-of-year so it's stable within a day and rotates nightly
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const doy = Math.floor((now - start) / 86400000);
+    const pick = ads[doy % ads.length];
+    pick.classList.add('ad--featured');
+    // Move the featured ad to the top of the box
+    box.insertBefore(pick, box.firstChild);
+    const title = (pick.querySelector('strong') || {}).textContent || 'Today';
+    tag.textContent = title.replace(/\s*—\s*$/, '');
+  })();
+
   /* ---------- On This Day in Computing History ---------- */
-  const history = [
-    [1,4,1975,'Microsoft is founded','Bill Gates and Paul Allen register the company in Albuquerque. The world has never been the same, especially on Tuesdays.'],
-    [2,24,1955,'Steve Jobs is born','Future turtleneck enthusiast and founder of Apple.'],
-    [3,12,1989,'Tim Berners-Lee proposes the World Wide Web','A humble memo at CERN. "Vague but exciting," wrote his manager.'],
-    [4,1,1976,'Apple Computer Company is founded','In a garage. Funded by a Volkswagen microbus.'],
-    [4,4,1975,'Microsoft officially formed','"Micro-Soft" — the hyphen dropped later, like so many features.'],
-    [5,9,1983,'The first mobile phone call in the Philippines','A prelude to your pocket computer.'],
-    [6,23,1912,'Alan Turing is born','The father of computer science. We owe him everything, including Candy Crush.'],
-    [7,20,1969,'Humans walk on the Moon','Guided by computers with less RAM than a modern light switch.'],
-    [8,12,1981,'IBM releases the PC (Model 5150)','MS-DOS ships with it. Thus began a forty-year argument.'],
-    [9,9,1945,'The first actual computer bug is logged','A moth, found in the Harvard Mark II relay. Grace Hopper taped it to the log.'],
-    [10,5,1991,'Linus Torvalds releases Linux 0.02','"Just a hobby, nothing big." Reader, it became big.'],
-    [11,7,1996,'Internet Explorer 3.0 ships','The great browser wars begin. Casualties: many afternoons.'],
-    [12,9,1968,'"The Mother of All Demos"','Doug Engelbart demonstrates the mouse, hypertext, and video conferencing — in 1968.']
-  ];
-  const todayOTD = new Date();
-  const m = todayOTD.getMonth() + 1, d = todayOTD.getDate();
-  let entry = history.find(h => h[0] === m && h[1] === d)
-    || history[Math.abs((m * 31 + d)) % history.length];
-  const otdH = document.getElementById('otdHeadline');
-  const otdB = document.getElementById('otdBody');
-  const otdBy = document.getElementById('otdByline');
-  if (otdH && entry) {
-    const monthName = new Date(entry[2], entry[0]-1, entry[1]).toLocaleString('en-US',{month:'long'});
-    otdH.textContent = `${entry[2]}: ${entry[3]}`;
-    otdBy.textContent = `Historical Desk · ${monthName} ${entry[1]}, ${entry[2]}`;
-    otdB.textContent = entry[4];
-  }
+  (function onThisDay() {
+    const otdH = document.getElementById('otdHeadline');
+    const otdB = document.getElementById('otdBody');
+    const otdBy = document.getElementById('otdByline');
+    if (!otdH || !otdB || !otdBy) return;
+
+    const today = new Date();
+    const m = today.getMonth() + 1, d = today.getDate();
+    const monthName = today.toLocaleString('en-US', { month: 'long' });
+
+    // Curated tech-history fallback (used when Wikipedia is unreachable)
+    const fallback = [
+      [1,4,1975,'Microsoft is founded','Bill Gates and Paul Allen register the company in Albuquerque.'],
+      [2,24,1955,'Steve Jobs is born','Future turtleneck enthusiast and founder of Apple.'],
+      [3,12,1989,'Tim Berners-Lee proposes the World Wide Web','A humble memo at CERN. "Vague but exciting," wrote his manager.'],
+      [4,1,1976,'Apple Computer Company is founded','In a garage. Funded by a Volkswagen microbus.'],
+      [4,4,1975,'Microsoft officially formed','"Micro-Soft" — the hyphen dropped later, like so many features.'],
+      [4,22,1993,'NCSA Mosaic 1.0 is released','The graphical web browser that put the Internet on everyone\'s desk.'],
+      [5,9,1983,'First mobile call in the Philippines','A prelude to your pocket computer.'],
+      [6,23,1912,'Alan Turing is born','The father of computer science. We owe him everything, including Candy Crush.'],
+      [7,20,1969,'Humans walk on the Moon','Guided by computers with less RAM than a modern light switch.'],
+      [8,12,1981,'IBM releases the PC (Model 5150)','MS-DOS ships with it. Thus began a forty-year argument.'],
+      [9,9,1945,'First actual computer bug is logged','A moth, found in the Harvard Mark II relay. Grace Hopper taped it to the log.'],
+      [10,5,1991,'Linus Torvalds releases Linux 0.02','"Just a hobby, nothing big." Reader, it became big.'],
+      [11,7,1996,'Internet Explorer 3.0 ships','The great browser wars begin. Casualties: many afternoons.'],
+      [12,9,1968,'"The Mother of All Demos"','Doug Engelbart demonstrates the mouse, hypertext, and video conferencing — in 1968.']
+    ];
+
+    const renderFallback = () => {
+      const entry = fallback.find(h => h[0] === m && h[1] === d)
+        || fallback[Math.abs((m * 31 + d)) % fallback.length];
+      otdH.textContent = `${entry[2]}: ${entry[3]}`;
+      otdBy.textContent = `Historical Desk · ${monthName} ${entry[1]}, ${entry[2]}`;
+      otdB.innerHTML = `${entry[4]} <div class="otd__source">Source · The Morgue Files</div>`;
+    };
+
+    // Try Wikipedia's On This Day feed (CORS-enabled, no key required)
+    const mm = String(m).padStart(2, '0');
+    const dd = String(d).padStart(2, '0');
+    const url = `https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/events/${mm}/${dd}`;
+
+    if (!/^https?:/i.test(location.protocol)) { renderFallback(); return; }
+
+    otdH.textContent = `On This Day — ${monthName} ${d}`;
+    otdBy.textContent = 'Filed from the Historical Desk';
+    otdB.textContent = 'Consulting the morning papers…';
+
+    fetch(url, { headers: { 'Accept': 'application/json' } })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(data => {
+        const events = (data && data.events) || [];
+        if (!events.length) { renderFallback(); return; }
+        // Prefer tech-flavored events; else most recent
+        const techRegex = /comput|software|internet|web|microsoft|apple|google|ibm|unix|linux|program|digital|silicon|nasa|satellite|radio|telegraph|telephone|network|algorithm|mathematic|cipher|crypt|code|bit|byte|processor|transistor/i;
+        const sorted = events.slice().sort((a, b) => (b.year || 0) - (a.year || 0));
+        const pick = sorted.find(e => techRegex.test(e.text || '')) || sorted[0];
+
+        const year = pick.year;
+        const text = (pick.text || '').replace(/\s+/g, ' ').trim();
+        const firstPage = (pick.pages && pick.pages[0]) || null;
+        const headline = firstPage ? (firstPage.titles && firstPage.titles.normalized) || firstPage.title : text.split('.')[0];
+
+        otdH.textContent = year ? `${year}: ${headline}` : headline;
+        otdBy.textContent = `Historical Desk · ${monthName} ${d}${year ? `, ${year}` : ''}`;
+        const pageUrl = firstPage && firstPage.content_urls && firstPage.content_urls.desktop && firstPage.content_urls.desktop.page;
+        otdB.innerHTML =
+          `${text}` +
+          `<div class="otd__source">Source · <a href="${pageUrl || 'https://en.wikipedia.org/wiki/Portal:Current_events'}" target="_blank" rel="noopener">Wikipedia · On This Day</a></div>`;
+      })
+      .catch(() => renderFallback());
+  })();
 
   /* ---------- Developer Horoscopes ---------- */
   const horos = {
@@ -1035,6 +1153,31 @@
       setSfx(!isSfxOn());
       render();
     });
+  })();
+
+  /* ---------- Edition stamp (latest commit hash & date) ---------- */
+  (function editionStamp() {
+    const hashEl = document.getElementById('editionHash');
+    const dateEl = document.getElementById('editionDate');
+    if (!hashEl || !dateEl) return;
+    // Placeholder while loading
+    dateEl.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+    if (!/^https?:/i.test(location.protocol)) { hashEl.textContent = 'local'; return; }
+
+    fetch('https://api.github.com/repos/DennisPitallano/dennispitallano.github.io/commits/main', {
+      headers: { 'Accept': 'application/vnd.github+json' }
+    })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(data => {
+        if (data && data.sha) {
+          hashEl.textContent = data.sha.slice(0, 7);
+          hashEl.title = data.commit && data.commit.message ? data.commit.message.split('\n')[0] : '';
+          if (data.commit && data.commit.author && data.commit.author.date) {
+            dateEl.textContent = new Date(data.commit.author.date).toLocaleDateString('en-US', { month:'short', day:'2-digit', year:'numeric' });
+          }
+        }
+      })
+      .catch(() => { hashEl.textContent = 'offline'; });
   })();
 
   /* ---------- Service worker registration ---------- */

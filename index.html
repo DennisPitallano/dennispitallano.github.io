@@ -140,7 +140,7 @@
 
       <div class="drawer__footer">
         <button class="drawer__edition" id="drawerEdition">☾ Evening Edition</button>
-        <div class="small center" style="margin-top:10px;opacity:.6">Made with 🌶 in the Philippines</div>
+        <div class="small center u-mt-10 u-muted">Made with 🌶 in the Philippines</div>
       </div>
     </aside>
   </div>
@@ -249,7 +249,7 @@
             </div>
           </div>
 
-          <p class="body" style="margin-top:10px"><strong>Open source —</strong> BSCSCAN .NET, CASH .NET, and Oragon Tutorials. Full archive available via the GitHub bureau. <a href="#" data-article="projects">Read the full field report &rsaquo;</a></p>
+          <p class="body u-mt-10"><strong>Open source —</strong> BSCSCAN .NET, CASH .NET, and Oragon Tutorials. Full archive available via the GitHub bureau. <a href="#" data-article="projects">Read the full field report &rsaquo;</a></p>
         </article>
 
         <article class="article reveal" id="editorial">
@@ -342,15 +342,23 @@
 
         <div class="box reveal">
           <h5>Classifieds</h5>
-          <div class="classifieds">
+          <div class="classifieds__head">Three Cents per Line · Cash or Barter</div>
+          <div class="classifieds" id="classifieds">
             <div class="ad"><strong>For Hire —</strong> Full-stack developer, .NET / JS / SQL. Ships on Fridays. References available. <a href="mailto:dpitallano@gmail.com">Inquire</a>.</div>
             <div class="ad"><strong>Wanted —</strong> Interesting problems. Must compile. No cryptocurrency rug-pulls, please.</div>
             <div class="ad"><strong>Lost —</strong> One semicolon. Last seen near line 247. Reward offered.</div>
             <div class="ad"><strong>Services —</strong> Code reviews conducted with tact and occasional British understatement.</div>
             <div class="ad"><strong>Found —</strong> Off-by-one error. Owner may claim at the production logs.</div>
             <div class="ad"><strong>Notice —</strong> The tabs-vs-spaces debate remains ongoing. Letters to the editor welcome.</div>
-            <div class="ad" id="secretAd" style="display:none"><strong>⚑ Classified —</strong> You typed the sacred sequence. A cup of digital coffee, on the house. ☕</div>
+            <div class="ad"><strong>For Sale —</strong> One (1) perfectly good legacy codebase. Runs on Windows XP. All sales final.</div>
+            <div class="ad"><strong>Missing —</strong> Have you seen this senior developer? Last spotted muttering about microservices. Answers to "tech lead."</div>
+            <div class="ad"><strong>Trade —</strong> Will exchange one working Kubernetes cluster for two calm nights of sleep. Terms negotiable.</div>
+            <div class="ad"><strong>Public Notice —</strong> All stand-ups exceeding fifteen minutes are hereby declared illegal in this newspaper's jurisdiction.</div>
+            <div class="ad"><strong>Personals —</strong> SQL query seeks proper INDEX. Must be honest, unique, and willing to commit.</div>
+            <div class="ad"><strong>Estate Sale —</strong> Estate of a retired COBOL programmer. Includes one (1) 80-column punch card collection. Serious bidders only.</div>
+            <div class="ad u-hide" id="secretAd"><strong>⚑ Classified —</strong> You typed the sacred sequence. A cup of digital coffee, on the house. ☕</div>
           </div>
+          <div class="classifieds__foot" id="classifiedsFoot">Ad of the Day · <span id="adOfDay">—</span></div>
         </div>
 
         <article class="article reveal">
@@ -390,7 +398,7 @@
           <div class="forecast">
             <div class="forecast__big" id="fcIcon">☀</div>
             <div class="forecast__label" id="fcLabel">CLEAR BUILDS</div>
-            <div class="small" id="fcDesc" style="margin-top:4px">No errors expected</div>
+            <div class="small u-mt-4" id="fcDesc">No errors expected</div>
             <div class="forecast__rows">
               <div><span>Merge chance</span><span>12%</span></div>
               <div><span>Prod wind</span><span>N 4 req/s</span></div>
@@ -403,18 +411,26 @@
         <div class="box reveal">
           <h5>Tech Stock Index</h5>
           <div class="stocks" id="stocks"></div>
-          <div class="small center" style="margin-top:8px;opacity:.7">Quotes delayed 0 ms · for amusement only</div>
+          <div class="small center u-mt-8 u-muted-2">Quotes delayed 0 ms · for amusement only</div>
         </div>
 
         <div class="box reveal">
           <h5>Daily Crossword</h5>
-          <div class="crossword" id="crossword" aria-label="Interactive crossword"></div>
-          <div class="small"><strong>Clues:</strong> 1-Across: the brand. 2-Down: what we do. 3-Across: not a bug, a ___. Click a cell to reveal.</div>
+          <div class="crossword" id="crossword" aria-label="Interactive mini crossword"></div>
+          <dl class="cw-clues">
+            <dt>Across</dt>
+            <dd><strong>1.</strong> What we write, not prose (4)</dd>
+            <dd><strong>3.</strong> Not features (4)</dd>
+            <dt>Down</dt>
+            <dd><strong>1.</strong> Network tether (5)</dd>
+            <dd><strong>2.</strong> A finger, or 0–9 (5)</dd>
+          </dl>
+          <div class="cw-status" id="cwStatus" aria-live="polite"></div>
         </div>
 
         <div class="box reveal">
           <h5>From the Archives</h5>
-          <ul class="works__list" style="font-size:13px">
+          <ul class="works__list u-works-small">
             <li><img class="works__ico" src="/img/favicon-32x32.png" alt="" loading="lazy"><a href="#archives" data-article="archives">Back Issues &amp; Morgue Files</a></li>
             <li><img class="works__ico" src="/img/favicon-32x32.png" alt="" loading="lazy"><a href="#manuals" data-article="manuals">Technical Manuals</a></li>
             <li><img class="works__ico" src="/img/favicon-32x32.png" alt="" loading="lazy"><a href="/blog/rss.xml" target="_blank" rel="noopener">RSS Feed</a></li>
@@ -424,8 +440,8 @@
 
         <div class="box reveal">
           <h5>The Wire</h5>
-          <p class="small" style="margin:0">Dispatches from the field:</p>
-          <ul class="small" style="padding-left:18px;margin:8px 0 0">
+          <p class="small u-m0">Dispatches from the field:</p>
+          <ul class="small u-list-plain">
             <li><a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">GitHub — DennisPitallano</a></li>
             <li><a href="https://linkedin.com/in/dennis-pitallano-b8764434/" target="_blank" rel="noopener">LinkedIn</a></li>
             <li><a href="https://stackoverflow.com/users/7022362/pitallano-dennis" target="_blank" rel="noopener">Stack Overflow</a></li>
@@ -444,7 +460,7 @@
 
         <div class="box reveal" id="horoscope">
           <h5>Developer Horoscopes</h5>
-          <p class="small center" style="margin:0 0 8px">Consult the stars. Or the compiler.</p>
+          <p class="small center u-m0-8">Consult the stars. Or the compiler.</p>
           <select id="signSelect" class="sign-select" aria-label="Choose your sign">
             <option value="c">♈ C — The Original</option>
             <option value="java">♉ Java — The Enterprise</option>
@@ -459,7 +475,7 @@
             <option value="cpp">♒ C++ — The Powerful</option>
             <option value="sql">♓ SQL — The Eternal Query</option>
           </select>
-          <p class="body small" id="horoReading" style="margin-top:10px;font-style:italic">The stars align over your merge request today…</p>
+          <p class="body small u-mt-10 u-italic" id="horoReading">The stars align over your merge request today…</p>
         </div>
 
         <div class="box reveal" id="comic">
@@ -481,7 +497,7 @@
               <div class="comic__label">PANEL 3 — THE COMPROMISE</div>
             </div>
           </div>
-          <p class="small center" style="margin:8px 0 0;opacity:.7"><button id="comicNext" class="link-btn">Next strip &rsaquo;</button></p>
+          <p class="small center u-m8-0 u-muted-2"><button id="comicNext" class="link-btn">Next strip &rsaquo;</button></p>
         </div>
 
         <div class="box reveal" id="vintageAd">
@@ -516,7 +532,7 @@
 
         <div class="box reveal" id="puzzle">
           <h5>The Puzzle Page</h5>
-          <p class="small center" style="margin:0 0 6px">Classic diversion · use arrow keys or tap</p>
+          <p class="small center u-m0-6">Classic diversion · use arrow keys or tap</p>
           <canvas id="snake" width="220" height="220"></canvas>
           <div class="snake-ctrl">
             <div></div>
@@ -529,7 +545,7 @@
             <button data-dir="down" aria-label="Down">▼</button>
             <div></div>
           </div>
-          <p class="small center" style="margin:6px 0 0">Score: <strong id="snakeScore">0</strong> · Best: <strong id="snakeBest">0</strong></p>
+          <p class="small center u-m6-0">Score: <strong id="snakeScore">0</strong> · Best: <strong id="snakeBest">0</strong></p>
         </div>
 
       </div>
@@ -540,7 +556,7 @@
     <!-- Colophon / footer -->
     <footer class="colophon">
       <div>Printed &amp; Published by Dennis Pitallano · Set in Playfair, Old Standard, UnifrakturCook &amp; Special Elite</div>
-      <div style="margin-top:6px">
+      <div class="u-mt-6">
         <a href="#archives" data-article="archives">Archives</a> ·
         <a href="#manuals" data-article="manuals">Manuals</a> ·
         <a href="/comics/">Comics Archive</a> ·
@@ -548,8 +564,9 @@
         <a href="/blog/rss.xml">RSS</a> ·
         <button id="sfxToggle" class="link-btn" type="button" aria-pressed="true">🔊 Sound</button>
       </div>
-      <div style="margin-top:10px">© <span id="yr"></span> The Oragon Gazette — All Rights Reserved · Made with 🌶 in the Philippines</div>
-      <div class="small" style="margin-top:6px;opacity:.6">Psst. Try the ↑↑↓↓←→←→BA on your keyboard.</div>
+      <div class="u-mt-10">© <span id="yr"></span> The Oragon Gazette — All Rights Reserved · Made with 🌶 in the Philippines</div>
+      <div class="colophon__edition">Edition <code id="editionHash">———————</code> · printed <span id="editionDate">—</span></div>
+      <div class="small u-mt-6 u-muted">Psst. Try the ↑↑↓↓←→←→BA on your keyboard.</div>
     </footer>
 
   </div>

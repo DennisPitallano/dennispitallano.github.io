@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dennispitallano.github.io/sitemap.xml
