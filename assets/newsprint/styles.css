@@ -2234,15 +2234,17 @@ kbd {
   position: fixed;
   inset: 0;
   background: rgba(20, 15, 10, 0.72);
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   z-index: 250;
   opacity: 0;
   transition: opacity 0.28s ease;
   padding: 20px;
+  pointer-events: none;
 }
-.newsflash.open { opacity: 1; }
+.newsflash[hidden] { display: none !important; }
+.newsflash.open { display: flex; opacity: 1; pointer-events: auto; }
 .newsflash__paper {
   background: var(--paper, #f1e7cf);
   color: var(--ink, #1a1a1a);
