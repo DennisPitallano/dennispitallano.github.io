@@ -137,12 +137,7 @@
   const updateBtn = () => {
     if (!editionBtn) return;
     const mode = document.documentElement.getAttribute('data-edition') || 'morning';
-    const lang = document.documentElement.getAttribute('lang') || 'en';
-    if (lang === 'tl') {
-      editionBtn.textContent = mode === 'evening' ? '☀ Umagang Ed.' : '☾ Gabing Ed.';
-    } else {
-      editionBtn.textContent = mode === 'evening' ? '☀ Morning Ed.' : '☾ Evening Ed.';
-    }
+    editionBtn.textContent = mode === 'evening' ? '☀ Morning Ed.' : '☾ Evening Ed.';
   };
   updateBtn();
   editionBtn && editionBtn.addEventListener('click', () => {

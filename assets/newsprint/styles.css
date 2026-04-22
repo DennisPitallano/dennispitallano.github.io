@@ -741,7 +741,7 @@ html[data-edition="evening"] .smudge { mix-blend-mode: screen; background: radia
 
 /* ---------- Print ---------- */
 @media print {
-  .ticker, .edition-toggle, .masthead__toggles, .smudge, .modal, #deadDrop, #wireService { display: none !important; }
+  .ticker, .edition-toggle, .smudge, .modal, #deadDrop, #wireService { display: none !important; }
   body { background: #fff; }
 }
 
@@ -1608,26 +1608,6 @@ html[data-edition="evening"] .searchbar__results .sr mark { background: #5a4520;
   color: var(--ink, #1a1a1a);
 }
 .rule-divider--inline { margin: 18px auto 22px; }
-
-/* Masthead toggles cluster (edition + language) */
-.masthead__toggles {
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-.masthead { position: relative; }
-.masthead__toggles .edition-toggle { position: static; }
-@media (max-width: 640px) {
-  .masthead__toggles {
-    position: static;
-    margin: 10px auto 0;
-    justify-content: center;
-  }
-}
 
 /* Editor's Note — rotating daily note below the lead deck */
 .editors-note {
