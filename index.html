@@ -160,23 +160,26 @@
       </div>
       <h1>The Oragon Gazette</h1>
       <div class="masthead__sub">
-        <span>All the Code That’s Fit to Ship</span>
+        <span data-i18n="tagline">All the Code That’s Fit to Ship</span>
         <span id="volumeNo">VOL. — · NO. —</span>
-        <span>Independent · Opinionated · Indented</span>
+        <span data-i18n="motto">Independent · Opinionated · Indented</span>
       </div>
-      <button class="edition-toggle" id="editionToggle" title="Toggle Morning / Evening Edition">☾ Evening Ed.</button>
+      <div class="masthead__toggles">
+        <button class="edition-toggle" id="langToggle" title="English / Tagalog" aria-pressed="false" data-i18n-btn="langToggle">🇵🇭 Tagalog Ed.</button>
+        <button class="edition-toggle" id="editionToggle" title="Toggle Morning / Evening Edition" data-i18n-btn="editionToggle">☾ Evening Ed.</button>
+      </div>
     </header>
 
     <!-- Section bar (nav) -->
     <nav class="sectionbar" aria-label="Sections">
-      <a href="#cover" data-article="about">Front Page</a>
-      <a href="#tech" data-article="stack">Technology</a>
-      <a href="#projects" data-article="projects">Field Reports</a>
-      <a href="#annals">The Annals</a>
-      <a href="#editorial" data-article="blog">Editorial</a>
-      <a href="#archives" data-article="archives">Archives</a>
-      <a href="#manuals" data-article="manuals">Manuals</a>
-      <a href="#contact" data-article="contact">Dispatch</a>
+      <a href="#cover" data-article="about" data-i18n="nav.front">Front Page</a>
+      <a href="#tech" data-article="stack" data-i18n="nav.tech">Technology</a>
+      <a href="#projects" data-article="projects" data-i18n="nav.field">Field Reports</a>
+      <a href="#annals" data-i18n="nav.annals">The Annals</a>
+      <a href="#editorial" data-article="blog" data-i18n="nav.editorial">Editorial</a>
+      <a href="#archives" data-article="archives" data-i18n="nav.archives">Archives</a>
+      <a href="#manuals" data-article="manuals" data-i18n="nav.manuals">Manuals</a>
+      <a href="#contact" data-article="contact" data-i18n="nav.dispatch">Dispatch</a>
       <a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">GitHub ↗</a>
       <div class="searchbar">
         <input type="search" id="searchInput" placeholder="Search the Gazette…" aria-label="Search the Gazette" autocomplete="off" />
@@ -195,6 +198,11 @@
           <h2 class="headline" data-article="about">Bicolano Developer Writes Code by Candlelight, Still Compiles</h2>
           <div class="byline">By The Editor · Staff Correspondent · Camarines Norte</div>
           <div class="deck">A full-stack dispatch from the provinces: one developer, several frameworks, and a suspicious amount of coffee.</div>
+
+          <aside class="editors-note" id="editorsNote" aria-label="Editor's note for today">
+            <span class="editors-note__label">✎ Editor’s Note —</span>
+            <span class="editors-note__body" id="editorsNoteText">The presses are warming. Today’s column will arrive shortly.</span>
+          </aside>
 
           <figure class="photo photo--img" aria-label="Photograph of Dennis Pitallano">
             <picture>
@@ -222,6 +230,25 @@
           <p class="body">Beyond the daily drivers, the subject maintains working familiarity with <strong>Vue</strong>, <strong>React</strong>, <strong>Next.js</strong>, <strong>NestJS</strong>, <strong>FastAPI</strong>, and <strong>Xamarin</strong>. Data handled across <strong>MSSQL</strong>, <strong>PostgreSQL</strong>, <strong>MongoDB</strong>, <strong>Redis</strong>, and <strong>SQLite</strong> — depending on which architect last held the pen.</p>
           <p class="body">Operations-adjacent skills include <strong>Docker</strong>, <strong>Kubernetes</strong>, <strong>Nginx</strong>, and <strong>Jenkins</strong>. A full dossier is available upon request, or by following the citation trail to the GitHub bureau. <a href="#" data-article="stack">Read on &rsaquo;</a></p>
         </article>
+
+        <div class="rule-divider rule-divider--svg rule-divider--inline" aria-hidden="true">
+          <svg viewBox="0 0 240 44" width="220" height="40" role="img" focusable="false">
+            <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+              <line x1="4" y1="22" x2="88" y2="22"/>
+              <line x1="152" y1="22" x2="236" y2="22"/>
+            </g>
+            <!-- Typewriter motif -->
+            <g fill="currentColor" transform="translate(100 6)">
+              <rect x="2" y="10" width="36" height="20" fill="none" stroke="currentColor" stroke-width="1.3" rx="2"/>
+              <rect x="6" y="14" width="28" height="2"/>
+              <rect x="8" y="18" width="24" height="2"/>
+              <rect x="10" y="22" width="20" height="2"/>
+              <rect x="12" y="4" width="16" height="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <line x1="20" y1="30" x2="20" y2="34" stroke="currentColor" stroke-width="1.3"/>
+              <rect x="14" y="34" width="12" height="3"/>
+            </g>
+          </svg>
+        </div>
 
         <article class="article reveal" id="projects">
           <div class="kicker">Field Reports · Selected</div>
@@ -266,6 +293,22 @@
           <div class="byline">Op-Ed · By D. Pitallano</div>
           <p class="body">A function named <code>doStuff()</code> is not a function; it is a threat. Clear names, small functions, honest comments — the craft is unglamorous but durable. <a href="#" data-article="blog">Continue &rsaquo;</a></p>
         </article>
+
+        <div class="rule-divider rule-divider--svg rule-divider--inline" aria-hidden="true">
+          <svg viewBox="0 0 240 48" width="220" height="42" role="img" focusable="false">
+            <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+              <line x1="4" y1="24" x2="88" y2="24"/>
+              <line x1="152" y1="24" x2="236" y2="24"/>
+            </g>
+            <!-- Coffee cup motif -->
+            <g fill="currentColor" transform="translate(102 6)">
+              <path d="M4 14 L4 30 Q4 36 10 36 L26 36 Q32 36 32 30 L32 14 Z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M32 18 Q40 18 40 24 Q40 30 32 30" fill="none" stroke="currentColor" stroke-width="1.4"/>
+              <rect x="0" y="36" width="36" height="2"/>
+              <path d="M10 8 Q14 4 14 0 M18 8 Q22 4 22 0 M26 8 Q30 4 30 0" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
 
         <article class="article reveal" id="annals">
           <div class="kicker">The Annals · Career Record</div>
@@ -406,14 +449,28 @@
           <div class="forecast">
             <div class="forecast__big" id="fcIcon">☀</div>
             <div class="forecast__label" id="fcLabel">CLEAR BUILDS</div>
-            <div class="small u-mt-4" id="fcDesc">No errors expected</div>
+            <div class="small u-mt-4" id="fcDesc">24°C · merge chance 12%</div>
             <div class="forecast__rows">
-              <div><span>Merge chance</span><span>12%</span></div>
-              <div><span>Prod wind</span><span>N 4 req/s</span></div>
-              <div><span>Coffee index</span><span>HIGH</span></div>
-              <div><span>Sunset deploy</span><span>17:59</span></div>
+              <div><span>Temperature</span><span id="fcTemp">— °C</span></div>
+              <div><span>Prod wind</span><span id="fcWind">— req/s</span></div>
+              <div><span>Coffee index</span><span id="fcCoffee">—</span></div>
+              <div><span>Sunset deploy</span><span id="fcSunset">—</span></div>
             </div>
+            <div class="forecast__loc" id="fcLoc">Wire from the provinces…</div>
           </div>
+        </div>
+
+        <div class="box reveal" id="deadDrop">
+          <h5>Dead Drop</h5>
+          <p class="small u-m0"><em>Anonymous tips to the Editor. 140 characters, no return address. Gentlemen’s agreement.</em></p>
+          <form class="dd-form" id="ddForm" data-endpoint="" novalidate>
+            <textarea class="dd-text" id="ddText" maxlength="140" rows="3" placeholder="Whisper the truth, hand to the Editor…" aria-label="Your anonymous tip"></textarea>
+            <div class="dd-foot">
+              <span class="small u-muted-2"><span id="ddCount">0</span>/140</span>
+              <button type="submit" class="dd-btn" id="ddSend">Slip it under the door</button>
+            </div>
+            <div class="dd-status small" id="ddStatus" role="status" aria-live="polite"></div>
+          </form>
         </div>
 
         <div class="box reveal">
@@ -446,11 +503,19 @@
           </ul>
         </div>
 
+        <div class="box reveal" id="wireService">
+          <h5>Wire Service</h5>
+          <p class="small u-m0 u-muted-2"><em>Dispatches from the GitHub bureau:</em></p>
+          <ul class="wire" id="wireList" aria-live="polite">
+            <li class="wire__item wire__loading">Tapping the telegraph…</li>
+          </ul>
+          <p class="small center u-mt-8 u-muted-2"><a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">Full bureau ↗</a></p>
+        </div>
+
         <div class="box reveal">
-          <h5>The Wire</h5>
-          <p class="small u-m0">Dispatches from the field:</p>
+          <h5>The Rolodex</h5>
+          <p class="small u-m0">Correspondents &amp; contact cards:</p>
           <ul class="small u-list-plain">
-            <li><a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">GitHub — DennisPitallano</a></li>
             <li><a href="https://linkedin.com/in/dennis-pitallano-b8764434/" target="_blank" rel="noopener">LinkedIn</a></li>
             <li><a href="https://stackoverflow.com/users/7022362/pitallano-dennis" target="_blank" rel="noopener">Stack Overflow</a></li>
             <li><a href="https://www.facebook.com/dennis.pitallano/" target="_blank" rel="noopener">Facebook</a></li>
@@ -559,7 +624,25 @@
       </div>
     </div>
 
-    <div class="rule-divider">❦ ❦ ❦</div>
+    <div class="rule-divider rule-divider--svg" aria-hidden="true">
+      <svg viewBox="0 0 240 56" width="240" height="56" role="img" focusable="false">
+        <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+          <line x1="4" y1="28" x2="92" y2="28"/>
+          <line x1="148" y1="28" x2="236" y2="28"/>
+        </g>
+        <!-- Printing press motif -->
+        <g fill="currentColor" transform="translate(100 10)">
+          <rect x="2" y="6" width="36" height="22" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <rect x="6" y="10" width="28" height="4"/>
+          <rect x="6" y="17" width="20" height="2"/>
+          <rect x="6" y="21" width="24" height="2"/>
+          <circle cx="10" cy="34" r="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="30" cy="34" r="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <line x1="20" y1="2" x2="20" y2="6" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="20" cy="2" r="1.5"/>
+        </g>
+      </svg>
+    </div>
 
     <!-- Colophon / footer -->
     <footer class="colophon">

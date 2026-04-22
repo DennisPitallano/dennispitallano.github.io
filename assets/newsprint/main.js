@@ -117,11 +117,32 @@
   /* ---------- Evening / Morning Edition toggle ---------- */
   const editionBtn = document.getElementById('editionToggle');
   const saved = localStorage.getItem('gazette.edition');
-  if (saved) document.documentElement.setAttribute('data-edition', saved);
+  if (saved) {
+    document.documentElement.setAttribute('data-edition', saved);
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    // Respect the reader's OS preference on first visit
+    document.documentElement.setAttribute('data-edition', 'evening');
+  }
+  // Follow subsequent OS-level changes if the user hasn't explicitly toggled
+  if (window.matchMedia) {
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    const listener = (e) => {
+      if (localStorage.getItem('gazette.edition')) return; // user made an explicit choice
+      document.documentElement.setAttribute('data-edition', e.matches ? 'evening' : 'morning');
+      updateBtn();
+    };
+    if (mql.addEventListener) mql.addEventListener('change', listener);
+    else if (mql.addListener) mql.addListener(listener);
+  }
   const updateBtn = () => {
     if (!editionBtn) return;
     const mode = document.documentElement.getAttribute('data-edition') || 'morning';
-    editionBtn.textContent = mode === 'evening' ? '☀ Morning Ed.' : '☾ Evening Ed.';
+    const lang = document.documentElement.getAttribute('lang') || 'en';
+    if (lang === 'tl') {
+      editionBtn.textContent = mode === 'evening' ? '☀ Umagang Ed.' : '☾ Gabing Ed.';
+    } else {
+      editionBtn.textContent = mode === 'evening' ? '☀ Morning Ed.' : '☾ Evening Ed.';
+    }
   };
   updateBtn();
   editionBtn && editionBtn.addEventListener('click', () => {
@@ -1200,5 +1221,310 @@
       navigator.serviceWorker.register('/sw.js').catch(() => { /* silent */ });
     });
   }
+
+  /* ---------- Daily Editor's Note (rotates by day-of-year) ---------- */
+  (function editorsNote(){
+    const el = document.getElementById('editorsNoteText');
+    if (!el) return;
+    const notes = [
+      'Today\u2019s column was written before coffee. Reader discretion advised.',
+      'The typesetter reports unusually clean kerning this morning.',
+      'A correspondent filed this dispatch over spotty 4G. Forgive the hyphens.',
+      'The Editor regrets nothing \u2014 least of all the Oxford comma.',
+      'Printed on recycled optimism and one borrowed semicolon.',
+      'A late correction: production is, in fact, the test environment.',
+      'Our fact-checker has returned from leave. Expect fewer dragons.',
+      'Filed under protest by a developer who prefers tabs.',
+      'This issue printed before the daily stand-up. Notes may evolve.',
+      'A reader writes to ask when we shall adopt Markdown. We shall not.',
+      'No features were harmed in the making of this edition.',
+      'Press run briefly interrupted by a rogue cron job. Resumed at dawn.',
+      'All opinions herein are the author\u2019s, held with modest confidence.',
+      'The newsroom is quiet today \u2014 the linter has nothing to flag.',
+      'A merge has been delayed pending the Editor\u2019s second cup.',
+      'Today we honour the humble <code>README</code>. Seldom read, often regretted.',
+      'Our financial desk notes: technical debt compounds. Pay early.',
+      'Notice: the docs are the source of truth. The source is also the truth.',
+      'The correspondent is on assignment in the staging environment.',
+      'This Gazette does not endorse premature abstraction.',
+      'Weather bureau reports: a light drizzle of TypeScript complaints.',
+      'Yesterday\u2019s bug has been promoted to a feature. Congratulations.',
+      'Letters to the editor are opened, read, and occasionally answered.',
+      'We regret that the crossword contains no references to blockchain.',
+      'A kind note from the archive desk: <em>your PR is still open.</em>',
+      'Deadline extended on account of the compiler. Again.',
+      'The presses were halted briefly to rename a variable. Worth it.',
+      'A moment of silence, please, for last night\u2019s merge conflict.',
+      'Our editorial board voted unanimously to ship it on Monday.',
+      'To the anonymous reader who fixed our typo: we remain in your debt.',
+      'This edition is dedicated to everyone still waiting on <code>npm install</code>.'
+    ];
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const diff = now - start + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+    const doy = Math.floor(diff / 86400000);
+    el.innerHTML = notes[doy % notes.length];
+  })();
+
+  /* ---------- Real Weather (Open-Meteo, no key) ---------- */
+  (function weather(){
+    const icon = document.getElementById('fcIcon');
+    const label = document.getElementById('fcLabel');
+    const desc = document.getElementById('fcDesc');
+    const temp = document.getElementById('fcTemp');
+    const wind = document.getElementById('fcWind');
+    const coffee = document.getElementById('fcCoffee');
+    const sunset = document.getElementById('fcSunset');
+    const loc = document.getElementById('fcLoc');
+    if (!icon || !label) return;
+
+    // Weather code → [icon, playful label, descriptor]
+    // https://open-meteo.com/en/docs#weathervariables (WMO codes)
+    const codeMap = {
+      0:  ['\u2600', 'CLEAR BUILDS',    'no errors expected'],
+      1:  ['\u{1F324}', 'MOSTLY CLEAR',    'light scattered warnings'],
+      2:  ['\u26C5', 'PARTLY CACHED',    'intermittent cloud cover'],
+      3:  ['\u2601', 'OVERCAST MERGE',   'heavy cloud, low visibility'],
+      45: ['\u{1F32B}', 'FOGGED LOGS',     'trace diagnostics advised'],
+      48: ['\u{1F32B}', 'RIMY DEPLOY',     'cold start expected'],
+      51: ['\u{1F327}', 'LIGHT DRIZZLE',   'minor PR comments falling'],
+      53: ['\u{1F327}', 'STEADY DRIZZLE',  'sustained nitpicks'],
+      55: ['\u{1F327}', 'HEAVY DRIZZLE',   'CR backlog rising'],
+      61: ['\u{1F327}', 'LIGHT RAIN',      'bring an umbrella \u2014 and tests'],
+      63: ['\u{1F327}', 'RAIN',            'tests recommended'],
+      65: ['\u26C8', 'HEAVY RAIN',       'rollback gear advised'],
+      71: ['\u{1F328}', 'LIGHT SNOW',      'cold cache incoming'],
+      73: ['\u{1F328}', 'SNOW',            'freeze on deployment'],
+      75: ['\u{1F328}', 'HEAVY SNOW',      'prod is frozen'],
+      80: ['\u{1F327}', 'SHOWERS',         'intermittent outages'],
+      81: ['\u{1F327}', 'RAIN SHOWERS',    'sustained downpours'],
+      82: ['\u26C8', 'VIOLENT SHOWERS',  'page the on-call'],
+      95: ['\u26C8', 'THUNDERSTORM',     'incident in progress'],
+      96: ['\u26C8', 'STORM + HAIL',     'DECLARE P0'],
+      99: ['\u26C8', 'SEVERE STORM',     'panic methodically']
+    };
+
+    const fmtTime = (iso) => {
+      try {
+        return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+      } catch(e) { return '\u2014'; }
+    };
+
+    const coffeeFromUv = (uv) => {
+      if (uv == null) return 'MEDIUM';
+      if (uv < 2) return 'LOW';
+      if (uv < 5) return 'MEDIUM';
+      if (uv < 8) return 'HIGH';
+      return 'CRITICAL';
+    };
+
+    const fetchWeather = (lat, lon, placeName) => {
+      const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
+        '&current=temperature_2m,wind_speed_10m,weather_code,relative_humidity_2m,uv_index' +
+        '&daily=sunset&timezone=auto&forecast_days=1';
+      fetch(url).then(r => r.ok ? r.json() : Promise.reject()).then(data => {
+        const c = data.current || {};
+        const d = data.daily || {};
+        const meta = codeMap[c.weather_code] || ['\u2600', 'UNKNOWN WEATHER', 'conditions unclear'];
+        const t = Math.round(c.temperature_2m);
+        const rh = c.relative_humidity_2m;
+        const mergeChance = rh != null ? Math.max(0, Math.min(99, Math.round(rh * 0.9))) : 12;
+        if (icon) icon.textContent = meta[0];
+        if (label) label.textContent = meta[1];
+        if (desc) desc.textContent = t + '\u00B0C \u00B7 merge chance ' + mergeChance + '%';
+        if (temp) temp.textContent = t + '\u00B0C';
+        if (wind) wind.textContent = (c.wind_speed_10m != null ? c.wind_speed_10m.toFixed(1) : '\u2014') + ' km/h';
+        if (coffee) coffee.textContent = coffeeFromUv(c.uv_index);
+        if (sunset) sunset.textContent = (d.sunset && d.sunset[0]) ? fmtTime(d.sunset[0]) : '\u2014';
+      }).catch(() => {
+        if (desc) desc.textContent = 'Wire interrupted \u2014 forecast from memory';
+      });
+      if (loc) loc.textContent = placeName;
+    };
+
+    // Try geolocation, fall back to Camarines Norte (the correspondent's desk)
+    const fallback = () => fetchWeather(14.1396, 122.7632, 'Camarines Norte Bureau');
+    if (!('geolocation' in navigator)) return fallback();
+    // Quick reverse-label helper using Open-Meteo reverse geocoding
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const { latitude, longitude } = pos.coords;
+      const rg = 'https://geocoding-api.open-meteo.com/v1/reverse?latitude=' + latitude +
+                 '&longitude=' + longitude + '&count=1&language=en&format=json';
+      fetch(rg).then(r => r.ok ? r.json() : null).then(j => {
+        const first = j && j.results && j.results[0];
+        const name = first ? (first.name + (first.country_code ? ', ' + first.country_code : '')) : 'Reader\u2019s desk';
+        fetchWeather(latitude, longitude, name);
+      }).catch(() => fetchWeather(latitude, longitude, 'Reader\u2019s desk'));
+    }, () => fallback(), { timeout: 5000, maximumAge: 600000 });
+  })();
+
+  /* ---------- Dead Drop (anonymous tips) ---------- */
+  (function deadDrop(){
+    const form = document.getElementById('ddForm');
+    if (!form) return;
+    const text = document.getElementById('ddText');
+    const count = document.getElementById('ddCount');
+    const status = document.getElementById('ddStatus');
+    const btn = document.getElementById('ddSend');
+    // Configure by setting data-endpoint on #ddForm (Formspree/Pipedream/etc)
+    // Example: <form id="ddForm" data-endpoint="https://formspree.io/f/xxxx">
+    const endpoint = form.getAttribute('data-endpoint') || '';
+
+    text.addEventListener('input', () => {
+      count.textContent = text.value.length;
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = (text.value || '').trim();
+      if (!msg) { status.textContent = 'The drop must contain a message.'; return; }
+      if (msg.length > 140) { status.textContent = 'Too long \u2014 140 characters or less.'; return; }
+
+      if (!endpoint) {
+        // No backend configured \u2014 fall back to mailto so it still ships.
+        const subject = encodeURIComponent('Dead Drop \u00b7 Anonymous tip');
+        const body = encodeURIComponent(msg + '\n\n\u2014 Slipped through the Gazette letterbox');
+        window.location.href = 'mailto:dpitallano@gmail.com?subject=' + subject + '&body=' + body;
+        status.textContent = 'Opening your letter\u2014carrier\u2026';
+        return;
+      }
+
+      btn.disabled = true;
+      status.textContent = 'Handing it to the runner\u2026';
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg, ua: navigator.userAgent, ts: new Date().toISOString() })
+      }).then(r => {
+        if (!r.ok) throw new Error('bad response');
+        form.reset();
+        count.textContent = '0';
+        status.textContent = 'Received. The Editor bows slightly in your direction.';
+      }).catch(() => {
+        status.textContent = 'The runner returned. Try again, or e\u2011mail the Editor directly.';
+      }).finally(() => { btn.disabled = false; });
+    });
+  })();
+
+  /* ---------- Wire Service (GitHub public events) ---------- */
+  (function wireService(){
+    const list = document.getElementById('wireList');
+    if (!list) return;
+    const user = 'DennisPitallano';
+
+    const fmtAgo = (iso) => {
+      const d = new Date(iso);
+      const s = Math.max(1, Math.floor((Date.now() - d.getTime()) / 1000));
+      if (s < 60) return s + 's ago';
+      if (s < 3600) return Math.floor(s/60) + 'm ago';
+      if (s < 86400) return Math.floor(s/3600) + 'h ago';
+      if (s < 2592000) return Math.floor(s/86400) + 'd ago';
+      return Math.floor(s/2592000) + 'mo ago';
+    };
+
+    const describe = (ev) => {
+      const repo = ev.repo && ev.repo.name ? ev.repo.name.replace(user + '/', '') : 'an unnamed beat';
+      const repoUrl = 'https://github.com/' + (ev.repo ? ev.repo.name : user);
+      switch (ev.type) {
+        case 'PushEvent': {
+          const n = ev.payload && ev.payload.commits ? ev.payload.commits.length : 1;
+          return 'Filed ' + n + ' commit' + (n === 1 ? '' : 's') + ' to <a href="' + repoUrl + '" target="_blank" rel="noopener">' + repo + '</a>';
+        }
+        case 'PullRequestEvent': {
+          const action = ev.payload.action;
+          const num = ev.payload.pull_request && ev.payload.pull_request.number;
+          return (action === 'opened' ? 'Opened' : action === 'closed' ? 'Closed' : 'Updated') +
+                 ' PR #' + num + ' in <a href="' + repoUrl + '" target="_blank" rel="noopener">' + repo + '</a>';
+        }
+        case 'IssuesEvent': {
+          const a = ev.payload.action;
+          const n = ev.payload.issue && ev.payload.issue.number;
+          return a.charAt(0).toUpperCase() + a.slice(1) + ' issue #' + n + ' in <a href="' + repoUrl + '" target="_blank" rel="noopener">' + repo + '</a>';
+        }
+        case 'IssueCommentEvent':
+          return 'Commented on <a href="' + repoUrl + '" target="_blank" rel="noopener">' + repo + '</a>';
+        case 'WatchEvent':
+          return 'Starred <a href="' + repoUrl + '" target="_blank" rel="noopener">' + repo + '</a>';
+        case 'ForkEvent':
+          return 'Forked <a href="' + repoUrl + '" target="_blank" rel="noopener">' + repo + '</a>';
+        case 'CreateEvent': {
+          const kind = ev.payload.ref_type || 'ref';
+          return 'Created a new ' + kind + ' in <a href="' + repoUrl + '" target="_blank" rel="noopener">' + repo + '</a>';
+        }
+        case 'ReleaseEvent': {
+          const tag = ev.payload.release && ev.payload.release.tag_name;
+          return 'Released ' + (tag ? '<code>' + tag + '</code> ' : '') + 'of <a href="' + repoUrl + '" target="_blank" rel="noopener">' + repo + '</a>';
+        }
+        case 'PublicEvent':
+          return 'Made <a href="' + repoUrl + '" target="_blank" rel="noopener">' + repo + '</a> public';
+        default:
+          return 'Dispatch from <a href="' + repoUrl + '" target="_blank" rel="noopener">' + repo + '</a>';
+      }
+    };
+
+    fetch('https://api.github.com/users/' + user + '/events/public?per_page=10')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(events => {
+        if (!Array.isArray(events) || !events.length) {
+          list.innerHTML = '<li class="wire__item u-muted-2">The wire is quiet today.</li>';
+          return;
+        }
+        const items = events.slice(0, 5).map(ev =>
+          '<li class="wire__item"><span class="wire__dot">\u25A0</span><span class="wire__text">' +
+          describe(ev) + '</span><span class="wire__when small u-muted-2">' + fmtAgo(ev.created_at) + '</span></li>'
+        );
+        list.innerHTML = items.join('');
+      })
+      .catch(() => {
+        list.innerHTML = '<li class="wire__item u-muted-2">Wire offline \u2014 reader, please check again shortly.</li>';
+      });
+  })();
+
+  /* ---------- i18n Tagalog Edition toggle ---------- */
+  (function i18n(){
+    const btn = document.getElementById('langToggle');
+    if (!btn) return;
+    const dict = {
+      'tagline':       'Lahat ng Koda na Karapat-dapat Ipadala',
+      'motto':         'Malaya \u00b7 May-Opinyon \u00b7 May-Indent',
+      'nav.front':     'Pahinang Pangharap',
+      'nav.tech':      'Teknolohiya',
+      'nav.field':     'Ulat sa Larangan',
+      'nav.annals':    'Mga Kasaysayan',
+      'nav.editorial': 'Editoryal',
+      'nav.archives':  'Mga Lumang Isyu',
+      'nav.manuals':   'Manwal',
+      'nav.dispatch':  'Padala'
+    };
+    const origs = {};
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      origs[el.getAttribute('data-i18n')] = el.textContent;
+    });
+
+    const setLang = (lang) => {
+      document.documentElement.setAttribute('lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (lang === 'tl' && dict[key]) {
+          el.textContent = dict[key];
+        } else if (origs[key] != null) {
+          el.textContent = origs[key];
+        }
+      });
+      btn.textContent = lang === 'tl' ? '\ud83c\uddec\ud83c\udde7 English Ed.' : '\ud83c\uddf5\ud83c\udded Tagalog Ed.';
+      btn.setAttribute('aria-pressed', lang === 'tl' ? 'true' : 'false');
+      try { localStorage.setItem('gazette.lang', lang); } catch(e) {}
+      // Update edition button text too (it reads the lang attribute)
+      try { updateBtn && updateBtn(); } catch(e) {}
+    };
+
+    const savedLang = (() => { try { return localStorage.getItem('gazette.lang'); } catch(e) { return null; } })();
+    if (savedLang === 'tl') setLang('tl');
+
+    btn.addEventListener('click', () => {
+      const cur = document.documentElement.getAttribute('lang') || 'en';
+      setLang(cur === 'tl' ? 'en' : 'tl');
+    });
+  })();
 
 })();

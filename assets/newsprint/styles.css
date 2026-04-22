@@ -741,7 +741,7 @@ html[data-edition="evening"] .smudge { mix-blend-mode: screen; background: radia
 
 /* ---------- Print ---------- */
 @media print {
-  .ticker, .edition-toggle, .smudge, .modal { display: none !important; }
+  .ticker, .edition-toggle, .masthead__toggles, .smudge, .modal, #deadDrop, #wireService { display: none !important; }
   body { background: #fff; }
 }
 
@@ -1590,6 +1590,151 @@ html[data-edition="evening"] .searchbar__results .sr mark { background: #5a4520;
   margin: 32px 0 18px;
   padding-right: 14px; /* compensate for right-side letter-spacing */
 }
+
+/* SVG wood-cut divider variant (printing press / typewriter / coffee) */
+.rule-divider--svg {
+  letter-spacing: 0;
+  padding-right: 0;
+  opacity: 0.8;
+  line-height: 0;
+}
+.rule-divider--svg svg { max-width: 100%; height: auto; }
+.rule-divider--svg svg,
+.rule-divider--svg g,
+.rule-divider--svg line,
+.rule-divider--svg rect,
+.rule-divider--svg circle,
+.rule-divider--svg path {
+  color: var(--ink, #1a1a1a);
+}
+.rule-divider--inline { margin: 18px auto 22px; }
+
+/* Masthead toggles cluster (edition + language) */
+.masthead__toggles {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.masthead { position: relative; }
+.masthead__toggles .edition-toggle { position: static; }
+@media (max-width: 640px) {
+  .masthead__toggles {
+    position: static;
+    margin: 10px auto 0;
+    justify-content: center;
+  }
+}
+
+/* Editor's Note — rotating daily note below the lead deck */
+.editors-note {
+  display: block;
+  margin: 12px 0 14px;
+  padding: 10px 12px;
+  border-left: 3px double var(--ink, #1a1a1a);
+  background: rgba(0,0,0,0.03);
+  font-family: var(--serif-body, 'Old Standard TT', Georgia, serif);
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.5;
+}
+.editors-note__label {
+  font-family: var(--sans, 'Special Elite', monospace);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+html[data-edition="evening"] .editors-note { background: rgba(255,255,255,0.04); }
+
+/* Weather location chip */
+.forecast__loc {
+  margin-top: 10px;
+  font-family: var(--sans, 'Special Elite', monospace);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  opacity: 0.65;
+  border-top: 1px dashed currentColor;
+  padding-top: 6px;
+}
+
+/* Dead Drop (anonymous tip form) */
+.dd-form { margin-top: 10px; }
+.dd-text {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid var(--ink, #1a1a1a);
+  background: var(--paper, #f1e7cf);
+  color: var(--ink, #1a1a1a);
+  font-family: var(--sans, 'Special Elite', monospace);
+  font-size: 13px;
+  line-height: 1.45;
+  resize: vertical;
+  min-height: 58px;
+}
+.dd-text:focus { outline: 2px solid var(--accent, #8b2a2a); outline-offset: 2px; }
+.dd-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  gap: 8px;
+}
+.dd-btn {
+  font-family: var(--sans, 'Special Elite', monospace);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border: 1px solid var(--ink, #1a1a1a);
+  background: var(--paper, #f1e7cf);
+  color: var(--ink, #1a1a1a);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.dd-btn:hover:not(:disabled) { background: var(--ink, #1a1a1a); color: var(--paper, #f1e7cf); }
+.dd-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.dd-status {
+  margin-top: 6px;
+  min-height: 1em;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* Wire Service list */
+.wire {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.wire__item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px dotted currentColor;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.wire__item:last-child { border-bottom: 0; }
+.wire__dot {
+  font-size: 8px;
+  opacity: 0.7;
+  flex: 0 0 auto;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+.wire__text { flex: 1 1 auto; }
+.wire__text a { text-decoration: underline; }
+.wire__when { flex: 0 0 auto; white-space: nowrap; }
+.wire__loading { font-style: italic; opacity: 0.6; }
 
 /* =========================================================
    Print stylesheet — a proper printable Gazette
