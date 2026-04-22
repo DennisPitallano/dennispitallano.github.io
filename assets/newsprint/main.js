@@ -19,16 +19,14 @@
     volumeEl.textContent = `VOL. ${vol} · NO. ${issue}`;
   }
 
-  /* ---------- Typewriter intro (first visit per session) ---------- */
+  /* ---------- Typewriter intro (every page load) ---------- */
   (function typewriterIntro() {
     const h1 = document.querySelector('.masthead h1');
     if (!h1) return;
-    let played = false;
-    try { played = sessionStorage.getItem('gazette.introPlayed') === '1'; } catch (e) {}
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (played || prefersReduced) return;
+    if (prefersReduced) return;
 
-    const text = h1.textContent;
+    const text = h1.textContent.trim();
     h1.textContent = '';
     h1.setAttribute('aria-label', text);
     h1.classList.add('typing');
@@ -74,7 +72,6 @@
           cursor.remove();
           spans.forEach(s => s.classList.remove('tw-hidden'));
         }, 420);
-        try { sessionStorage.setItem('gazette.introPlayed', '1'); } catch (e) {}
         return;
       }
       spans[i].classList.remove('tw-hidden');
