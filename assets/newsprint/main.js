@@ -46,20 +46,38 @@
 
     // SFX via WebAudio (no asset needed)
     let ctx = null;
+    const ensureCtx = () => {
+      if (!ctx) {
+        try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+      }
+      if (ctx && ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      return ctx;
+    };
     const tick = (isBell = false) => {
+      const ac = ensureCtx();
+      if (!ac) return;
       try {
-        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
+        const now = ac.currentTime;
+        const o = ac.createOscillator();
+        const g = ac.createGain();
         o.type = isBell ? 'triangle' : 'square';
-        o.frequency.value = isBell ? 1760 : 1100 + Math.random() * 400;
-        g.gain.value = isBell ? 0.06 : 0.018;
-        o.connect(g).connect(ctx.destination);
-        o.start();
-        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + (isBell ? 0.35 : 0.04));
-        o.stop(ctx.currentTime + (isBell ? 0.4 : 0.05));
+        o.frequency.setValueAtTime(isBell ? 1760 : 1000 + Math.random() * 500, now);
+        const peak = isBell ? 0.08 : 0.04;
+        const dur = isBell ? 0.45 : 0.06;
+        g.gain.setValueAtTime(0.0001, now);
+        g.gain.exponentialRampToValueAtTime(peak, now + 0.005);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+        o.connect(g).connect(ac.destination);
+        o.start(now);
+        o.stop(now + dur + 0.02);
       } catch (e) {}
     };
+    // Unlock audio on first interaction if the context was still suspended
+    const unlock = () => { ensureCtx(); document.removeEventListener('pointerdown', unlock); document.removeEventListener('keydown', unlock); };
+    document.addEventListener('pointerdown', unlock, { once: true });
+    document.addEventListener('keydown', unlock, { once: true });
 
     // Reveal letter-by-letter
     const spans = h1.querySelectorAll('.tw-ch');
