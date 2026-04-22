@@ -2234,17 +2234,23 @@ kbd {
   position: fixed;
   inset: 0;
   background: rgba(20, 15, 10, 0.72);
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 250;
   opacity: 0;
-  transition: opacity 0.28s ease;
+  visibility: hidden;
+  transition: opacity 0.28s ease, visibility 0s linear 0.28s;
   padding: 20px;
   pointer-events: none;
 }
 .newsflash[hidden] { display: none !important; }
-.newsflash.open { display: flex; opacity: 1; pointer-events: auto; }
+.newsflash.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.28s ease, visibility 0s linear 0s;
+}
 .newsflash__paper {
   background: var(--paper, #f1e7cf);
   color: var(--ink, #1a1a1a);
