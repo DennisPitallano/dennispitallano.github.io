@@ -1,7 +1,7 @@
 /* The Oragon Gazette — Service Worker
    Strategy: stale-while-revalidate for same-origin GET requests.
    Bump VERSION when shipping major changes to bust the cache. */
-const VERSION = 'gazette-v1';
+const VERSION = 'gazette-v2';
 const CORE = [
   '/',
   '/index.html',
@@ -9,6 +9,8 @@ const CORE = [
   '/assets/newsprint/main.js',
   '/img/favicon.svg',
   '/img/pita.jpg',
+  '/img/pita.avif',
+  '/img/pita.webp',
   '/img/apple-touch-icon.png',
   '/img/icon-192.png',
   '/img/icon-512.png',

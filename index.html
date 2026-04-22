@@ -197,7 +197,11 @@
           <div class="deck">A full-stack dispatch from the provinces: one developer, several frameworks, and a suspicious amount of coffee.</div>
 
           <figure class="photo photo--img" aria-label="Photograph of Dennis Pitallano">
-            <img src="/img/pita.jpg" alt="Dennis Pitallano" loading="lazy" />
+            <picture>
+              <source srcset="/img/pita.avif" type="image/avif" />
+              <source srcset="/img/pita.webp" type="image/webp" />
+              <img src="/img/pita.jpg" alt="Dennis Pitallano" width="600" height="600" loading="lazy" decoding="async" />
+            </picture>
           </figure>
           <div class="photo__caption">Above: Mr. Pitallano, photographed on assignment. Halftone by this newspaper.</div>
 
