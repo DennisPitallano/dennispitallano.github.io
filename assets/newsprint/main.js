@@ -1588,6 +1588,13 @@
     });
   })();
 
+  /* ---------- Preview card images: hide on error so gradient shows ---------- */
+  (function previewFallback(){
+    document.querySelectorAll('.preview__img').forEach(img => {
+      img.addEventListener('error', () => { img.remove(); }, { once: true });
+    });
+  })();
+
   /* ---------- Press clipboard toast (shared tiny notifier) ---------- */
   function pressToast(msg){
     const t = document.getElementById('pressToast');

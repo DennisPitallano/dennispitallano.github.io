@@ -2423,8 +2423,10 @@ html[data-edition="evening"] .preview__chrome { background: #2a241c; }
 .preview__shot {
   position: relative;
   padding: 26px 18px 30px;
-  min-height: 120px;
+  min-height: 140px;
   color: #fff;
+  overflow: hidden;
+  isolation: isolate;
   background:
     linear-gradient(135deg,
       hsl(var(--hue, 32), 55%, 38%) 0%,
@@ -2440,6 +2442,30 @@ html[data-edition="evening"] .preview__chrome { background: #2a241c; }
       hsl(var(--hue, 32), 55%, 38%) 0%,
       hsl(calc(var(--hue, 32) + 30), 65%, 48%) 100%);
 }
+.preview__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  z-index: -2;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.preview__img[src] { opacity: 1; }
+.preview__shot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    hsla(var(--hue, 32), 55%, 15%, 0.20) 0%,
+    hsla(var(--hue, 32), 55%, 10%, 0.55) 55%,
+    hsla(var(--hue, 32), 55%, 8%, 0.85) 100%);
+}
+html[data-edition="evening"] .preview__img { filter: saturate(0.85) brightness(0.85); }
 .preview[data-hue="180"] { --hue: 180; }
 .preview[data-hue="32"]  { --hue: 32; }
 .preview[data-hue="210"] { --hue: 210; }
