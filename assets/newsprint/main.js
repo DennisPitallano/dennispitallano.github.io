@@ -722,10 +722,7 @@
     // Only try API on http(s); file:// will fail CORS
     if (!/^https?:/i.test(location.protocol)) { showFallback(); return; }
 
-    fetch(`https://api.github.com/repos/${REPO}/issues?labels=letter&state=all&per_page=5`, {
-      headers: { 'Accept': 'application/vnd.github+json' }
-    })
-      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    ghFetch(`https://api.github.com/repos/${REPO}/issues?labels=letter&state=all&per_page=5`, 900000)
       .then(issues => {
         if (!Array.isArray(issues) || issues.length === 0) { showFallback(); return; }
         const items = issues.slice(0, 5).map(i => ({
@@ -1196,10 +1193,7 @@
     dateEl.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
     if (!/^https?:/i.test(location.protocol)) { hashEl.textContent = 'local'; return; }
 
-    fetch('https://api.github.com/repos/DennisPitallano/dennispitallano.github.io/commits/main', {
-      headers: { 'Accept': 'application/vnd.github+json' }
-    })
-      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    ghFetch('https://api.github.com/repos/DennisPitallano/dennispitallano.github.io/commits/main', 600000)
       .then(data => {
         if (data && data.sha) {
           hashEl.textContent = data.sha.slice(0, 7);
@@ -1455,8 +1449,7 @@
       }
     };
 
-    fetch('https://api.github.com/users/' + user + '/events/public?per_page=10')
-      .then(r => r.ok ? r.json() : Promise.reject())
+    ghFetch('https://api.github.com/users/' + user + '/events/public?per_page=10', 300000)
       .then(events => {
         if (!Array.isArray(events) || !events.length) {
           list.innerHTML = '<li class="wire__item u-muted-2">The wire is quiet today.</li>';
@@ -1473,13 +1466,28 @@
       });
   })();
 
-  /* ---------- Module-level typewriter SFX (shared) ---------- */
+  /* ---------- Module-level typewriter SFX (shared) ----------
+     AudioContext must be created after a user gesture, otherwise Chrome
+     prints a warning for every oscillator created. We arm _sfxCtx lazily
+     on the first user interaction (click/keydown/touchstart), then
+     subsequent sfxClack() calls use it freely.                           */
   let _sfxCtx = null;
+  let _sfxArmed = false;
+  const _armSfx = () => {
+    if (_sfxArmed) return;
+    _sfxArmed = true;
+    try {
+      _sfxCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (_sfxCtx.state === 'suspended') _sfxCtx.resume().catch(() => {});
+    } catch (e) { _sfxCtx = null; }
+  };
+  ['click','keydown','touchstart'].forEach(ev => {
+    window.addEventListener(ev, _armSfx, { once: true, passive: true, capture: true });
+  });
   const sfxClack = (variant) => {
     if (!isSfxOn()) return;
+    if (!_sfxArmed || !_sfxCtx) return; // no gesture yet \u2014 silent, no warning
     try {
-      if (!_sfxCtx) _sfxCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (_sfxCtx.state === 'suspended') _sfxCtx.resume().catch(() => {});
       const now = _sfxCtx.currentTime;
       const o = _sfxCtx.createOscillator();
       const g = _sfxCtx.createGain();
@@ -1494,6 +1502,30 @@
       o.start(now);
       o.stop(now + dur + 0.02);
     } catch (e) {}
+  };
+
+  /* ---------- Tiny GitHub fetch with localStorage caching ----------
+     Anonymous calls to api.github.com are rate-limited to 60/hr per IP.
+     Cache successful responses for 10 min and serve any cached value as
+     a fallback on 403, so a rate-limited page still renders content.    */
+  const ghFetch = (url, ttlMs) => {
+    const key = 'gh:' + url;
+    const now = Date.now();
+    let cached = null;
+    try { cached = JSON.parse(localStorage.getItem(key) || 'null'); } catch(_) {}
+    if (cached && (now - cached.t) < (ttlMs || 600000)) {
+      return Promise.resolve(cached.v);
+    }
+    return fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } })
+      .then(r => {
+        if (r.ok) return r.json().then(v => {
+          try { localStorage.setItem(key, JSON.stringify({ t: now, v: v })); } catch(_) {}
+          return v;
+        });
+        // 403 / 429: serve stale cache if we have any
+        if (cached) return cached.v;
+        return Promise.reject(r.status);
+      });
   };
 
   /* ---------- Typewriter SFX on search input ---------- */
@@ -1680,12 +1712,12 @@
     fetch(base + path + '.json', { cache: 'no-store', mode: 'cors' })
       .then(r => r.ok ? r.json() : null)
       .then(data => {
-        if (!data) return;
+        if (!data) { el.hidden = true; return; }
         const n = data.count_unique != null ? data.count_unique : data.count;
-        if (n == null) return;
+        if (n == null) { el.hidden = true; return; }
         el.textContent = 'Circulation: ' + fmt(n) + ' reader' + (n === 1 ? '' : 's');
       })
-      .catch(() => { /* public stats disabled \u2014 silent */ });
+      .catch(() => { el.hidden = true; /* public stats disabled \u2014 hide pill */ });
   })();
 
   /* ---------- Keyboard shortcuts (? opens reference desk) ---------- */
