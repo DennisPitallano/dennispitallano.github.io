@@ -151,7 +151,7 @@
       <div class="masthead__top">
         <span>Est. MMXIV · Camarines Norte Edition</span>
         <span id="todayDate">—</span>
-        <span>Price: One Cup of Coffee ☕</span>
+        <span>Price: One Cup of Coffee ☕ · <span id="readersToday" class="readers-today" title="Page views today (GoatCounter)">Circulation: —</span></span>
       </div>
       <h1>The Oragon Gazette</h1>
       <div class="masthead__sub">
@@ -246,6 +246,58 @@
           <div class="kicker">Field Reports · Selected</div>
           <h3 class="headline" data-article="projects">Selected Works &amp; Recent Dispatches</h3>
           <div class="byline">From the Portfolio Desk</div>
+
+          <!-- Featured projects as mock-browser preview cards (CSS-only) -->
+          <div class="preview-grid">
+            <a class="preview" href="https://www.digibyte.org/" target="_blank" rel="noopener" data-hue="180" data-project="digibyte.org">
+              <div class="preview__chrome"><i></i><i></i><i></i><span>digibyte.org</span></div>
+              <div class="preview__shot">
+                <div class="preview__title">DigiByte</div>
+                <div class="preview__deck">Official site for the blockchain</div>
+              </div>
+              <div class="preview__cap"><span class="preview__tag">Contribution</span><span>→ Visit</span></div>
+            </a>
+            <a class="preview" href="https://pay.dgbwallet.app/" target="_blank" rel="noopener" data-hue="32" data-project="pay.dgbwallet.app">
+              <div class="preview__chrome"><i></i><i></i><i></i><span>pay.dgbwallet.app</span></div>
+              <div class="preview__shot">
+                <div class="preview__title">DGB Pay</div>
+                <div class="preview__deck">Payment gateway for DigiByte</div>
+              </div>
+              <div class="preview__cap"><span class="preview__tag">Personal Work</span><span>→ Visit</span></div>
+            </a>
+            <a class="preview" href="https://clockinplus.com/" target="_blank" rel="noopener" data-hue="210" data-project="clockinplus.com">
+              <div class="preview__chrome"><i></i><i></i><i></i><span>clockinplus.com</span></div>
+              <div class="preview__shot">
+                <div class="preview__title">ClockIn+</div>
+                <div class="preview__deck">Time tracking &amp; attendance</div>
+              </div>
+              <div class="preview__cap"><span class="preview__tag">Personal Work</span><span>→ Visit</span></div>
+            </a>
+            <a class="preview" href="https://diskarte-production-10d2.up.railway.app/" target="_blank" rel="noopener" data-hue="12" data-project="diskarte">
+              <div class="preview__chrome"><i></i><i></i><i></i><span>diskarte</span></div>
+              <div class="preview__shot">
+                <div class="preview__title">Diskarte</div>
+                <div class="preview__deck">Productivity, Filipino-flavored</div>
+              </div>
+              <div class="preview__cap"><span class="preview__tag"><span class="preview__live">● LIVE</span></span><span>→ Visit</span></div>
+            </a>
+            <a class="preview" href="https://the-daily-classifieds-production.up.railway.app/" target="_blank" rel="noopener" data-hue="45" data-project="classifieds">
+              <div class="preview__chrome"><i></i><i></i><i></i><span>the-daily-classifieds</span></div>
+              <div class="preview__shot">
+                <div class="preview__title">Daily Classifieds</div>
+                <div class="preview__deck">A classifieds board in newsprint spirit</div>
+              </div>
+              <div class="preview__cap"><span class="preview__tag"><span class="preview__live">● LIVE</span></span><span>→ Visit</span></div>
+            </a>
+            <a class="preview" href="https://www.agiletechops.com/" target="_blank" rel="noopener" data-hue="260" data-project="agiletechops">
+              <div class="preview__chrome"><i></i><i></i><i></i><span>agiletechops.com</span></div>
+              <div class="preview__shot">
+                <div class="preview__title">AgileTechOps</div>
+                <div class="preview__deck">DevOps consultancy</div>
+              </div>
+              <div class="preview__cap"><span class="preview__tag">Contribution</span><span>→ Visit</span></div>
+            </a>
+          </div>
 
           <div class="works">
             <div class="works__group">
@@ -701,6 +753,12 @@
       <div class="newsflash__deck" id="newsflashDeck">The Editor salutes you. A cup of digital coffee has been poured — see the Classifieds for details.</div>
       <button class="newsflash__close" id="newsflashClose">Continue reading</button>
     </div>
+  </div>
+
+  <!-- Press clipboard toast (email copy, etc.) -->
+  <div class="toast" id="pressToast" role="status" aria-live="polite" hidden>
+    <span class="toast__mark">✓</span>
+    <span class="toast__msg" id="pressToastMsg">Copied to the press clipboard.</span>
   </div>
 
   <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>

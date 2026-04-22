@@ -1588,6 +1588,89 @@
     });
   })();
 
+  /* ---------- Press clipboard toast (shared tiny notifier) ---------- */
+  function pressToast(msg){
+    const t = document.getElementById('pressToast');
+    if (!t) return;
+    const m = document.getElementById('pressToastMsg');
+    if (m && msg) m.textContent = msg;
+    t.hidden = false;
+    // reflow so CSS transition runs
+    void t.offsetWidth;
+    t.classList.add('toast--show');
+    clearTimeout(pressToast._t);
+    pressToast._t = setTimeout(() => {
+      t.classList.remove('toast--show');
+      setTimeout(() => { t.hidden = true; }, 260);
+    }, 2100);
+  }
+
+  /* ---------- Copy email on click (with mailto fallback) ---------- */
+  (function emailCopy(){
+    const selector = 'a[href^="mailto:"]';
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest(selector);
+      if (!a) return;
+      // allow real mailto via modifier keys or middle-click
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1) return;
+      const href = a.getAttribute('href') || '';
+      const addr = href.replace(/^mailto:/i, '').split('?')[0].trim();
+      if (!addr) return;
+      if (!navigator.clipboard || !navigator.clipboard.writeText) return; // let mailto proceed
+      e.preventDefault();
+      navigator.clipboard.writeText(addr).then(() => {
+        pressToast('Copied \u201C' + addr + '\u201D to the press clipboard.');
+        sfxClack('bell');
+        // Offer mailto as a follow-up after the toast so users still reach their client
+        setTimeout(() => { window.location.href = href; }, 650);
+      }).catch(() => {
+        window.location.href = href;
+      });
+    });
+  })();
+
+  /* ---------- Outbound link tracking (GoatCounter events) ---------- */
+  (function outboundTracker(){
+    const host = location.hostname;
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[href^="http"]');
+      if (!a) return;
+      let url;
+      try { url = new URL(a.href); } catch(_) { return; }
+      if (!url.hostname || url.hostname === host) return;
+      if (!window.goatcounter || typeof window.goatcounter.count !== 'function') return;
+      try {
+        window.goatcounter.count({
+          path: 'outbound: ' + url.hostname + url.pathname,
+          title: a.textContent.trim().slice(0, 80) || url.hostname,
+          event: true
+        });
+      } catch(_) {}
+    });
+  })();
+
+  /* ---------- Readers Today (public GoatCounter counter) ---------- */
+  (function readersToday(){
+    const el = document.getElementById('readersToday');
+    if (!el) return;
+    const base = 'https://dennispitallano.goatcounter.com/counter/';
+    const path = encodeURIComponent(location.pathname || '/');
+    const fmt = (n) => {
+      n = Number(n) || 0;
+      if (n >= 10000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'k';
+      return n.toLocaleString('en-US');
+    };
+    fetch(base + path + '.json', { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!data) return;
+        const n = data.count_unique != null ? data.count_unique : data.count;
+        if (n == null) return;
+        el.textContent = 'Circulation: ' + fmt(n) + ' reader' + (n === 1 ? '' : 's');
+      })
+      .catch(() => {});
+  })();
+
   /* ---------- Keyboard shortcuts (? opens reference desk) ---------- */
   (function shortcuts(){
     const modal = document.getElementById('kbModal');

@@ -2355,3 +2355,173 @@ html[data-edition="evening"] body::before {
   padding-bottom: 2px;
 }
 .err404-links { margin: 6px 0 20px; }
+
+
+/* =========================================================
+   Field Reports — preview cards (CSS-only mock browser)
+   ========================================================= */
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  margin: 14px 0 18px;
+}
+.preview {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--ink, #1a1a1a);
+  background: var(--paper, #f1e7cf);
+  border: 1px solid var(--ink, #1a1a1a);
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.18);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  overflow: hidden;
+  font-family: var(--serif-body, 'Old Standard TT', Georgia, serif);
+}
+.preview:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 rgba(0,0,0,0.22);
+}
+.preview:focus-visible {
+  outline: 2px solid var(--accent, #8b2a2a);
+  outline-offset: 2px;
+}
+.preview__chrome {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  background: #d7cdb5;
+  border-bottom: 1px solid var(--ink, #1a1a1a);
+  font-family: var(--sans-label, 'Special Elite', monospace);
+  font-size: 11px;
+}
+html[data-edition="evening"] .preview__chrome { background: #2a241c; }
+.preview__chrome i {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #bbb;
+  border: 1px solid rgba(0,0,0,0.25);
+  display: inline-block;
+}
+.preview__chrome i:nth-child(1) { background: #e06c5a; }
+.preview__chrome i:nth-child(2) { background: #e2b64c; }
+.preview__chrome i:nth-child(3) { background: #6fae5c; }
+.preview__chrome span {
+  flex: 1;
+  margin-left: 6px;
+  padding: 2px 8px;
+  background: var(--paper, #f1e7cf);
+  border: 1px solid rgba(0,0,0,0.25);
+  border-radius: 2px;
+  color: var(--ink, #1a1a1a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 10px;
+  opacity: 0.85;
+}
+.preview__shot {
+  position: relative;
+  padding: 26px 18px 30px;
+  min-height: 120px;
+  color: #fff;
+  background:
+    linear-gradient(135deg,
+      hsl(var(--hue, 32), 55%, 38%) 0%,
+      hsl(calc(var(--hue, 32) + 30), 65%, 48%) 100%);
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.04) 0px,
+      rgba(255,255,255,0.04) 1px,
+      transparent 1px,
+      transparent 6px),
+    linear-gradient(135deg,
+      hsl(var(--hue, 32), 55%, 38%) 0%,
+      hsl(calc(var(--hue, 32) + 30), 65%, 48%) 100%);
+}
+.preview[data-hue="180"] { --hue: 180; }
+.preview[data-hue="32"]  { --hue: 32; }
+.preview[data-hue="210"] { --hue: 210; }
+.preview[data-hue="12"]  { --hue: 12; }
+.preview[data-hue="45"]  { --hue: 45; }
+.preview[data-hue="260"] { --hue: 260; }
+.preview__title {
+  font-family: var(--serif-head, 'Playfair Display', serif);
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: -0.3px;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+.preview__deck {
+  margin-top: 6px;
+  font-style: italic;
+  font-size: 13px;
+  opacity: 0.92;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+.preview__cap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(0,0,0,0.15);
+  font-family: var(--sans-label, 'Special Elite', monospace);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.preview__tag { opacity: 0.8; }
+.preview__live {
+  color: var(--accent, #8b2a2a);
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* =========================================================
+   Readers today pill (masthead)
+   ========================================================= */
+.readers-today {
+  font-family: var(--sans-label, 'Special Elite', monospace);
+}
+
+/* =========================================================
+   Toast (press clipboard)
+   ========================================================= */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  transform: translate(-50%, 16px);
+  background: var(--ink, #1a1a1a);
+  color: var(--paper, #f1e7cf);
+  padding: 10px 18px;
+  border: 1px solid var(--ink, #1a1a1a);
+  box-shadow: 3px 3px 0 var(--accent, #8b2a2a);
+  font-family: var(--serif-body, 'Old Standard TT', Georgia, serif);
+  font-size: 14px;
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.26s cubic-bezier(.2,1.4,.5,1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 90vw;
+}
+.toast[hidden] { display: none; }
+.toast.toast--show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.toast__mark {
+  font-family: var(--sans-label, 'Special Elite', monospace);
+  color: var(--accent, #ff7a66);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+@media print {
+  .preview-grid, .toast { display: none !important; }
+}
