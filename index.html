@@ -36,7 +36,11 @@
   <link rel="manifest" href="/img/site.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Old+Standard+TT:wght@400;700&family=UnifrakturCook:wght@700&family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Old+Standard+TT:wght@400;700&family=UnifrakturCook:wght@700&family=Special+Elite&display=swap" />
+  <link rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Old+Standard+TT:wght@400;700&family=UnifrakturCook:wght@700&family=Special+Elite&display=swap" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Old+Standard+TT:wght@400;700&family=UnifrakturCook:wght@700&family=Special+Elite&display=swap" /></noscript>
   <link rel="stylesheet" href="/assets/newsprint/styles.css" />
 
   <!-- Structured data: Person + WebSite -->
@@ -580,6 +584,6 @@
   </div>
 
   <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
-  <script src="/assets/newsprint/main.js"></script>
+  <script src="/assets/newsprint/main.js" defer></script>
 </body>
 </html>
