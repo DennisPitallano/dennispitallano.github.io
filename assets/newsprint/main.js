@@ -732,8 +732,22 @@
     const scoreEl = document.getElementById('snakeScore');
     let best = parseInt(localStorage.getItem('gazette.snake.best') || '0', 10);
     if (bestEl) bestEl.textContent = best;
-    const css = getComputedStyle(document.documentElement);
-    const col = (n) => css.getPropertyValue(n).trim();
+
+    // Cache computed CSS colors; refresh only when edition toggles (avoids per-frame forced reflow)
+    let colorCache = {};
+    const refreshColors = () => {
+      const css = getComputedStyle(document.documentElement);
+      colorCache = {
+        '--paper': css.getPropertyValue('--paper').trim(),
+        '--paper-dark': css.getPropertyValue('--paper-dark').trim(),
+        '--ink': css.getPropertyValue('--ink').trim(),
+        '--accent': css.getPropertyValue('--accent').trim()
+      };
+    };
+    refreshColors();
+    // Re-read when user toggles morning/evening
+    new MutationObserver(refreshColors).observe(document.documentElement, { attributes: true, attributeFilter: ['data-edition'] });
+    const col = (n) => colorCache[n] || '';
     function reset() {
       s = [{x:5,y:5},{x:4,y:5},{x:3,y:5}];
       dir = {x:1,y:0};
