@@ -13,6 +13,30 @@
     try { localStorage.setItem(SFX_KEY, on ? 'on' : 'off'); } catch (e) {}
   };
 
+  /* ---------- Tiny GitHub fetch with localStorage caching ----------
+     Anonymous calls to api.github.com are rate-limited to 60/hr per IP.
+     Cache successful responses for the given TTL and serve any cached
+     value as a fallback on 403/429, so a rate-limited page still
+     renders content. Declared early so later IIFEs can use it.          */
+  const ghFetch = (url, ttlMs) => {
+    const key = 'gh:' + url;
+    const now = Date.now();
+    let cached = null;
+    try { cached = JSON.parse(localStorage.getItem(key) || 'null'); } catch(_) {}
+    if (cached && (now - cached.t) < (ttlMs || 600000)) {
+      return Promise.resolve(cached.v);
+    }
+    return fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } })
+      .then(r => {
+        if (r.ok) return r.json().then(v => {
+          try { localStorage.setItem(key, JSON.stringify({ t: now, v: v })); } catch(_) {}
+          return v;
+        });
+        if (cached) return cached.v;
+        return Promise.reject(r.status);
+      });
+  };
+
   /* ---------- Date in masthead ---------- */
   const dateEl = document.getElementById('todayDate');
   const volumeEl = document.getElementById('volumeNo');
@@ -1502,30 +1526,6 @@
       o.start(now);
       o.stop(now + dur + 0.02);
     } catch (e) {}
-  };
-
-  /* ---------- Tiny GitHub fetch with localStorage caching ----------
-     Anonymous calls to api.github.com are rate-limited to 60/hr per IP.
-     Cache successful responses for 10 min and serve any cached value as
-     a fallback on 403, so a rate-limited page still renders content.    */
-  const ghFetch = (url, ttlMs) => {
-    const key = 'gh:' + url;
-    const now = Date.now();
-    let cached = null;
-    try { cached = JSON.parse(localStorage.getItem(key) || 'null'); } catch(_) {}
-    if (cached && (now - cached.t) < (ttlMs || 600000)) {
-      return Promise.resolve(cached.v);
-    }
-    return fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } })
-      .then(r => {
-        if (r.ok) return r.json().then(v => {
-          try { localStorage.setItem(key, JSON.stringify({ t: now, v: v })); } catch(_) {}
-          return v;
-        });
-        // 403 / 429: serve stale cache if we have any
-        if (cached) return cached.v;
-        return Promise.reject(r.status);
-      });
   };
 
   /* ---------- Typewriter SFX on search input ---------- */
