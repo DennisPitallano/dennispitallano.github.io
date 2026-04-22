@@ -19,6 +19,76 @@
     volumeEl.textContent = `VOL. ${vol} · NO. ${issue}`;
   }
 
+  /* ---------- Typewriter intro (first visit per session) ---------- */
+  (function typewriterIntro() {
+    const h1 = document.querySelector('.masthead h1');
+    if (!h1) return;
+    let played = false;
+    try { played = sessionStorage.getItem('gazette.introPlayed') === '1'; } catch (e) {}
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (played || prefersReduced) return;
+
+    const text = h1.textContent;
+    h1.textContent = '';
+    h1.setAttribute('aria-label', text);
+    h1.classList.add('typing');
+
+    // Build per-letter spans
+    const chars = [...text];
+    chars.forEach((ch) => {
+      const s = document.createElement('span');
+      s.className = 'tw-ch';
+      s.textContent = ch === ' ' ? '\u00A0' : ch;
+      h1.appendChild(s);
+    });
+    const cursor = document.createElement('span');
+    cursor.className = 'tw-cursor';
+    cursor.textContent = '▍';
+    h1.appendChild(cursor);
+
+    // SFX via WebAudio (no asset needed)
+    let ctx = null;
+    const tick = (isBell = false) => {
+      try {
+        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = isBell ? 'triangle' : 'square';
+        o.frequency.value = isBell ? 1760 : 1100 + Math.random() * 400;
+        g.gain.value = isBell ? 0.06 : 0.018;
+        o.connect(g).connect(ctx.destination);
+        o.start();
+        g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + (isBell ? 0.35 : 0.04));
+        o.stop(ctx.currentTime + (isBell ? 0.4 : 0.05));
+      } catch (e) {}
+    };
+
+    // Reveal letter-by-letter
+    const spans = h1.querySelectorAll('.tw-ch');
+    let i = 0;
+    const step = () => {
+      if (i >= spans.length) {
+        tick(true); // ding
+        setTimeout(() => {
+          h1.classList.remove('typing');
+          cursor.remove();
+          spans.forEach(s => s.classList.remove('tw-hidden'));
+        }, 420);
+        try { sessionStorage.setItem('gazette.introPlayed', '1'); } catch (e) {}
+        return;
+      }
+      spans[i].classList.remove('tw-hidden');
+      if (spans[i].textContent.trim()) tick(false);
+      i++;
+      // Variable cadence for realism
+      const delay = 55 + Math.random() * 55 + (spans[i - 1].textContent === ' ' ? 40 : 0);
+      setTimeout(step, delay);
+    };
+    spans.forEach(s => s.classList.add('tw-hidden'));
+    // Small initial pause so the paper settles
+    setTimeout(step, 350);
+  })();
+
   /* ---------- Evening / Morning Edition toggle ---------- */
   const editionBtn = document.getElementById('editionToggle');
   const saved = localStorage.getItem('gazette.edition');
@@ -193,7 +263,39 @@
         'The author may be reached by electronic mail at dpitallano@gmail.com for professional inquiries, freelance missions, and polite arguments about semicolons.',
         'Also reachable on the usual wires: GitHub (DennisPitallano), LinkedIn, StackOverflow, Discord, Facebook, and Reddit. Response times vary with the tides and with deployment cycles.',
         'For urgent matters, please attach a minimal reproducible example.'
-      ]
+      ],
+      extra: `
+        <form class="sub-card" id="contactForm" novalidate>
+          <div class="sub-card__stamp-mark">POSTE · PAID</div>
+          <div class="sub-card__kicker">— Subscription Card —</div>
+          <h3 class="sub-card__title">File a Dispatch</h3>
+          <p class="sub-card__lede">Complete the form below and hand it to the nearest courier.</p>
+          <hr/>
+          <div class="sub-card__row">
+            <div class="sub-card__field">
+              <label class="sub-card__label" for="cfName">Name of Correspondent</label>
+              <input class="sub-card__input" id="cfName" name="name" type="text" required autocomplete="name" />
+            </div>
+            <div class="sub-card__field">
+              <label class="sub-card__label" for="cfEmail">Return Address</label>
+              <input class="sub-card__input" id="cfEmail" name="email" type="email" required autocomplete="email" />
+            </div>
+            <div class="sub-card__field sub-card__field--full">
+              <label class="sub-card__label" for="cfSubject">Re:</label>
+              <input class="sub-card__input" id="cfSubject" name="subject" type="text" placeholder="e.g. Freelance mission, polite argument, etc." required />
+            </div>
+            <div class="sub-card__field sub-card__field--full">
+              <label class="sub-card__label" for="cfBody">Message to the Editor</label>
+              <textarea class="sub-card__textarea" id="cfBody" name="message" rows="5" required></textarea>
+            </div>
+          </div>
+          <div class="sub-card__actions">
+            <span class="sub-card__stamp">Rec'd · <span id="cfStamp"></span></span>
+            <button class="sub-card__submit" type="submit">Send by Post ✉</button>
+          </div>
+          <p class="sub-card__note">Submitting will open your mail client with this dispatch ready for delivery.</p>
+        </form>
+      `
     },
     blog: {
       kicker: 'Editorial',
@@ -246,12 +348,42 @@
       <h2>${a.title}</h2>
       <div class="byline">${a.byline}</div>
       ${a.body.map(p => `<p class="body">${p}</p>`).join('')}
+      ${a.extra || ''}
     `;
     // Force all links inside the modal to open in a new tab
     modalBody.querySelectorAll('a[href]').forEach(link => {
       link.setAttribute('target', '_blank');
       link.setAttribute('rel', 'noopener noreferrer');
     });
+
+    // Wire up contact form (only present in the contact modal)
+    const cf = modalBody.querySelector('#contactForm');
+    if (cf) {
+      const stamp = modalBody.querySelector('#cfStamp');
+      if (stamp) {
+        const d = new Date();
+        stamp.textContent = d.toLocaleDateString('en-US', { month:'short', day:'2-digit', year:'numeric' }).toUpperCase();
+      }
+      cf.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        const name = cf.querySelector('#cfName').value.trim();
+        const email = cf.querySelector('#cfEmail').value.trim();
+        const subject = cf.querySelector('#cfSubject').value.trim();
+        const message = cf.querySelector('#cfBody').value.trim();
+        if (!name || !email || !subject || !message) {
+          cf.querySelector('.sub-card__note').textContent = '⚠ Please complete every field before posting.';
+          return;
+        }
+        const bodyText =
+          `Dear Editor,\n\n${message}\n\n— ${name}\n(${email})\n\n` +
+          `--\nFiled via The Oragon Gazette subscription card.`;
+        const mailto = 'mailto:dpitallano@gmail.com'
+          + '?subject=' + encodeURIComponent('[Gazette] ' + subject)
+          + '&body=' + encodeURIComponent(bodyText);
+        window.location.href = mailto;
+        cf.querySelector('.sub-card__note').innerHTML = '✓ Your mail client should now be open. <em>If nothing happened, write to <a href="mailto:dpitallano@gmail.com">dpitallano@gmail.com</a> directly.</em>';
+      });
+    }
     // Preserve scroll position while locking body
     const scrollY = window.scrollY;
     document.body.dataset.scrollY = String(scrollY);
@@ -667,6 +799,124 @@
         input.focus();
       }
     });
+  })();
+
+  /* ---------- Mobile sticky bar + drawer ---------- */
+  (function mobileNav() {
+    const bar = document.getElementById('mobilebar');
+    const drawer = document.getElementById('drawer');
+    const menuBtn = document.getElementById('mbMenu');
+    const searchBtn = document.getElementById('mbSearch');
+    const drawerSearch = document.getElementById('drawerSearch');
+    const drawerEdition = document.getElementById('drawerEdition');
+    if (!bar || !drawer) return;
+
+    // Open / close drawer
+    const openDrawer = () => {
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('drawer-open');
+      menuBtn && menuBtn.setAttribute('aria-expanded', 'true');
+    };
+    const closeDrawer = () => {
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('drawer-open');
+      menuBtn && menuBtn.setAttribute('aria-expanded', 'false');
+    };
+
+    menuBtn && menuBtn.addEventListener('click', openDrawer);
+    searchBtn && searchBtn.addEventListener('click', () => {
+      openDrawer();
+      setTimeout(() => drawerSearch && drawerSearch.focus(), 260);
+    });
+
+    // Close on backdrop or any [data-close-drawer] click
+    drawer.addEventListener('click', (e) => {
+      if (e.target.hasAttribute('data-close-drawer') ||
+          e.target.closest('[data-close-drawer]')) {
+        closeDrawer();
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
+    });
+
+    // Drawer nav anchor clicks: smooth scroll + open modal if data-article
+    drawer.querySelectorAll('.drawer__nav a').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const art = a.getAttribute('data-article');
+        const href = a.getAttribute('href');
+        if (art) {
+          e.preventDefault();
+          closeDrawer();
+          setTimeout(() => openModal(art), 260);
+        } else if (href && href.startsWith('#')) {
+          e.preventDefault();
+          closeDrawer();
+          setTimeout(() => {
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({behavior:'smooth', block:'start'});
+              target.classList.remove('search-hit'); void target.offsetWidth; target.classList.add('search-hit');
+            }
+          }, 260);
+        }
+        // else let external links pass through
+      });
+    });
+
+    // Edition toggle sync in drawer
+    const syncEdition = () => {
+      const mode = document.documentElement.getAttribute('data-edition') || 'morning';
+      if (drawerEdition) drawerEdition.textContent = mode === 'evening' ? '☀ Morning Edition' : '☾ Evening Edition';
+    };
+    syncEdition();
+    drawerEdition && drawerEdition.addEventListener('click', () => {
+      const editionBtn = document.getElementById('editionToggle');
+      if (editionBtn) editionBtn.click();
+      syncEdition();
+    });
+
+    // Hide on scroll down, show on scroll up
+    let lastY = window.scrollY;
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (y > lastY + 6 && y > 120) bar.classList.add('mobilebar--hidden');
+        else if (y < lastY - 6 || y < 80) bar.classList.remove('mobilebar--hidden');
+        lastY = y;
+        ticking = false;
+      });
+    }, { passive: true });
+
+    // Proxy drawer search to the main search input (reuse the same index)
+    if (drawerSearch) {
+      const mainInput = document.getElementById('searchInput');
+      const mainResults = document.getElementById('searchResults');
+      if (mainInput && mainResults) {
+        drawerSearch.addEventListener('input', () => {
+          mainInput.value = drawerSearch.value;
+          mainInput.dispatchEvent(new Event('input'));
+          // Mirror result into drawer if we want — simpler: when user hits enter, close drawer and scroll to first
+        });
+        drawerSearch.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            const first = mainResults.querySelector('.sr');
+            if (first) {
+              e.preventDefault();
+              drawerSearch.value = '';
+              mainInput.value = '';
+              closeDrawer();
+              setTimeout(() => first.click(), 260);
+            }
+          }
+        });
+      }
+    }
   })();
 
   /* ---------- Typewriter SFX on masthead click ---------- */

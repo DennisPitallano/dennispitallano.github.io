@@ -5,9 +5,30 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>The Oragon Gazette · Dennis Pitallano</title>
   <meta name="description" content="The Oragon Gazette — a classic-newspaper portfolio for Dennis Pitallano, full-stack developer from the Philippines." />
+  <meta name="author" content="Dennis Pitallano" />
+  <meta name="theme-color" content="#f1e7cf" />
+  <link rel="canonical" href="https://dennispitallano.github.io/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="The Oragon Gazette" />
   <meta property="og:title" content="The Oragon Gazette · Dennis Pitallano" />
-  <meta property="og:description" content="A full-stack developer’s portfolio, set in hot-metal type." />
+  <meta property="og:description" content="A full-stack developer’s portfolio, set in hot-metal type. All the news that’s fit to commit." />
   <meta property="og:url" content="https://dennispitallano.github.io/" />
+  <meta property="og:image" content="https://dennispitallano.github.io/img/og-card.svg" />
+  <meta property="og:image:type" content="image/svg+xml" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="The Oragon Gazette front page — Dennis Pitallano, Full-Stack Developer" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The Oragon Gazette · Dennis Pitallano" />
+  <meta name="twitter:description" content="A full-stack developer’s portfolio, set in hot-metal type." />
+  <meta name="twitter:image" content="https://dennispitallano.github.io/img/og-card.svg" />
+  <meta name="twitter:image:alt" content="The Oragon Gazette front page" />
+
   <link rel="icon" href="/img/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,6 +40,58 @@
   <!-- Breaking news ticker -->
   <div class="ticker" aria-label="Breaking news">
     <div class="ticker__track"></div>
+  </div>
+
+  <!-- Mobile sticky top bar -->
+  <header class="mobilebar" id="mobilebar" aria-label="Mobile navigation">
+    <button class="mobilebar__btn" id="mbMenu" aria-label="Open section index" aria-expanded="false">☰</button>
+    <div class="mobilebar__title">The Oragon Gazette</div>
+    <button class="mobilebar__btn" id="mbSearch" aria-label="Search the Gazette">⌕</button>
+  </header>
+
+  <!-- Mobile drawer (Section Index) -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer__backdrop" data-close-drawer></div>
+    <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="Section Index">
+      <div class="drawer__masthead">
+        <div class="drawer__kicker">The Section Index</div>
+        <div class="drawer__name">The Oragon Gazette</div>
+        <button class="drawer__close" data-close-drawer aria-label="Close">✕</button>
+      </div>
+
+      <div class="drawer__search">
+        <input type="search" id="drawerSearch" placeholder="Search the Gazette…" aria-label="Search" autocomplete="off" />
+      </div>
+
+      <nav class="drawer__nav" aria-label="Sections">
+        <div class="drawer__heading">Front Matter</div>
+        <a href="#cover" data-article="about" data-close-drawer>Front Page — The Cover Story</a>
+        <a href="#tech" data-article="stack" data-close-drawer>Technology — Tools of the Trade</a>
+        <a href="#projects" data-article="projects" data-close-drawer>Field Reports — Selected Works</a>
+        <a href="#annals" data-close-drawer>The Annals — Career Record</a>
+        <a href="#editorial" data-article="blog" data-close-drawer>Editorial — Opinion</a>
+
+        <div class="drawer__heading">Features</div>
+        <a href="#obituaries" data-close-drawer>Obituaries — In Memoriam</a>
+        <a href="#history" data-close-drawer>On This Day in History</a>
+        <a href="#horoscope" data-close-drawer>Developer Horoscopes</a>
+        <a href="#comic" data-close-drawer>The Daily Glitch — Comic</a>
+        <a href="#puzzle" data-close-drawer>The Puzzle Page</a>
+
+        <div class="drawer__heading">Reference</div>
+        <a href="#archives" data-article="archives" data-close-drawer>Archives — Back Issues</a>
+        <a href="#manuals" data-article="manuals" data-close-drawer>Manuals — Reference Works</a>
+
+        <div class="drawer__heading">Dispatch</div>
+        <a href="#contact" data-article="contact" data-close-drawer>Dispatch Desk — Contact</a>
+        <a href="https://github.com/DennisPitallano" target="_blank" rel="noopener" data-close-drawer>GitHub ↗</a>
+      </nav>
+
+      <div class="drawer__footer">
+        <button class="drawer__edition" id="drawerEdition">☾ Evening Edition</button>
+        <div class="small center" style="margin-top:10px;opacity:.6">Made with 🌶 in the Philippines</div>
+      </div>
+    </aside>
   </div>
 
   <div class="paper">
