@@ -1579,3 +1579,14 @@ html[data-edition="evening"] .searchbar__results .sr mark { background: #5a4520;
   .sub-card { padding: 16px 14px; }
   .sub-card__title { font-size: 20px; }
 }
+
+/* Ornament divider between content and footer */
+.rule-divider {
+  text-align: center;
+  font-size: 22px;
+  letter-spacing: 14px;
+  color: var(--ink, #1a1a1a);
+  opacity: 0.6;
+  margin: 32px 0 18px;
+  padding-right: 14px; /* compensate for right-side letter-spacing */
+}
