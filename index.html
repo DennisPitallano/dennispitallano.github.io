@@ -98,7 +98,6 @@
     <div class="mobilebar__title">The Oragon Gazette</div>
     <button class="mobilebar__btn" id="mbSearch" aria-label="Search the Gazette">⌕</button>
   </header>
-
   <!-- Mobile drawer (Section Index) -->
   <div class="drawer" id="drawer" aria-hidden="true">
     <div class="drawer__backdrop" data-close-drawer></div>
@@ -530,17 +529,11 @@
         </div>
 
         <div class="box reveal">
-          <h5>Daily Crossword</h5>
+          <h5>Daily Crossword <span id="cwPuzzleNum" class="small u-muted" style="font-weight:400;font-size:.7em;"></span></h5>
           <div class="crossword" id="crossword" aria-label="Interactive mini crossword"></div>
-          <dl class="cw-clues">
-            <dt>Across</dt>
-            <dd><strong>1.</strong> What we write, not prose (4)</dd>
-            <dd><strong>3.</strong> Not features (4)</dd>
-            <dt>Down</dt>
-            <dd><strong>1.</strong> Network tether (5)</dd>
-            <dd><strong>2.</strong> A finger, or 0–9 (5)</dd>
-          </dl>
+          <dl class="cw-clues" id="cwClues"></dl>
           <div class="cw-status" id="cwStatus" aria-live="polite"></div>
+          <div class="small center u-mt-6"><a href="puzzles.html" style="font-size:.78em;">More puzzles →</a></div>
         </div>
 
         <div class="box reveal">
@@ -710,6 +703,7 @@
         <a href="#archives" data-article="archives">Archives</a> ·
         <a href="#manuals" data-article="manuals">Manuals</a> ·
         <a href="/comics/">Comics Archive</a> ·
+        <a href="puzzles.html">Puzzles</a> ·
         <a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">GitHub</a> ·
         <a href="/blog/rss.xml">RSS</a> ·
         <button id="sfxToggle" class="link-btn" type="button" aria-pressed="true">🔊 Sound</button>

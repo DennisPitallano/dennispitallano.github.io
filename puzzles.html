@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" data-edition="morning">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crossword Puzzles · The Oragon Gazette</title>
+  <meta name="description" content="Crossword puzzles from The Oragon Gazette." />
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
+  <!-- Newspaper fonts -->
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/playfair-latin.woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/fonts/fonts.css" />
+  <link rel="stylesheet" href="/assets/newsprint/styles.css" />
+  <link rel="stylesheet" href="assets/css/puzzles.css" />
+</head>
+<body>
+  <!-- Masthead -->
+  <div class="cw-masthead">
+    <div class="cw-masthead__inner">
+      <a href="index.html" class="cw-masthead__home">← The Oragon Gazette</a>
+      <h1 class="cw-masthead__title">Crossword</h1>
+      <span class="cw-masthead__date" id="cw-date"></span>
+    </div>
+  </div>
+
+  <main class="cw-main">
+    <!-- Puzzle Selector -->
+    <div id="cw-selector" class="cw-selector">
+      <p class="cw-selector__hint">Select a puzzle to begin</p>
+      <div id="cw-puzzle-list" class="cw-puzzle-list"></div>
+    </div>
+
+    <!-- Crossword Board (hidden until puzzle selected) -->
+    <div id="cw-board" class="cw-board" hidden>
+      <div class="cw-board__header">
+        <div>
+          <h2 id="cw-title" class="cw-board__title"></h2>
+          <p id="cw-subtitle" class="cw-board__subtitle"></p>
+        </div>
+        <div class="cw-board__actions">
+          <button class="cw-btn cw-btn--secondary" id="cw-check">Check</button>
+          <button class="cw-btn cw-btn--secondary" id="cw-reveal">Reveal</button>
+          <button class="cw-btn cw-btn--secondary" id="cw-clear">Clear</button>
+          <button class="cw-btn cw-btn--ghost" id="cw-back">← All Puzzles</button>
+        </div>
+      </div>
+
+      <div class="cw-board__body">
+        <!-- Grid -->
+        <div class="cw-grid-wrap">
+          <div id="cw-grid" class="cw-grid" role="grid" aria-label="Crossword grid"></div>
+          <div id="cw-status" class="cw-status" aria-live="polite"></div>
+        </div>
+
+        <!-- Clues Panel -->
+        <aside class="cw-clues" aria-label="Clues">
+          <div class="cw-clues__col">
+            <h3 class="cw-clues__heading">Across</h3>
+            <ol id="cw-clues-across" class="cw-clues__list"></ol>
+          </div>
+          <div class="cw-clues__col">
+            <h3 class="cw-clues__heading">Down</h3>
+            <ol id="cw-clues-down" class="cw-clues__list"></ol>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Active clue bar (mobile) -->
+      <div class="cw-activeclue" id="cw-activeclue">
+        <span id="cw-activeclue-num"></span>&thinsp;<span id="cw-activeclue-dir"></span>&ensp;<span id="cw-activeclue-text"></span>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/puzzles.js"></script>
+</body>
+</html>

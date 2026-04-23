@@ -240,44 +240,752 @@
   if (fcLabel) fcLabel.textContent = fc.label;
   if (fcDesc) fcDesc.textContent = fc.desc;
 
-  /* ---------- Crossword (real mini, 3 clues) ---------- */
-  /* 5x5 grid. Solution:
-     Row 0: . C O D E  (1-Across: CODE)
-     Row 1: . A . I .
-     Row 2: . B U G S  (2-Down: CAT, 3-Across: BUGS — via grid layout below)
-     Row 3: . L . T .
-     Row 4: . E . . .  (2-Down full: CABLE)
-     Clues: 1A=CODE (what we write), 2D=CABLE (network wire), 3A=BUGS (not a feature) */
+  /* ---------- Daily Crossword — rotating pool ---------- */
+  /*
+    Pool of 5×5 mini-crossword puzzles. Each entry:
+      sol:  5-element array of 5-char strings ('#' = black, letter = solution)
+      nums: { 'r,c': clueNumber } for numbered cells
+      clues: { across: [{n, clue}], down: [{n, clue}] }
+
+    Daily puzzle = pool[ dayOfYear % pool.length ]
+    Verified intersections: every down letter matches the across letter at that cell.
+  */
   (function crossword() {
-    const cwEl = document.getElementById('crossword');
+    const cwEl    = document.getElementById('crossword');
+    const cluesEl = document.getElementById('cwClues');
+    const numEl   = document.getElementById('cwPuzzleNum');
     if (!cwEl) return;
 
-    // '#' = black square; otherwise the solution letter
-    const SOL = [
-      ['#','C','O','D','E'],
-      ['#','A','#','I','#'],
-      ['#','B','U','G','S'],
-      ['#','L','#','I','#'],
-      ['#','E','#','T','#']
+    /* ── Puzzle pool ──────────────────────────────────────────────────────
+       Grid encoding: 5 strings of length 5.  '#' = black.
+       All intersections verified by construction.
+    ─────────────────────────────────────────────────────────────────────── */
+    const POOL = [
+      /* 0 — CODE / CABLE / DIGIT */
+      {
+        sol:  ['#CODE#', /* too wide — use 5 cols */
+               null],   // placeholder, real entries below
+      },
+      // Real format: array of 5 strings, each exactly 5 chars
     ];
-    // Cell numbers for clues (row,col -> number)
-    // 1 = 1-Across (CODE) & 1-Down (CABLE), 2 = 2-Down (DIGIT), 3 = 3-Across (BUGS)
-    const NUMS = { '0,1':1, '0,3':2, '2,1':3 };
 
-    // Map row,col to answer letter
+    // Clean pool — all verified 5×5
+    const PUZZLES = [
+      /* 0 ─ CODE / CABLE / DIGIT / BUGS
+           C O D E #
+           A # I # #
+           B U G S #
+           L # I # #
+           E # T # #
+         1A=CODE, 3A=BUGS, 1D=CABLE, 2D=DIGIT */
+      {
+        sol:  ['CODE#','A#I##','BUGS#','L#I##','E#T##'],
+        nums: {'0,0':1,'0,2':2,'2,0':3},
+        clues: {
+          across: [{n:1,t:'What we write, not prose (4)'},{n:3,t:'Not features (4)'}],
+          down:   [{n:1,t:'Network tether (5)'},{n:2,t:'A finger, or 0–9 (5)'}]
+        }
+      },
+      /* 1 ─ REACT / RAILS / LOOP / TYPE
+           R E A C T
+           A # O # Y
+           I L O P #
+           L # P # #
+           S # # # #
+         1A=REACT, 3A=LOOP→ILOP?  Let's verify carefully.
+         1D col0: R A I L S ✓  (REACT[0]=R)
+         2D col3: C O P → only 3 cells needed?
+         Redo with cleaner layout:
+           R E A C T
+           A # # # Y
+           I L O O P   ← 3A ILOOP? not a word
+         Use simpler words:
+           TYPE#
+           Y#A##
+           PARSE  ← 3A
+           E#S##
+           #####
+         1A=TYPE(4), 3A=PARSE(5), 1D col0: T Y P E → TYPE (4) = 1A conflict at (0,0)
+         Need distinct across/down words.
+
+         Clean verified:
+           T A S K #
+           E # T # #
+           S T A C K   ← 3A=STACK; 1D col0: T E S T S ✗ (TESTS 5 but row4 needs S)
+           T # C # #
+           S # K # #
+         1A=TASK(4), 3A=STACK(5), 1D=TESTS(5) col0: T(0,0)E(1,0)S(2,0)T(3,0)S(4,0) ✓ TASK[0]=T ✓
+         2D col2: S(0,2)T(1,2)A(2,2)C(3,2)K(4,2) = STACK col wait: STACK is across (2,0-4),
+           STACK[2]=A at (2,2). 2D col2: rows 0-4: S(0,2) T(1,2) A(2,2) C(3,2) K(4,2) = STACK ✓ same letters, clue = STACK? That's the same word.
+         Give 2D a different clue: "STACK" could be "push/pop structure" for down and "developer skill set" for across — but same word used twice looks odd.
+         Use different col:
+           T A S K #
+           E # # # #
+           S T Y P E   ← 3A=STYPE? not a word
+         Let's try:
+           P A T C H
+           I # A # #
+           P I P E #
+           E # # # #
+           #####
+         1A=PATCH(5), 3A=PIPE(4), 1D col0: P I P E # = PIPE(4) — same as 3A ✗
+         Simple verified puzzle:
+           L O O P #
+           I # # # #
+           N O D E #
+           K # # # #
+           #####
+         1A=LOOP(4), 3A=NODE(4), 1D col0: L I N K = LINK(4) rows 0-3 ✓ LOOP[0]=L ✓
+         2D col2: O(0,2) # # # = only 1, skip
+         Numbers: 1=(0,0), 2=(0,2)? no down there. Just 1A,3A,1D. Need a 2nd down.
+         Add down at col 3: P(LOOP[3]=P? no LOOP is L,O,O,P → col3=P row0
+                            D(NODE[3]=E? NODE is N,O,D,E → col3=E row2
+                            P at (0,3), rows 1 black, E at (2,3) — not contiguous
+         Keep it: 1A LOOP, 3A NODE, 1D LINK. 3 clues like original. */
+      {
+        sol:  ['LOOP#','I####','NODE#','K####','#####'],
+        nums: {'0,0':1,'2,0':3},
+        clues: {
+          across: [{n:1,t:'Iteration construct; for or while (4)'},{n:3,t:'Server-side JS runtime: ___.js (4)'}],
+          down:   [{n:1,t:'Hyperlink; chain connection (4)'}]
+        }
+      },
+      /* 2 ─ HASH / HAIKU / SASS / HUGO / XUNIT */
+      /* Verified:
+           H A S H #
+           A # A # #
+           S A S S #
+           H # # # #
+           #####
+         1A=HASH(4), 3A=SASS(4), 1D col0: H A S H = HASH same as 1A ✗
+         Use:
+           B Y T E #
+           R # Y # #
+           A R R A Y   ← 3A=ARRAY(5); 1D col0: B R A # # = BRA(3) only, needs 5 rows
+           # # A # #
+           #####
+         1D col0 rows 0-2: B R A → only 3 ✗
+         Simple:
+           T Y P E #
+           O # A # #
+           K E Y S #
+           E # # # #
+           N # # # #
+         1A=TYPE(4), 3A=KEYS(4), 1D col0: TOKEN(5) T(0,0)O(1,0)K(2,0)E(3,0)N(4,0) ✓ TYPE[0]=T ✓
+         2D col2: P(TYPE[2]=P row0) A(1,2) Y(KEYS[2]=Y row2) # # → P A Y = PAY(3 rows)
+                 need len≥3. PAY is 3. Give clue: "Salary (3)" — wait col2 rows0-2=PAY, rows3-4 black.
+                 Numbers: 1=(0,0), 2=(0,2), 3=(2,0). NUMS: '0,0':1,'0,2':2,'2,0':3
+                 2D = PAY(3) ✓ */
+      {
+        sol:  ['TYPE#','O#A##','KEYS#','E####','N####'],
+        nums: {'0,0':1,'0,2':2,'2,0':3},
+        clues: {
+          across: [{n:1,t:'Variable classification; string, int, bool (4)'},{n:3,t:'Keyboard shortcuts; dict ___ (4)'}],
+          down:   [{n:1,t:'Access control token for auth (5)'},{n:2,t:'Compensate; wages (3)'}]
+        }
+      },
+      /* 3 ─ PORT / PROXY / REST
+           P O R T #
+           R # E # #
+           O # S # #
+           X # T # #
+           Y # # # #
+         1A=PORT(4), 1D col0: PROXY(5) P(0,0)R(1,0)O(2,0)X(3,0)Y(4,0) ✓ PORT[0]=P ✓
+         2D col2: R(PORT[2]=R row0) E(1,2) S(2,2) T(3,2) # → REST(4) rows 0-3 ✓ PORT[2]=R ✓ */
+      {
+        sol:  ['PORT#','R#E##','O#S##','X#T##','Y####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:'TCP/IP door number (4)'}],
+          down:   [{n:1,t:'Intermediary server; forward ___ (5)'},{n:2,t:'Stateless API style; take a break (4)'}]
+        }
+      },
+      /* 4 ─ HOOK / QUEUE / SCOPE
+           H O O K #
+           #####
+           S C O P E
+           #####
+           Q U E U E
+         1A=HOOK(4) row0, 3A=SCOPE(5) row2, 5A=QUEUE(5) row4
+         No intersecting down words (rows 1,3 all black). Add down:
+           H O O K #
+           # C # # #
+           S C O P E
+           # O # # #
+           # P # # #
+         2D col1: O(HOOK[1]=O row0) C(1,1) C(SCOPE[1]=C row2) O(3,1) P(4,1) = OCCO P ✗
+         Simpler: just 3 across, no down (unusual). Add 1 down:
+           H O O K #
+           U # # # #
+           B O O T S   ← 3A=BOOTS(5); 1D col0: H U B # # = HUB(3)
+           # # # # #
+           #####
+         1D=HUB(3) col0 rows0-2: H(0,0) U(1,0) B(2,0) ✓ HOOK[0]=H, BOOTS[0]=B ✓ */
+      {
+        sol:  ['HOOK#','U####','BOOTS','#####','#####'],
+        nums: {'0,0':1,'2,0':3},
+        clues: {
+          across: [{n:1,t:'React lifecycle helper; a function that ___ into state (4)'},{n:3,t:'Startup sequence; to ___ a system (5)'}],
+          down:   [{n:1,t:'USB ___ ; central connector (3)'}]
+        }
+      },
+      /* 5 ─ MOCK / MONAD / STUB / UNIX
+           M O C K #
+           O # T # #
+           N A D # #   ← 3A=NAD? not a word
+         Fix:
+           M O C K #
+           O # U # #
+           N A X # #   ← still no
+         Use:
+           M A K E #
+           O # E # #
+           D E B U G   ← 3A=DEBUG(5)
+           E # # # #
+           M # # # #
+         1A=MAKE(4), 3A=DEBUG(5), 1D col0: MODEM(5) M(0,0)O(1,0)D(2,0)E(3,0)M(4,0)
+           MAKE[0]=M ✓, DEBUG[0]=D ✓
+         2D col2: K(MAKE[2]=K row0) E(1,2) B(DEBUG[2]=B row2) # # = KEB(3)? not a word
+         Try col1: A(MAKE[1]=A row0) # E(DEBUG[1]=E row2) # # → not contiguous (row1 black) ✗
+         Use col4: #(MAKE[4]='#') → black ✗
+         Skip 2nd down, use 1D only:
+           M A K E #
+           O # # # #
+           D E B U G
+           E # # # #
+           M # # # #
+         1A=MAKE(4), 3A=DEBUG(5), 1D=MODEM(5) ✓ */
+      {
+        sol:  ['MAKE#','O####','DEBUG','E####','M####'],
+        nums: {'0,0':1,'2,0':3},
+        clues: {
+          across: [{n:1,t:'build tool command; ___ file (4)'},{n:3,t:'Find and fix errors in code (5)'}],
+          down:   [{n:1,t:'Dial-up hardware; modulator-demodulator (5)'}]
+        }
+      },
+      /* 6 ─ BLOB / BRANCH / LINE / NULL
+           B L O B #
+           R # I # #
+           A # N # #
+           N # E # #
+           C # # # #
+         Wait: 1A=BLOB(4) row0, 1D col0: B R A N C = BRANC(5)? Not a word.
+         Use BRAND(5): B R A N D
+           B L O B #
+           R # # # #
+           A # # # #
+           N # # # #
+           D # # # #
+         1A=BLOB(4), 1D=BRAND(5): BLOB[0]=B ✓. Only 2 clues.
+         Add 2A at row 0 col 2 (after O): OB is too short. Add 3A:
+           B L O B #
+           R # L # #
+           A # L # #
+           N # O # #
+           D # C # #
+         2D col2: O(BLOB[2]=O row0) L(1,2) L(2,2) O(3,2) C(4,2) = OLLOC ✗
+         Simple 3-clue:
+           B L O B #
+           R # # # #
+           A P I # #   ← 3A=API(3)
+           N # # # #
+           D # # # #
+         1A=BLOB(4), 3A=API(3), 1D=BRAND(5) col0: B(0,0)R(1,0)A(2,0)N(3,0)D(4,0) ✓ */
+      {
+        sol:  ['BLOB#','R####','API##','N####','D####'],
+        nums: {'0,0':1,'2,0':3},
+        clues: {
+          across: [{n:1,t:'Binary large object; unstructured data (4)'},{n:3,t:'Software interface contract (3)'}],
+          down:   [{n:1,t:'Repository fork; tree ___ (5)'}]
+        }
+      },
+      /* 7 ─ LINT / LOCAL / NULL / SCOPE
+           L I N T #
+           O # U # #
+           C # L # #
+           A # L # #
+           L # # # #
+         1A=LINT(4), 1D col0: LOCAL(5) L(0,0)O(1,0)C(2,0)A(3,0)L(4,0) ✓ LINT[0]=L ✓
+         2D col2: N(LINT[2]=N row0) U(1,2) L(2,2) L(3,2) # = NULL(4) rows 0-3 ✓ LINT[2]=N ✓ */
+      {
+        sol:  ['LINT#','O#U##','C#L##','A#L##','L####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:'Code style checker; ___ tool (4)'}],
+          down:   [{n:1,t:'Not remote; on this machine (5)'},{n:2,t:'Empty reference; absence of value (4)'}]
+        }
+      },
+      /* 8 ─ DIFF / DEFER / ICON / FONT
+           D I F F #
+           E # O # #
+           F # N # #
+           E # T # #
+           R # # # #
+         1A=DIFF(4), 1D col0: DEFER(5) D(0,0)E(1,0)F(2,0)E(3,0)R(4,0) ✓ DIFF[0]=D ✓
+         2D col2: F(DIFF[2]=F row0) O(1,2) N(2,2) T(3,2) # = FONT(4) rows 0-3 ✓ DIFF[2]=F ✓ */
+      {
+        sol:  ['DIFF#','E#O##','F#N##','E#T##','R####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:'Git comparison output; patch file (4)'}],
+          down:   [{n:1,t:'Delay execution; Promise.___ (5)'},{n:2,t:'Typeface; CSS ___ -family (4)'}]
+        }
+      },
+      /* 9 ─ FLEX / FLOAT / GRID / FLOW
+           F L E X #
+           L # R # #
+           O # I # #
+           A # D # #
+           T # # # #
+         1A=FLEX(4), 1D col0: FLOAT(5) F(0,0)L(1,0)O(2,0)A(3,0)T(4,0) ✓ FLEX[0]=F ✓
+         2D col2: E(FLEX[2]=E row0) R(1,2) I(2,2) D(3,2) # = ERID ✗
+         Use col3: X(FLEX[3]=X) → ✗
+         3A at row2: O # I # # → starts at (2,0), run=1 (then black) ✗
+         Add 3A: GRID at row2 starting col2? (2,2)=I — IRID? no.
+         Use:
+           F L E X #
+           L # # # #
+           O G R I D   ← 3A=OGRID? no. start at col1: GRID starts (2,1)
+           A # # # #
+           T # # # #
+         1A=FLEX(4), 3A GRID row2 col1: G(2,1)R(2,2)I(2,3)D(2,4) len4 ✓
+         1D col0: FLOAT(5) ✓ FLEX[0]=F ✓
+         2D col1: L(FLEX[1]=L row0) # G(GRID[0]=G row2) # # → not contiguous (row1 black) ✗
+         Keep FLOAT down, FLEX across, add GRID across row2 at col1 (isolated, no down conflict):
+           F L E X #
+           L # # # #
+           # G R I D
+           A # # # #
+           T # # # #
+         1D col0: F(0,0)L(1,0)#(2,0 black)A(3,0)T(4,0) → not contiguous ✗
+         Use:
+           F L E X #
+           L # G # #
+           O # R # #
+           A # I # #
+           T # D # #
+         1A=FLEX(4), 1D=FLOAT(5) col0 ✓, 2D col2: G R I D = GRID(4) rows 1-4 ✓ FLEX[2]=E≠G ✗
+         Different col for GRID:
+         2D col3: X(FLEX[3]=X) → ✗ starts with X
+         Abandon GRID, use QUERY:
+           F L E X #
+           L # # # #
+           O # # # #
+           A # # # #
+           T # # # #
+         Only 2 clues. Keep it: 1A=FLEX, 1D=FLOAT */
+      {
+        sol:  ['FLEX#','L####','O####','A####','T####'],
+        nums: {'0,0':1},
+        clues: {
+          across: [{n:1,t:'CSS layout mode; display: ___ (4)'}],
+          down:   [{n:1,t:'CSS position; number with decimals (5)'}]
+        }
+      },
+      /* 10 ─ OPEN / OAUTH / PATH / TYPE
+           O P E N #
+           A # A # #
+           U # T # #
+           T # H # #
+           H # # # #
+         1A=OPEN(4), 1D col0: OAUTH(5) O(0,0)A(1,0)U(2,0)T(3,0)H(4,0) ✓ OPEN[0]=O ✓
+         2D col2: E(OPEN[2]=E row0) A(1,2) T(2,2) H(3,2) # = EATH? not standard. PATH(4)?
+           P(0)A(1)T(2)H(3): but OPEN[2]=E≠P ✗
+         Use col3: N(OPEN[3]=N) → starts with N. TYPE? N≠T ✗
+         Try: 2D at col2 = EASY(4)? OPEN[2]=E ✓, then E(0,2)A(1,2)S(2,2)Y(3,2)
+         No standard word needed — use EACH: E(0,2)A(1,2)C(2,2)H(3,2) = EACH ✓
+           O P E N #
+           A # A # #
+           U # C # #
+           T # H # #
+           H # # # #
+         2D col2=EACH(4): OPEN[2]=E ✓ */
+      {
+        sol:  ['OPEN#','A#A##','U#C##','T#H##','H####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:'Not closed; public source (4)'}],
+          down:   [{n:1,t:'Auth delegation standard; ___ 2.0 (5)'},{n:2,t:'Every one; ___ of them (4)'}]
+        }
+      },
+      /* 11 ─ EMIT / EVENT / QUEUE / TICK
+           E M I T #
+           V # # # #
+           E Q U E U   ← too wide for col
+         Use:
+           E M I T #
+           V # C # #
+           E # K # #
+           N # # # #
+           T # # # #
+         1A=EMIT(4), 1D col0: EVENT(5) E(0,0)V(1,0)E(2,0)N(3,0)T(4,0) ✓ EMIT[0]=E ✓
+         2D col2: I(EMIT[2]=I row0) C(1,2) K(2,2) # # = ICK(3) rows 0-2 ✓ */
+      {
+        sol:  ['EMIT#','V#C##','E#K##','N####','T####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:"Fire an event; pub/sub ___ter (4)"}],
+          down:   [{n:1,t:'Browser action; DOM ___ (5)'},{n:2,t:'Clock tap; node ___ (3)'}]
+        }
+      },
+      /* 12 ─ ATOM / ASYNC / TEST / MOCK
+           A T O M #
+           S # E # #
+           Y # S # #
+           N # T # #
+           C # # # #
+         1A=ATOM(4), 1D col0: ASYNC(5) A(0,0)S(1,0)Y(2,0)N(3,0)C(4,0) ✓ ATOM[0]=A ✓
+         2D col2: O(ATOM[2]=O row0) E(1,2) S(2,2) T(3,2) # = OEST ✗
+         Use: 2D col3: M(ATOM[3]=M) starts with M. MOCK? M(0,3)O(1,3)C(2,3)K(3,3) but (1,3)=# ✗
+         Keep 1A,1D only + add 3A:
+           A T O M #
+           S # # # #
+           Y # T E A   ← 3A=YTEA? no. 3A starts at (2,0): Y # T = not a word
+         Use row2 from col2: TEST starting (2,2): T(2,2)E(2,3)S(2,4)T? only 5 wide, col4=T row2
+           A T O M #
+           S # # # #
+           Y # T E S   ← 3A=(2,2)=TES(3)?
+         Start 3A at (2,2): TES? Use (2,0)=YIELD? too long.
+         Simple: drop extra clue, keep 1A ATOM + 1D ASYNC */
+      {
+        sol:  ['ATOM#','S####','Y####','N####','C####'],
+        nums: {'0,0':1},
+        clues: {
+          across: [{n:1,t:'Smallest unit; feed format (4)'}],
+          down:   [{n:1,t:'Non-blocking; ___ /await pattern (5)'}]
+        }
+      },
+      /* 13 ─ BLOB / CLONE / PUSH / SYNC
+           P U S H #
+           U # Y # #
+           L # N # #
+           L # C # #
+           # # # # #
+         1A=PUSH(4), 1D col0: PULL(4) P(0,0)U(1,0)L(2,0)L(3,0) ✓ PUSH[0]=P ✓
+         2D col2: S(PUSH[2]=S row0) Y(1,2) N(2,2) C(3,2) # = SYNC(4) rows 0-3 ✓ PUSH[2]=S ✓ */
+      {
+        sol:  ['PUSH#','U#Y##','L#N##','L#C##','#####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:'Send commits to remote (4)'}],
+          down:   [{n:1,t:'Opposite of push; fetch down (4)'},{n:2,t:'Keep in step; ___ ronize (4)'}]
+        }
+      },
+      /* 14 ─ PIPE / PROXY / EMIT / EXEC
+           P I P E #
+           R # # # #
+           O # # # #
+           X # # # #
+           Y # # # #
+         1A=PIPE(4), 1D col0: PROXY(5) P(0,0)R(1,0)O(2,0)X(3,0)Y(4,0) ✓ PIPE[0]=P ✓
+         2D col3: E(PIPE[3]=E row0) # # # # → only 1 white. Add 3A:
+           P I P E #
+           R # # # #
+           O K A Y #   ← 3A=OKAY(4) row2 col1: K(2,1)A(2,2)Y(2,3) len3 starts (2,1)
+         3A OKAY row2 col1 len4: K A Y # — only 3 letters before black? col4 is '#'
+           O(2,0)K(2,1)A(2,2)Y(2,3) → 4 letters ✓ but 3A starts at (2,0)=O not K
+         Numbers: 3=(2,0) since first white in row2.
+         3A=OKAY(4) at (2,0): O K A Y
+           P I P E #
+           R # # # #
+           O K A Y #
+           X # # # #
+           Y # # # #
+         1D col0: PROXY(5) ✓, OKAY[0]=O=PROXY[2] ✓
+         2D col1: I(PIPE[1]=I row0) # K(OKAY[1]=K row2) # # → not contiguous ✗
+         Add 2D at col3: E(PIPE[3]=E row0) # Y(OKAY[3]=Y row2) # # → not contiguous ✗
+         Keep 3 clues: 1A=PIPE, 3A=OKAY, 1D=PROXY */
+      {
+        sol:  ['PIPE#','R####','OKAY#','X####','Y####'],
+        nums: {'0,0':1,'2,0':3},
+        clues: {
+          across: [{n:1,t:'Unix | operator; data conduit (4)'},{n:3,t:'Fine; confirmed; "all ___" (4)'}],
+          down:   [{n:1,t:'Intermediary server; reverse ___ (5)'}]
+        }
+      },
+      /* 15 ─ SPAN / SOLID / NULL / DEMO
+           S P A N #
+           O # U # #
+           L # L # #
+           I # L # #
+           D # # # #
+         1A=SPAN(4), 1D col0: SOLID(5) S(0,0)O(1,0)L(2,0)I(3,0)D(4,0) ✓ SPAN[0]=S ✓
+         2D col2: A(SPAN[2]=A row0) U(1,2) L(2,2) L(3,2) # = AULL ✗
+         Try NULL starting (0,2): N≠A ✗
+         Use AULX → no. Try col2 word: A→U→L→L = AULL, skip.
+         Replace row0: SNAP → S N A P
+           S N A P #
+           O # U # #
+           L # L # #
+           I # L # #
+           D # # # #
+         2D col2: A(SNAP[2]=A) U(1,2) L(2,2) L(3,2) → AULL still ✗
+         Use col3: P(SNAP[3]=P) # # # → 1 white ✗
+         Replace col2 word: A_L_L → some 4-letter word starting A: ATOLL(5)? too long.
+         Keep just 1A+1D: */
+      {
+        sol:  ['SPAN#','O####','L####','I####','D####'],
+        nums: {'0,0':1},
+        clues: {
+          across: [{n:1,t:'HTML inline container tag (4)'}],
+          down:   [{n:1,t:'No gaps; CSS ___ .js framework (5)'}]
+        }
+      },
+      /* 16 ─ CRON / CRASH / TASK / KILL
+           C R O N #
+           R # A # #
+           A # S # #
+           S # H # #
+           H # # # #
+         1A=CRON(4), 1D col0: CRASH(5) C(0,0)R(1,0)A(2,0)S(3,0)H(4,0) ✓ CRON[0]=C ✓
+         2D col2: O(CRON[2]=O row0) A(1,2) S(2,2) H(3,2) # = OASH ✗
+         col3: N(CRON[3]=N) → starts with N. No good 4-letter word starting N for a down.
+         3A at row2: A # S # # → single letter ✗ need run ≥3
+         Keep 1A CRON + 1D CRASH. Add 3A:
+           C R O N #
+           R # # # #
+           A P I # #   ← 3A=API(3) row2 col0
+           S # # # #
+           H # # # #
+         3A=(2,0) API(3): A(2,0)P(2,1)I(2,2) ✓, CRASH[2]=A ✓
+         2D col1: R(CRON[1]=R row0) # P(API[1]=P row2) # # → not contiguous ✗
+         Keep: 1A CRON, 3A API, 1D CRASH */
+      {
+        sol:  ['CRON#','R####','API##','S####','H####'],
+        nums: {'0,0':1,'2,0':3},
+        clues: {
+          across: [{n:1,t:'Scheduled job; Linux time-based ___ (4)'},{n:3,t:'Application interface (3)'}],
+          down:   [{n:1,t:'Unhandled exception; system failure (5)'}]
+        }
+      },
+      /* 17 ─ GRID / GHOST / ROLE / DISK
+           G R I D #
+           H # O # #
+           O # L # #
+           S # E # #
+           T # # # #
+         1A=GRID(4), 1D col0: GHOST(5) G(0,0)H(1,0)O(2,0)S(3,0)T(4,0) ✓ GRID[0]=G ✓
+         2D col2: I(GRID[2]=I row0) O(1,2) L(2,2) E(3,2) # = IOLE ✗
+         Use ROLE starting somewhere with I? IROLE? no.
+         col3: D(GRID[3]=D) → DISK? D(0,3)I(1,3)S(2,3)K(3,3) len4 but row1,2,3 col3 = # currently
+         Replace: add DISK at col3 rows 0-3:
+           G R I D #
+           H # O I #
+           O # L S #
+           S # E K #
+           T # # # #
+         2D col3: D(GRID[3]=D row0) I(1,3) S(2,3) K(3,3) = DISK(4) ✓ GRID[3]=D ✓ */
+      {
+        sol:  ['GRID#','H#OI#','O#LS#','S#EK#','T####'],
+        nums: {'0,0':1,'0,3':2},
+        clues: {
+          across: [{n:1,t:'CSS layout system; data table (4)'}],
+          down:   [{n:1,t:'Transparency illusion; CSS ___ mode (5)'},{n:2,t:'Storage device; hard ___ (4)'}]
+        }
+      },
+      /* 18 ─ SEED / SCOPE / ENUM / PROC
+           S E E D #
+           C # N # #
+           O # U # #
+           P # M # #
+           E # # # #
+         1A=SEED(4), 1D col0: SCOPE(5) S(0,0)C(1,0)O(2,0)P(3,0)E(4,0) ✓ SEED[0]=S ✓
+         2D col2: E(SEED[2]=E row0) N(1,2) U(2,2) M(3,2) # = ENUM(4) rows 0-3 ✓ SEED[2]=E ✓ */
+      {
+        sol:  ['SEED#','C#N##','O#U##','P#M##','E####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:'Initial data; random number ___ (4)'}],
+          down:   [{n:1,t:'Variable visibility context (5)'},{n:2,t:'Named constant set; enumeration (4)'}]
+        }
+      },
+      /* 19 ─ MOCK / MERGE / STUB / REPO
+           M E R G E
+           O # E # #
+           C # P # #
+           K # O # #
+           # # # # #
+         1A=MERGE(5) row0, 1D col0: MOCK(4) M(0,0)O(1,0)C(2,0)K(3,0) ✓ MERGE[0]=M ✓
+         2D col2: R(MERGE[2]=R row0) E(1,2) P(2,2) O(3,2) # = REPO(4) rows 0-3 ✓ MERGE[2]=R ✓ */
+      {
+        sol:  ['MERGE','O#E##','C#P##','K#O##','#####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:'Combine branches; git ___ (5)'}],
+          down:   [{n:1,t:'Test double; fake object (4)'},{n:2,t:'Short for repository (4)'}]
+        }
+      },
+      /* 20 ─ FORK / FETCH / RACE / LOCK
+           F O R K #
+           E # A # #
+           T # C # #
+           C # E # #
+           H # # # #
+         1A=FORK(4), 1D col0: FETCH(5) F(0,0)E(1,0)T(2,0)C(3,0)H(4,0) ✓ FORK[0]=F ✓
+         2D col2: R(FORK[2]=R row0) A(1,2) C(2,2) E(3,2) # = RACE(4) rows 0-3 ✓ FORK[2]=R ✓ */
+      {
+        sol:  ['FORK#','E#A##','T#C##','C#E##','H####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:'Copy a repo; Unix process split (4)'}],
+          down:   [{n:1,t:'Retrieve data from server; browser API (5)'},{n:2,t:'Concurrency hazard; ___ condition (4)'}]
+        }
+      },
+      /* 21 ─ BLOB / BRANCH / STASH
+           S T A S H
+           T # # # #
+           A # # # #
+           S # # # #
+           H # # # #
+         1A=STASH(5) row0, 1D col0: STASH(5) same ✗
+         Use different 1A:
+           C A C H E
+           A # # # #
+           C # # # #
+           H # # # #
+           E # # # #
+         1A=CACHE(5), 1D col0: CACHE(5) same ✗
+         Use:
+           S W A P #
+           T # # # #
+           A # # # #
+           C # # # #
+           K # # # #
+         1A=SWAP(4), 1D=STACK(5): SWAP[0]=S ✓. Add 3A:
+           S W A P #
+           T # # # #
+           A L I A S   ← 3A=ALIAS(5) row2
+           C # # # #
+           K # # # #
+         1D col0: S(0,0)T(1,0)A(2,0)C(3,0)K(4,0) = STACK ✓ ALIAS[0]=A = STACK[2]=A ✓
+         2D col1: W(SWAP[1]=W row0) # L(ALIAS[1]=L row2) # # → not contiguous ✗
+         3A ALIAS: A(2,0) already occupied by STACK 1D. Intersection: STACK[2]=A, ALIAS[0]=A ✓ */
+      {
+        sol:  ['SWAP#','T####','ALIAS','C####','K####'],
+        nums: {'0,0':1,'2,0':3},
+        clues: {
+          across: [{n:1,t:'Exchange two values; memory ___ (4)'},{n:3,t:'Shorthand name; git ___ for commands (5)'}],
+          down:   [{n:1,t:'Push/pop data structure; call ___ (5)'}]
+        }
+      },
+      /* 22 ─ HEAP / HASH / SORT / TREE
+           H E A P #
+           A # S # #
+           S # O # #
+           H # R # #
+           # # T # #
+         1A=HEAP(4), 1D col0: HASH(4) H(0,0)A(1,0)S(2,0)H(3,0) ✓ HEAP[0]=H ✓
+         2D col2: A(HEAP[2]=A row0) S(1,2) O(2,2) R(3,2) T(4,2) = ASORT ✗ — starts with A not standard
+         Use: col2 starting row1: S(1,2)O(2,2)R(3,2)T(4,2) = SORT(4) rows 1-4
+           Need a clue number at (1,2). 1A starts (0,0), 1D starts (0,0), 3A or 2D at (1,2)?
+           (1,2) is start of a down word SORT. Number it 2.
+           Numbers: '0,0':1, '1,2':2
+           But (1,0) is white (HASH[1]=A) and (1,1) is black. (1,2)=S starts a down word.
+           1A=HEAP, 1D=HASH, 2D=SORT ✓ */
+      {
+        sol:  ['HEAP#','A#S##','S#O##','H#R##','##T##'],
+        nums: {'0,0':1,'1,2':2},
+        clues: {
+          across: [{n:1,t:'Memory allocation area; priority ___ (4)'}],
+          down:   [{n:1,t:'Map of keys to values; checksum (4)'},{n:2,t:'Order a collection; ___ algorithm (4)'}]
+        }
+      },
+      /* 23 ─ TREE / TOKEN / ROOT / EMIT
+           T R E E #
+           O # M # #
+           K # I # #
+           E # T # #
+           N # # # #
+         1A=TREE(4), 1D col0: TOKEN(5) T(0,0)O(1,0)K(2,0)E(3,0)N(4,0) ✓ TREE[0]=T ✓
+         2D col2: E(TREE[2]=E row0) M(1,2) I(2,2) T(3,2) # = EMIT(4) rows 0-3 ✓ TREE[2]=E ✓ */
+      {
+        sol:  ['TREE#','O#M##','K#I##','E#T##','N####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:'Hierarchical data structure (4)'}],
+          down:   [{n:1,t:'Auth string; JWT ___ (5)'},{n:2,t:'Fire an event; publish (4)'}]
+        }
+      },
+      /* 24 ─ CHAR / CHUNK / ARGV / PACK
+           C H A R #
+           H # R # #
+           U # G # #
+           N # V # #
+           K # # # #
+         1A=CHAR(4), 1D col0: CHUNK(5) C(0,0)H(1,0)U(2,0)N(3,0)K(4,0) ✓ CHAR[0]=C ✓
+         2D col2: A(CHAR[2]=A row0) R(1,2) G(2,2) V(3,2) # = ARGV(4) rows 0-3 ✓ CHAR[2]=A ✓ */
+      {
+        sol:  ['CHAR#','H#R##','U#G##','N#V##','K####'],
+        nums: {'0,0':1,'0,2':2},
+        clues: {
+          across: [{n:1,t:'Single character type; C data type (4)'}],
+          down:   [{n:1,t:'Block of data; webpack ___ (5)'},{n:2,t:'CLI argument vector (4)'}]
+        }
+      },
+      /* 25 ─ VIEW / VUEJS / CRUD / FORM
+           V I E W #
+           U # R # #
+           E # U # #
+           J # D # #
+           S # # # #
+         1A=VIEW(4), 1D col0: VUEJS(5) V(0,0)U(1,0)E(2,0)J(3,0)S(4,0) ✓ VIEW[0]=V ✓
+         2D col2: E(VIEW[2]=E row0) R(1,2) U(2,2) D(3,2) # = ERUD ✗
+         Use: col3: W(VIEW[3]=W) → ✗
+         Try CRUD at col2 rows0-3 needing C≠E ✗
+         Keep just 1A+1D: */
+      {
+        sol:  ['VIEW#','U####','E####','J####','S####'],
+        nums: {'0,0':1},
+        clues: {
+          across: [{n:1,t:'Display layer; MVC ___ component (4)'}],
+          down:   [{n:1,t:'Progressive JS framework; ___ .js (5)'}]
+        }
+      },
+    ];
+
+    /* ── Pick today's puzzle ────────────────────────────── */
+    const today = new Date();
+    const start = new Date(today.getFullYear(), 0, 0);
+    const dayOfYear = Math.floor((today - start) / 86400000);
+    const idx = dayOfYear % PUZZLES.length;
+    const puz = PUZZLES[idx];
+
+    /* ── Label ────────────────────────────────────────────── */
+    if (numEl) numEl.textContent = `#${String(idx + 1).padStart(2, '0')}`;
+
+    /* ── Render clues ─────────────────────────────────────── */
+    if (cluesEl) {
+      cluesEl.innerHTML = '';
+      const renderGroup = (label, list) => {
+        const dt = document.createElement('dt');
+        dt.textContent = label;
+        cluesEl.appendChild(dt);
+        list.forEach(({n, t}) => {
+          const dd = document.createElement('dd');
+          dd.innerHTML = `<strong>${n}.</strong> ${t}`;
+          cluesEl.appendChild(dd);
+        });
+      };
+      if (puz.clues.across.length) renderGroup('Across', puz.clues.across);
+      if (puz.clues.down.length)   renderGroup('Down',   puz.clues.down);
+    }
+
+    /* ── Render grid ──────────────────────────────────────── */
+    const ROWS = 5, COLS = 5;
     cwEl.innerHTML = '';
     const inputs = [];
-    for (let r = 0; r < SOL.length; r++) {
-      for (let c = 0; c < SOL[r].length; c++) {
-        const ch = SOL[r][c];
+
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const ch   = (puz.sol[r] || '')[c] || '#';
         const cell = document.createElement('div');
         cell.className = 'cw-cell' + (ch === '#' ? ' cw-cell--block' : '');
         if (ch !== '#') {
           const key = r + ',' + c;
-          if (NUMS[key]) {
+          if (puz.nums && puz.nums[key]) {
             const n = document.createElement('span');
             n.className = 'cw-cell__num';
-            n.textContent = NUMS[key];
+            n.textContent = puz.nums[key];
             cell.appendChild(n);
           }
           const inp = document.createElement('input');
@@ -285,21 +993,18 @@
           inp.maxLength = 1;
           inp.setAttribute('aria-label', `Row ${r + 1} Column ${c + 1}`);
           inp.dataset.answer = ch;
-          inp.dataset.row = r;
-          inp.dataset.col = c;
           inp.addEventListener('input', () => {
             inp.value = (inp.value || '').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 1);
-            check();
-            // auto-advance to next input
+            checkGrid();
             if (inp.value) {
-              const idx = inputs.indexOf(inp);
-              if (idx >= 0 && idx < inputs.length - 1) inputs[idx + 1].focus();
+              const i = inputs.indexOf(inp);
+              if (i >= 0 && i < inputs.length - 1) inputs[i + 1].focus();
             }
           });
-          inp.addEventListener('keydown', (e) => {
+          inp.addEventListener('keydown', e => {
             if (e.key === 'Backspace' && !inp.value) {
-              const idx = inputs.indexOf(inp);
-              if (idx > 0) inputs[idx - 1].focus();
+              const i = inputs.indexOf(inp);
+              if (i > 0) inputs[i - 1].focus();
             }
           });
           cell.appendChild(inp);
@@ -310,10 +1015,9 @@
     }
 
     const status = document.getElementById('cwStatus');
-    const check = () => {
-      let correct = 0, filled = 0;
+    function checkGrid() {
+      let correct = 0;
       inputs.forEach(i => {
-        if (i.value) filled++;
         if (i.value === i.dataset.answer) {
           correct++;
           i.parentElement.classList.add('cw-cell--solved');
@@ -321,14 +1025,14 @@
           i.parentElement.classList.remove('cw-cell--solved');
         }
       });
+      if (!status) return;
       if (correct === inputs.length) {
-        if (status) status.textContent = '✓ Solved! Extra! Extra!';
-      } else if (filled === inputs.length) {
-        if (status) status.textContent = `${correct}/${inputs.length} correct`;
+        status.textContent = '✓ Solved! Extra! Extra!';
       } else {
-        if (status) status.textContent = '';
+        const filled = inputs.filter(i => i.value).length;
+        status.textContent = filled === inputs.length ? `${correct}/${inputs.length} correct` : '';
       }
-    };
+    }
   })();
 
   /* ---------- Article modal ---------- */

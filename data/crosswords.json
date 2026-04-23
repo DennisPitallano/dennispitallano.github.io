@@ -1,0 +1,115 @@
+[
+  {
+    "id": "cw-001",
+    "title": "The Daily Oragon",
+    "subtitle": "No. 1 — General Knowledge",
+    "difficulty": "easy",
+    "width": 13,
+    "height": 13,
+    "grid": [
+      "###REACT###",
+      "###E###I###",
+      "AZURE##GHT#",
+      "#N##CODE###",
+      "LINUX######",
+      "###L###T###",
+      "STACK#ASYNC",
+      "###O###E###",
+      "###C###S###",
+      "###K###T###",
+      "###########"
+    ],
+    "clues": {
+      "across": [
+        { "number": 1, "row": 0, "col": 3, "length": 5, "clue": "Popular JS UI library from Meta" },
+        { "number": 5, "row": 2, "col": 0, "length": 5, "clue": "Microsoft's cloud platform" },
+        { "number": 7, "row": 3, "col": 4, "length": 4, "clue": "Lines of programming instructions" },
+        { "number": 9, "row": 4, "col": 0, "length": 5, "clue": "Open-source OS kernel" },
+        { "number": 11, "row": 6, "col": 0, "length": 5, "clue": "Data structure: push/pop ___" },
+        { "number": 12, "row": 6, "col": 6, "length": 5, "clue": "Non-blocking: ___ programming" }
+      ],
+      "down": [
+        { "number": 1, "row": 0, "col": 3, "length": 6, "clue": "Chemical element #75; also a .NET framework" },
+        { "number": 2, "row": 0, "col": 5, "length": 4, "clue": "Used in web pages: ___ element" },
+        { "number": 3, "row": 0, "col": 7, "length": 4, "clue": "User interface abbreviation" },
+        { "number": 4, "row": 2, "col": 2, "length": 8, "clue": "Serverless function execution unit" },
+        { "number": 6, "row": 2, "col": 4, "length": 9, "clue": "Trunk of version control" },
+        { "number": 8, "row": 3, "col": 6, "length": 4, "clue": "Front-end build target format" },
+        { "number": 10, "row": 4, "col": 7, "length": 6, "clue": "Software ___ (automated deployment)" }
+      ]
+    }
+  },
+  {
+    "id": "cw-002",
+    "title": "The Tech Tribune",
+    "subtitle": "No. 2 — Web & Cloud",
+    "difficulty": "medium",
+    "width": 11,
+    "height": 11,
+    "grid": [
+      "##CLOUD####",
+      "##L####S###",
+      "##I####Q###",
+      "####FETCH##",
+      "##E####L###",
+      "##N#######",
+      "TOKEN######",
+      "##K##API###",
+      "##E########",
+      "##N########",
+      "##D########"
+    ],
+    "clues": {
+      "across": [
+        { "number": 1, "row": 0, "col": 2, "length": 5, "clue": "Remote storage and computing infrastructure" },
+        { "number": 4, "row": 3, "col": 4, "length": 5, "clue": "Browser API to request remote data" },
+        { "number": 7, "row": 6, "col": 0, "length": 5, "clue": "Authentication credential string" },
+        { "number": 8, "row": 7, "col": 3, "length": 3, "clue": "Application Programming Interface" }
+      ],
+      "down": [
+        { "number": 1, "row": 0, "col": 2, "length": 11, "clue": "Computer system component for processing" },
+        { "number": 2, "row": 0, "col": 7, "length": 6, "clue": "Structured query language abbreviation" },
+        { "number": 3, "row": 3, "col": 4, "length": 3, "clue": "HTTP response status: ___ Not Found (abbr)" },
+        { "number": 5, "row": 4, "col": 8, "length": 4, "clue": "JavaScript testing library abbreviation" },
+        { "number": 6, "row": 5, "col": 2, "length": 4, "clue": "Component prop update trigger" }
+      ]
+    }
+  },
+  {
+    "id": "cw-003",
+    "title": "The Oragon Sunday",
+    "subtitle": "No. 3 — Full-Stack Special",
+    "difficulty": "hard",
+    "width": 13,
+    "height": 13,
+    "grid": [
+      "###DOTNET###",
+      "###O###E###",
+      "###C###S###",
+      "###K###T###",
+      "CSHARP#####",
+      "#######I###",
+      "###DOCKER##",
+      "###E###E###",
+      "###P###S###",
+      "###L###T###",
+      "###O###S###",
+      "###Y######",
+      "###########"
+    ],
+    "clues": {
+      "across": [
+        { "number": 1, "row": 0, "col": 3, "length": 6, "clue": "Microsoft's managed runtime framework" },
+        { "number": 5, "row": 4, "col": 0, "length": 6, "clue": "Compiled OO language, rhymes with 'see sharp'" },
+        { "number": 7, "row": 6, "col": 3, "length": 6, "clue": "Container platform by Docker Inc." }
+      ],
+      "down": [
+        { "number": 1, "row": 0, "col": 3, "length": 8, "clue": "___ line (CLI tool interface)" },
+        { "number": 2, "row": 0, "col": 5, "length": 4, "clue": "TypeScript abbreviation" },
+        { "number": 3, "row": 0, "col": 7, "length": 7, "clue": "Software build/test/deploy pipeline (abbr.)" },
+        { "number": 4, "row": 0, "col": 9, "length": 6, "clue": "Standard test coverage metric (abbr.)" },
+        { "number": 6, "row": 6, "col": 7, "length": 5, "clue": "Digital signature & encryption method" }
+      ]
+    }
+  }
+]
