@@ -640,6 +640,30 @@ html[data-edition="evening"] .cw-cell.revealed { background: #5a4520; color: var
   color: var(--ink-soft);
 }
 
+/* ---------- Testimonials / Letters to the Editor ---------- */
+.testimonial {
+  margin: 0 0 4px;
+  padding-bottom: 14px;
+  border-bottom: 1px dotted var(--paper-edge);
+}
+.testimonial:last-of-type { border-bottom: none; }
+.testimonial .pullquote {
+  font-size: 15px;
+  padding: 10px 6px 4px;
+  border: none;
+  margin: 0;
+}
+.testimonial .pullquote::before { font-size: 44px; vertical-align: -14px; }
+.testimonial .pullquote::after  { font-size: 44px; vertical-align: -22px; }
+.testimonial__byline {
+  font-family: var(--sans-label);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-align: right;
+  color: var(--ink-soft);
+  margin: 2px 4px 0;
+}
+
 /* ---------- Quote / pull quote ---------- */
 .pullquote {
   font-family: var(--serif-title);
