@@ -79,7 +79,9 @@
 
     // SFX via WebAudio (no asset needed)
     let ctx = null;
+    let _twGestured = false;
     const ensureCtx = () => {
+      if (!_twGestured) return null; // don't create AudioContext before a user gesture
       if (!ctx) {
         try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
       }
@@ -109,7 +111,7 @@
       } catch (e) {}
     };
     // Unlock audio on first interaction if the context was still suspended
-    const unlock = () => { ensureCtx(); document.removeEventListener('pointerdown', unlock); document.removeEventListener('keydown', unlock); };
+    const unlock = () => { _twGestured = true; ensureCtx(); };
     document.addEventListener('pointerdown', unlock, { once: true });
     document.addEventListener('keydown', unlock, { once: true });
 
