@@ -2399,31 +2399,12 @@
     });
   })();
 
-  /* ---------- Readers Today (public GoatCounter counter) ----------
-     Requires GoatCounter dashboard setting "Allow anyone to view statistics"
-     to be enabled. If disabled (403 + CORS), the Circulation pill stays
-     on its default text and the error is swallowed silently.              */
+  /* ---------- Readers Today ----------
+     GoatCounter /counter/ requires "Allow anyone to view statistics" to be
+     enabled in the dashboard. Until then, hide the pill silently.         */
   (function readersToday(){
     const el = document.getElementById('readersToday');
-    if (!el) return;
-    // Skip on localhost/file: the endpoint needs a real origin anyway.
-    if (!/^https?:/i.test(location.protocol) || /^(localhost|127\.)/.test(location.hostname)) return;
-    const base = 'https://dennispitallano.goatcounter.com/counter/';
-    const path = encodeURIComponent(location.pathname || '/');
-    const fmt = (n) => {
-      n = Number(n) || 0;
-      if (n >= 10000) return (n/1000).toFixed(1).replace(/\.0$/,'') + 'k';
-      return n.toLocaleString('en-US');
-    };
-    fetch(base + path + '.json', { cache: 'no-store', mode: 'cors' })
-      .then(r => r.ok ? r.json() : null)
-      .then(data => {
-        if (!data) { el.hidden = true; return; }
-        const n = data.count_unique != null ? data.count_unique : data.count;
-        if (n == null) { el.hidden = true; return; }
-        el.textContent = 'Circulation: ' + fmt(n) + ' reader' + (n === 1 ? '' : 's');
-      })
-      .catch(() => { el.hidden = true; /* public stats disabled \u2014 hide pill */ });
+    if (el) el.hidden = true;
   })();
 
   /* ---------- Keyboard shortcuts (? opens reference desk) ---------- */
