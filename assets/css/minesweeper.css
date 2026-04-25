@@ -1,0 +1,275 @@
+/* =========================================================
+   Minesweeper — Oragon Gazette theme
+   Relies on --ink / --paper / --accent / --serif-title etc.
+   from newsprint/styles.css
+   ========================================================= */
+
+/* ── Masthead ── */
+.ms-masthead {
+  border-bottom: 3px double var(--rule, #2a241f);
+  padding: 10px 0 8px;
+  background: var(--paper, #f4ecd8);
+}
+.ms-masthead__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.ms-masthead__home {
+  font-size: .82em;
+  color: var(--accent, #8b0000);
+  text-decoration: none;
+  font-family: var(--sans-label, monospace);
+  letter-spacing: .04em;
+}
+.ms-masthead__home:hover { text-decoration: underline; }
+.ms-masthead__title {
+  font-family: var(--serif-title, serif);
+  font-size: 2em;
+  font-weight: 700;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  letter-spacing: .04em;
+}
+.ms-masthead__date {
+  font-size: .78em;
+  font-family: var(--sans-label, monospace);
+  color: var(--ink-soft, #555);
+}
+
+/* ── Main layout ── */
+.ms-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+/* ── Toolbar ── */
+.ms-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--rule, #2a241f);
+  margin-bottom: 18px;
+}
+.ms-toolbar__left,
+.ms-toolbar__center,
+.ms-toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.ms-label {
+  font-family: var(--sans-label, monospace);
+  font-size: .78em;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink-soft, #555);
+}
+.ms-select {
+  font-family: var(--sans-label, monospace);
+  font-size: .78em;
+  padding: 4px 8px;
+  border: 1.5px solid var(--rule, #2a241f);
+  background: var(--paper, #f4ecd8);
+  color: var(--ink, #1a1613);
+  border-radius: 2px;
+  cursor: pointer;
+}
+.ms-btn {
+  font-family: var(--sans-label, monospace);
+  font-size: .78em;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  padding: 5px 14px;
+  border: 1.5px solid var(--rule, #2a241f);
+  background: var(--paper, #f4ecd8);
+  color: var(--ink, #1a1613);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background .12s, color .12s;
+}
+.ms-btn:hover { background: var(--rule, #2a241f); color: var(--paper, #f4ecd8); }
+.ms-btn--primary {
+  background: var(--accent, #8b0000);
+  border-color: var(--accent, #8b0000);
+  color: #fff;
+}
+.ms-btn--primary:hover { background: #6a0000; border-color: #6a0000; }
+.ms-btn--flag[aria-pressed="true"] {
+  background: var(--rule, #2a241f);
+  color: var(--paper, #f4ecd8);
+}
+.ms-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-width: 48px;
+}
+.ms-stat__label {
+  font-family: var(--sans-label, monospace);
+  font-size: .64em;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--ink-soft, #555);
+}
+.ms-stat__val {
+  font-family: var(--serif-title, serif);
+  font-size: 1.3em;
+  font-weight: 700;
+  color: var(--ink, #1a1613);
+  line-height: 1;
+}
+
+/* ── Board ── */
+.ms-board-wrap {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.ms-board {
+  display: inline-grid;
+  border: 2px solid var(--ink, #1a1613);
+  background: var(--ink, #1a1613);
+  gap: 1px;
+  user-select: none;
+  margin: 0 auto;
+  /* grid-template-columns set via JS */
+}
+
+/* ── Cells ── */
+.ms-cell {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--sans-label, monospace);
+  font-size: .88em;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--paper-dark, #e8dcc0);
+  border: none;
+  outline: none;
+  transition: background .08s;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.ms-cell:hover:not(.ms-cell--revealed):not(.ms-cell--exploded) {
+  background: var(--paper, #f4ecd8);
+}
+
+/* Unrevealed / flagged */
+.ms-cell--hidden {
+  background: var(--paper-dark, #e8dcc0);
+}
+.ms-cell--flagged {
+  background: var(--paper-dark, #e8dcc0);
+}
+
+/* Revealed */
+.ms-cell--revealed {
+  background: var(--paper, #f4ecd8);
+  cursor: default;
+}
+
+/* Exploded mine */
+.ms-cell--exploded {
+  background: var(--accent, #8b0000);
+  color: #fff;
+  cursor: default;
+}
+
+/* All-mines-shown on loss */
+.ms-cell--mine-shown {
+  background: #d4b483;
+  cursor: default;
+}
+
+/* Wrong flag on loss */
+.ms-cell--wrong-flag {
+  background: #f8d7da;
+  cursor: default;
+}
+
+/* Number colors — classic palette adapted to sepia tone */
+.ms-cell[data-n="1"] { color: #1a4d8b; }
+.ms-cell[data-n="2"] { color: #1a6b3a; }
+.ms-cell[data-n="3"] { color: #8b0000; }
+.ms-cell[data-n="4"] { color: #2a241f; }
+.ms-cell[data-n="5"] { color: #6b1a00; }
+.ms-cell[data-n="6"] { color: #1a6b6b; }
+.ms-cell[data-n="7"] { color: #3a0070; }
+.ms-cell[data-n="8"] { color: var(--ink-soft, #555); }
+
+/* ── Status banner ── */
+.ms-status {
+  min-height: 2.2em;
+  margin-top: 14px;
+  padding: 8px 14px;
+  font-family: var(--serif-title, serif);
+  font-size: 1.1em;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: .04em;
+  border-radius: 2px;
+  background: transparent;
+  transition: background .2s;
+}
+.ms-status--win {
+  background: #d4edda;
+  color: #1a6b3a;
+  border: 1.5px solid #a3d5b5;
+}
+.ms-status--lose {
+  background: #f8d7da;
+  color: #8b0000;
+  border: 1.5px solid #f3b8bb;
+}
+
+/* ── Rules / how to play ── */
+.ms-rules {
+  margin-top: 24px;
+  border: 1.5px solid var(--paper-edge, #d9c9a3);
+  border-radius: 4px;
+  padding: 10px 16px;
+  background: var(--paper, #f4ecd8);
+}
+.ms-rules__summary {
+  font-family: var(--sans-label, monospace);
+  font-size: .78em;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  cursor: pointer;
+  color: var(--accent, #8b0000);
+}
+.ms-rules__list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  font-family: var(--serif-body, serif);
+  font-size: .88em;
+  line-height: 1.7;
+  color: var(--ink, #1a1613);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .ms-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ms-cell { width: 28px; height: 28px; font-size: .78em; }
+  .ms-masthead__title { font-size: 1.5em; }
+}
+@media (max-width: 420px) {
+  .ms-cell { width: 24px; height: 24px; font-size: .72em; }
+}

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" data-edition="morning">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minesweeper · The Oragon Gazette</title>
+  <meta name="description" content="Classic Minesweeper game from The Oragon Gazette." />
+  <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/playfair-latin.woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/fonts/fonts.css" />
+  <link rel="stylesheet" href="/assets/newsprint/styles.css" />
+  <link rel="stylesheet" href="assets/css/minesweeper.css" />
+</head>
+<body>
+
+  <!-- Masthead -->
+  <div class="ms-masthead">
+    <div class="ms-masthead__inner">
+      <a href="index.html" class="ms-masthead__home">← The Oragon Gazette</a>
+      <h1 class="ms-masthead__title">Minesweeper</h1>
+      <span class="ms-masthead__date" id="ms-date"></span>
+    </div>
+  </div>
+
+  <main class="ms-main">
+
+    <!-- Toolbar -->
+    <div class="ms-toolbar">
+      <div class="ms-toolbar__left">
+        <label class="ms-label" for="ms-difficulty">Difficulty:</label>
+        <select id="ms-difficulty" class="ms-select">
+          <option value="easy">Easy (9×9 · 10 mines)</option>
+          <option value="medium" selected>Medium (16×16 · 40 mines)</option>
+          <option value="hard">Hard (30×16 · 99 mines)</option>
+        </select>
+      </div>
+      <div class="ms-toolbar__center">
+        <button class="ms-btn ms-btn--primary" id="ms-new">New Game</button>
+        <button class="ms-btn ms-btn--flag" id="ms-flagmode" aria-pressed="false" title="Toggle flag mode (F)">🚩 Flag Mode</button>
+      </div>
+      <div class="ms-toolbar__right">
+        <div class="ms-stat">
+          <span class="ms-stat__label">Mines</span>
+          <span class="ms-stat__val" id="ms-mines">0</span>
+        </div>
+        <div class="ms-stat">
+          <span class="ms-stat__label">Time</span>
+          <span class="ms-stat__val" id="ms-timer">0:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Board -->
+    <div class="ms-board-wrap">
+      <div id="ms-board" class="ms-board" role="grid" aria-label="Minesweeper grid"></div>
+    </div>
+
+    <!-- Status banner -->
+    <div id="ms-status" class="ms-status" aria-live="polite"></div>
+
+    <!-- How to play -->
+    <details class="ms-rules">
+      <summary class="ms-rules__summary">How to Play</summary>
+      <ul class="ms-rules__list">
+        <li><strong>Left-click</strong> (or tap) a cell to reveal it.</li>
+        <li><strong>Right-click</strong> (or toggle Flag Mode then tap) to plant or remove a flag.</li>
+        <li>Numbers show how many mines are adjacent. Use logic to find them all.</li>
+        <li><strong>Chord:</strong> click a revealed number whose flag count matches to clear its safe neighbors.</li>
+        <li>The first click is always safe.</li>
+      </ul>
+    </details>
+
+  </main>
+
+  <script src="assets/js/minesweeper.js"></script>
+</body>
+</html>
