@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="/assets/fonts/fonts.css" />
   <link rel="stylesheet" href="/assets/newsprint/styles.css" />
   <link rel="stylesheet" href="assets/css/puzzles.css" />
+  <!-- Apply saved edition before paint to avoid flash -->
+  <script>(function(){try{var e=localStorage.getItem('gazette-edition');document.documentElement.setAttribute('data-edition',e||(matchMedia('(prefers-color-scheme:dark)').matches?'evening':'morning'))}catch(_){}})()</script>
 </head>
 <body>
   <!-- Masthead -->
@@ -19,6 +21,7 @@
       <a href="index.html" class="cw-masthead__home">← The Oragon Gazette</a>
       <h1 class="cw-masthead__title">Crossword</h1>
       <a href="minesweeper.html" class="cw-masthead__home">Minesweeper →</a>
+      <button class="edition-toggle" id="editionToggle" title="Toggle Morning / Evening Edition">☾ Evening Ed.</button>
       <span class="cw-masthead__date" id="cw-date"></span>
     </div>
   </div>
@@ -73,5 +76,6 @@
   </main>
 
   <script src="assets/js/puzzles.js"></script>
+  <script>(function(){var b=document.getElementById('editionToggle');if(!b)return;function s(){b.textContent=document.documentElement.dataset.edition==='evening'?'\u2600 Morning Ed.':'\u263e Evening Ed.';}s();b.addEventListener('click',function(){var n=document.documentElement.dataset.edition==='evening'?'morning':'evening';document.documentElement.setAttribute('data-edition',n);try{localStorage.setItem('gazette-edition',n);}catch(_){}s();});})()</script>
 </body>
 </html>

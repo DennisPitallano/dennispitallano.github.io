@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="/assets/fonts/fonts.css" />
   <link rel="stylesheet" href="/assets/newsprint/styles.css" />
   <link rel="stylesheet" href="assets/css/minesweeper.css" />
+  <!-- Apply saved edition before paint to avoid flash -->
+  <script>(function(){try{var e=localStorage.getItem('gazette-edition');document.documentElement.setAttribute('data-edition',e||(matchMedia('(prefers-color-scheme:dark)').matches?'evening':'morning'))}catch(_){}})()</script>
 </head>
 <body>
 
@@ -18,6 +20,7 @@
     <div class="ms-masthead__inner">
       <a href="index.html" class="ms-masthead__home">← The Oragon Gazette</a>
       <h1 class="ms-masthead__title">Minesweeper</h1>
+      <button class="edition-toggle" id="editionToggle" title="Toggle Morning / Evening Edition">☾ Evening Ed.</button>
       <span class="ms-masthead__date" id="ms-date"></span>
     </div>
   </div>
@@ -73,5 +76,6 @@
   </main>
 
   <script src="assets/js/minesweeper.js"></script>
+  <script>(function(){var b=document.getElementById('editionToggle');if(!b)return;function s(){b.textContent=document.documentElement.dataset.edition==='evening'?'\u2600 Morning Ed.':'\u263e Evening Ed.';}s();b.addEventListener('click',function(){var n=document.documentElement.dataset.edition==='evening'?'morning':'evening';document.documentElement.setAttribute('data-edition',n);try{localStorage.setItem('gazette-edition',n);}catch(_){}s();});})()</script>
 </body>
 </html>
