@@ -18,6 +18,19 @@
   <link rel="manifest" href="/img/site.webmanifest" />
   <link rel="stylesheet" href="/assets/fonts/fonts.css" />
   <link rel="stylesheet" href="/assets/newsprint/styles.css" />
+  <style>
+    /* Resume uses long date-range years — widen the annals year column */
+    .annals::before           { left: 120px; }
+    .annals__item             { grid-template-columns: 105px 30px 1fr; }
+    .annals__item::before     { left: 115px; }
+    .annals__year             { font-size: 15px; white-space: normal; line-height: 1.3; }
+    @media (max-width: 600px) {
+      .annals::before         { left: 92px; }
+      .annals__item           { grid-template-columns: 78px 22px 1fr; gap: 0 8px; }
+      .annals__item::before   { left: 86px; top: 15px; width: 10px; height: 10px; }
+      .annals__year           { font-size: 12px; }
+    }
+  </style>
 
   <script type="application/ld+json">
   {
