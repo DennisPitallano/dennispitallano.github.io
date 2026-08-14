@@ -537,6 +537,7 @@
       <nav class="social" aria-label="External links">
         <a href="https://github.com/DennisPitallano"           target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/dennispitallano/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://stackoverflow.com/users/7022362/pitallano-dennis" target="_blank" rel="noopener">Stack&nbsp;Overflow</a>
         <a href="mailto:dpitallano@gmail.com">Email</a>
         <a href="/resume.html">R&eacute;sum&eacute;</a>
       </nav>
@@ -545,7 +546,7 @@
     <hr class="divider" />
 
     <!-- ABOUT -->
-    <details class="section" id="s-about">
+    <details class="section" id="s-about" open>
       <summary><span>About</span><span class="s-arrow">&#8250;</span></summary>
       <div class="section__body">
         <p>
@@ -888,13 +889,33 @@
 
         ring.classList.add('webgl-ready');
 
+        /* Pre-build color strings for stable endpoints — avoids string concat per cell per frame */
+        var sepStr = new Array(n), oriStr = new Array(n);
+        for (var j = 0; j < n; j++) {
+          var jc = j * 3;
+          sepStr[j] = 'rgb(' + sepia[jc] + ',' + sepia[jc+1] + ',' + sepia[jc+2] + ')';
+          oriStr[j] = 'rgb(' + orig[jc]  + ',' + orig[jc+1]  + ',' + orig[jc+2]  + ')';
+        }
+
+        /* Pause drawing when portrait is scrolled out of view */
+        var visible = true;
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (entries) {
+            visible = entries[0].isIntersecting;
+          }, { threshold: 0 }).observe(ring);
+        }
+        document.addEventListener('visibilitychange', function () {
+          visible = document.visibilityState === 'visible';
+        });
+
         var t = 0;
         (function draw() {
           requestAnimationFrame(draw);
+          /* Skip draw entirely when off-screen and animation is settled */
+          if (!visible && Math.abs(rt - (isHover ? 1 : 0)) < 0.001) return;
           ctx.clearRect(0, 0, SIZE, SIZE);
           t += 0.016;
 
-          /* Ease rt toward hover target */
           rt += ((isHover ? 1 : 0) - rt) * 0.08;
 
           for (var row = 0; row < CELLS; row++) {
@@ -902,23 +923,28 @@
               var k  = row * CELLS + col;
               var c3 = k * 3;
 
-              /* Interpolate sepia → original color */
-              var fr = (sepia[c3]   + (orig[c3]   - sepia[c3])   * rt) | 0;
-              var fg = (sepia[c3+1] + (orig[c3+1] - sepia[c3+1]) * rt) | 0;
-              var fb = (sepia[c3+2] + (orig[c3+2] - sepia[c3+2]) * rt) | 0;
+              /* Use pre-built strings at rest; blend only during hover transition */
+              var fillStr;
+              if (rt < 0.002) {
+                fillStr = sepStr[k];
+              } else if (rt > 0.998) {
+                fillStr = oriStr[k];
+              } else {
+                var fr = (sepia[c3]   + (orig[c3]   - sepia[c3])   * rt) | 0;
+                var fg = (sepia[c3+1] + (orig[c3+1] - sepia[c3+1]) * rt) | 0;
+                var fb = (sepia[c3+2] + (orig[c3+2] - sepia[c3+2]) * rt) | 0;
+                fillStr = 'rgb(' + fr + ',' + fg + ',' + fb + ')';
+              }
 
-              /* Luminance for dot sizing */
-              var lum = (0.299*orig[c3] + 0.587*orig[c3+1] + 0.114*orig[c3+2]) / 255;
-
-              /* Breathing wave fades out as reveal progresses */
-              var wave  = Math.sin(t*0.75 + (row/CELLS)*20 + (col/CELLS)*10) * 0.022 * (1 - rt);
-              var aLum  = Math.max(0, Math.min(1, lum + wave));
-              var htR   = CELL * 0.5 * (1 - aLum * 0.88 + 0.06); /* halftone radius */
-              var radius = Math.max(0.5, htR + (CELL * 0.62 - htR) * rt); /* blooms to fill cell */
+              var lum  = (0.299*orig[c3] + 0.587*orig[c3+1] + 0.114*orig[c3+2]) / 255;
+              var wave = Math.sin(t*0.75 + (row/CELLS)*20 + (col/CELLS)*10) * 0.022 * (1 - rt);
+              var aLum = Math.max(0, Math.min(1, lum + wave));
+              var htR  = CELL * 0.5 * (1 - aLum * 0.88 + 0.06);
+              var radius = Math.max(0.5, htR + (CELL * 0.62 - htR) * rt);
 
               ctx.beginPath();
               ctx.arc((col + 0.5) * CELL, (row + 0.5) * CELL, radius, 0, 6.2832);
-              ctx.fillStyle = 'rgb(' + fr + ',' + fg + ',' + fb + ')';
+              ctx.fillStyle = fillStr;
               ctx.fill();
             }
           }
@@ -941,7 +967,8 @@
             body.style.transition = 'height .3s cubic-bezier(.4,0,.2,1),opacity .3s';
             body.style.opacity = '0';
             body.style.height = '0';
-            body.addEventListener('transitionend', function done() {
+            body.addEventListener('transitionend', function done(e) {
+              if (e.propertyName !== 'height') return;
               body.removeEventListener('transitionend', done);
               detail.removeAttribute('open');
               body.style.cssText = '';
@@ -956,7 +983,8 @@
               body.style.transition = 'height .3s cubic-bezier(.4,0,.2,1),opacity .3s';
               body.style.height = end + 'px';
               body.style.opacity = '1';
-              body.addEventListener('transitionend', function done() {
+              body.addEventListener('transitionend', function done(e) {
+                if (e.propertyName !== 'height') return;
                 body.removeEventListener('transitionend', done);
                 body.style.cssText = '';
               });
