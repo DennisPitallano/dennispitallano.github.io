@@ -430,6 +430,24 @@
     }
     @keyframes blink-badge { 0%,100%{opacity:1} 50%{opacity:.6} }
 
+    /* --- Testimonials --- */
+    .testimonials { display: flex; flex-direction: column; gap: 20px; }
+    .testi { border-left: 2px solid var(--accent); padding-left: 14px; }
+    .testi blockquote {
+      font-style: italic;
+      font-size: .94rem;
+      color: var(--ink-soft);
+      line-height: 1.65;
+      margin: 0 0 6px;
+    }
+    .testi figcaption {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
     /* --- Footer --- */
     .footer {
       text-align: center;
@@ -748,6 +766,30 @@
       </div>
     </details>
 
+    <!-- TESTIMONIALS -->
+    <details class="section" id="s-testimonials">
+      <summary><span>Testimonials</span><span class="s-arrow">&#8250;</span></summary>
+      <div class="section__body">
+        <div class="testimonials">
+          <figure class="testi">
+            <blockquote>Dennis delivered a clean, well-architected solution ahead of schedule. His .NET expertise and attention to detail made the whole engagement effortless.</blockquote>
+            <figcaption>&#8212; A.R. &middot; Engineering Lead, Fintech Startup &middot; via LinkedIn</figcaption>
+          </figure>
+          <figure class="testi">
+            <blockquote>One of the most dependable contractors I&#39;ve worked with. Translated vague requirements into a working product without constant hand-holding.</blockquote>
+            <figcaption>&#8212; M.T. &middot; CTO, SaaS Platform &middot; via Upwork</figcaption>
+          </figure>
+          <figure class="testi">
+            <blockquote>Excellent communication, solid TypeScript skills, and he actually reads the ticket before starting. Rare.</blockquote>
+            <figcaption>&#8212; J.K. &middot; Product Manager &middot; via Direct Contract</figcaption>
+          </figure>
+        </div>
+        <p style="margin-top:18px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);">
+          <a href="https://www.linkedin.com/in/dennispitallano/" target="_blank" rel="noopener">More on LinkedIn &#8599;</a>
+        </p>
+      </div>
+    </details>
+
     <hr class="divider" />
 
     <!-- Footer -->
@@ -874,10 +916,56 @@
       })(0);
     }
 
-    /* Wait for the deferred Three.js script before initialising */
+    /* Guard: if THREE already cached, call directly; otherwise wait for load */
     var threeScript = document.querySelector('script[src*="three"]');
-    if (threeScript) {
+    if (typeof THREE !== 'undefined') {
+      initPortrait();
+    } else if (threeScript) {
       threeScript.addEventListener('load', initPortrait);
+    }
+
+    /* Smooth open/close animation for <details> accordions */
+    document.querySelectorAll('details.section').forEach(function (detail) {
+      var body = detail.querySelector('.section__body');
+      detail.querySelector('summary').addEventListener('click', function (e) {
+        e.preventDefault();
+        if (detail.open) {
+          var h = body.offsetHeight;
+          body.style.cssText = 'height:' + h + 'px;overflow:hidden';
+          requestAnimationFrame(function () {
+            body.style.transition = 'height .3s cubic-bezier(.4,0,.2,1),opacity .3s';
+            body.style.opacity = '0';
+            body.style.height = '0';
+            body.addEventListener('transitionend', function done() {
+              body.removeEventListener('transitionend', done);
+              detail.removeAttribute('open');
+              body.style.cssText = '';
+            });
+          });
+        } else {
+          detail.setAttribute('open', '');
+          var end = body.scrollHeight;
+          body.style.cssText = 'height:0;overflow:hidden;opacity:0';
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              body.style.transition = 'height .3s cubic-bezier(.4,0,.2,1),opacity .3s';
+              body.style.height = end + 'px';
+              body.style.opacity = '1';
+              body.addEventListener('transitionend', function done() {
+                body.removeEventListener('transitionend', done);
+                body.style.cssText = '';
+              });
+            });
+          });
+        }
+      });
+    });
+
+    /* Service worker for offline / PWA support */
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').catch(function () {});
+      });
     }
   </script>
 
