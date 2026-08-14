@@ -3,42 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Oragon Gazette · Dennis Pitallano</title>
-  <meta name="description" content="The Oragon Gazette — a classic-newspaper portfolio for Dennis Pitallano, full-stack developer from the Philippines." />
+  <title>Dennis Pitallano — Full-Stack Developer</title>
+  <meta name="description" content="Dennis Pitallano — Full-stack developer from the Philippines. C#, .NET, TypeScript, React. Building clean, durable software from Camarines Norte." />
   <meta name="author" content="Dennis Pitallano" />
-  <meta name="theme-color" content="#f1e7cf" />
+  <meta name="theme-color" content="#f4ecd8" />
   <link rel="canonical" href="https://dennispitallano.github.io/" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="The Oragon Gazette" />
-  <meta property="og:title" content="The Oragon Gazette · Dennis Pitallano" />
-  <meta property="og:description" content="A full-stack developer’s portfolio, set in hot-metal type. All the news that’s fit to commit." />
+  <meta property="og:title" content="Dennis Pitallano — Full-Stack Developer" />
+  <meta property="og:description" content="Full-stack developer from the Philippines. C#, .NET, TypeScript, React." />
   <meta property="og:url" content="https://dennispitallano.github.io/" />
   <meta property="og:image" content="https://dennispitallano.github.io/img/og-card.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="The Oragon Gazette front page — Dennis Pitallano, Full-Stack Developer" />
+  <meta property="og:image:alt" content="Dennis Pitallano — Full-Stack Developer" />
   <meta property="og:locale" content="en_US" />
 
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="The Oragon Gazette · Dennis Pitallano" />
-  <meta name="twitter:description" content="A full-stack developer’s portfolio, set in hot-metal type." />
+  <meta name="twitter:title" content="Dennis Pitallano — Full-Stack Developer" />
+  <meta name="twitter:description" content="Full-stack developer from the Philippines. C#, .NET, TypeScript, React." />
   <meta name="twitter:image" content="https://dennispitallano.github.io/img/og-card.png" />
-  <meta name="twitter:image:alt" content="The Oragon Gazette front page" />
 
   <link rel="icon" href="/img/favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="/img/favicon.ico" />
   <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
   <link rel="mask-icon" href="/img/favicon.svg" color="#1a1a1a" />
   <link rel="manifest" href="/img/site.webmanifest" />
-  <!-- Self-hosted fonts (no third-party requests) -->
+
+  <!-- Self-hosted fonts -->
   <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/playfair-latin.woff2" crossorigin />
   <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/oldstandard-400-latin.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/specialelite-latin.woff2" crossorigin />
   <link rel="stylesheet" href="/assets/fonts/fonts.css" />
-  <link rel="stylesheet" href="/assets/newsprint/styles.css" />
 
   <!-- Structured data: Person + WebSite -->
   <script type="application/ld+json">
@@ -60,7 +60,7 @@
           "addressRegion": "Camarines Norte",
           "addressCountry": "PH"
         },
-        "knowsAbout": [".NET", "C#", "TypeScript", "React", "Node.js", "Azure", "SQL", "Distributed Systems", "Clean Architecture"],
+        "knowsAbout": [".NET","C#","TypeScript","React","Node.js","Azure","SQL","Distributed Systems","Clean Architecture"],
         "sameAs": [
           "https://github.com/DennisPitallano",
           "https://www.linkedin.com/in/dennispitallano/",
@@ -73,7 +73,7 @@
         "url": "https://dennispitallano.github.io/",
         "name": "The Oragon Gazette",
         "alternateName": "Dennis Pitallano · Portfolio",
-        "description": "A classic-newspaper portfolio for Dennis Pitallano, full-stack developer from the Philippines.",
+        "description": "Portfolio of Dennis Pitallano, full-stack developer from the Philippines.",
         "inLanguage": "en",
         "publisher": { "@id": "https://dennispitallano.github.io/#person" }
       }
@@ -81,723 +81,805 @@
   }
   </script>
 
-  <!-- Privacy-friendly analytics (GoatCounter) -->
+  <!-- Analytics (GoatCounter) -->
   <script data-goatcounter="https://dennispitallano.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    /* --- Design tokens --- */
+    :root {
+      --ink:         #1a1613;
+      --ink-soft:    #3a3430;
+      --ink-muted:   #8a7e72;
+      --paper:       #f4ecd8;
+      --paper-mid:   #e8dcc0;
+      --accent:      #8b0000;
+      --rule:        rgba(42,36,31,.18);
+      --rule-strong: rgba(42,36,31,.38);
+      --f-head: "Playfair Display","Old Standard TT",Georgia,serif;
+      --f-body: "Old Standard TT","PT Serif",Georgia,"Times New Roman",serif;
+      --f-mono: "Special Elite","Courier New",monospace;
+      --ease: cubic-bezier(.4,0,.2,1);
+    }
+    [data-edition="evening"] {
+      --ink:         #e8dcc0;
+      --ink-soft:    #b8ac90;
+      --ink-muted:   #7a7060;
+      --paper:       #1a1613;
+      --paper-mid:   #24201b;
+      --accent:      #d4a35a;
+      --rule:        rgba(200,180,140,.14);
+      --rule-strong: rgba(200,180,140,.32);
+    }
+
+    /* --- Reset --- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--f-body);
+      font-size: 17px;
+      line-height: 1.65;
+      transition: background .4s var(--ease), color .4s var(--ease);
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        repeating-linear-gradient(0deg,  transparent 0 3px, rgba(0,0,0,.008) 3px 4px),
+        repeating-linear-gradient(90deg, transparent 0 3px, rgba(0,0,0,.008) 3px 4px);
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px dotted var(--rule-strong);
+      transition: color .2s, border-color .2s;
+    }
+    a:hover { color: var(--accent); border-bottom-style: solid; border-bottom-color: var(--accent); }
+
+    /* --- Ticker --- */
+    .ticker {
+      position: relative;
+      z-index: 10;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      overflow: hidden;
+      white-space: nowrap;
+      border-bottom: 2px solid var(--accent);
+      transition: background .4s var(--ease);
+    }
+    .ticker__track {
+      display: inline-block;
+      padding: 7px 0;
+      animation: marquee 50s linear infinite;
+    }
+    .ticker__track span { margin: 0 2.5rem; }
+    .ticker__track span::before { content: "◆ "; color: var(--accent); }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* --- Layout --- */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 40px 28px 80px;
+    }
+
+    /* --- Top bar --- */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+    .brand {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      border-bottom: none;
+    }
+    .brand:hover { color: var(--ink); border-bottom: none; }
+    .edition-btn {
+      background: none;
+      border: 1px solid var(--rule-strong);
+      color: var(--ink-muted);
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      padding: 4px 10px;
+      cursor: pointer;
+      line-height: 1.4;
+      transition: color .2s, border-color .2s;
+    }
+    .edition-btn:hover { color: var(--ink); border-color: var(--ink-soft); }
+
+    /* --- Portrait --- */
+    .portrait-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .portrait-ring {
+      position: relative;
+      width: 184px;
+      height: 184px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1.5px solid var(--rule-strong);
+      box-shadow: 0 2px 24px rgba(0,0,0,.10);
+      transition: border-color .4s var(--ease);
+    }
+    #portrait-canvas { display: block; }
+    .portrait-fallback {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      filter: sepia(.55) grayscale(.25);
+      transition: opacity .6s ease;
+    }
+    .portrait-ring.webgl-ready .portrait-fallback { opacity: 0; pointer-events: none; }
+
+    /* --- Hero --- */
+    .hero { text-align: center; margin-bottom: 44px; }
+    .hero__name {
+      font-family: var(--f-head);
+      font-size: clamp(2rem, 5.5vw, 2.65rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: .015em;
+      margin-bottom: 8px;
+    }
+    .hero__role {
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+    .hero__intro {
+      font-size: 1rem;
+      line-height: 1.72;
+      color: var(--ink-soft);
+      max-width: 480px;
+      margin: 0 auto 24px;
+    }
+
+    /* --- Social --- */
+    .social {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px 18px;
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .social a { border-bottom: none; opacity: .65; transition: opacity .2s, color .2s; }
+    .social a:hover { opacity: 1; color: var(--accent); }
+
+    /* --- Divider --- */
+    .divider { border: none; border-top: 1px solid var(--rule); margin: 40px 0; height: 0; overflow: hidden; display: block; }
+
+    /* --- Accordion --- */
+    details.section { border-top: 1px solid var(--rule); }
+    details.section:last-of-type { border-bottom: 1px solid var(--rule); }
+    details.section > summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      list-style: none;
+      cursor: pointer;
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      transition: color .2s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    details.section > summary::-webkit-details-marker { display: none; }
+    details.section > summary:hover { color: var(--ink); }
+    .s-arrow {
+      display: inline-block;
+      font-size: 15px;
+      color: var(--accent);
+      transition: transform .28s var(--ease);
+      line-height: 1;
+    }
+    details.section[open] > summary .s-arrow { transform: rotate(90deg); }
+    .section__body {
+      padding: 0 0 26px;
+      font-size: .97rem;
+      line-height: 1.7;
+      color: var(--ink-soft);
+    }
+    .section__body p + p { margin-top: 12px; }
+    .section__body strong { color: var(--ink); }
+
+    /* --- Timeline --- */
+    .annals { list-style: none; padding: 0; }
+    .annals__item {
+      display: flex;
+      gap: 18px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .annals__item:last-child { border-bottom: none; padding-bottom: 0; }
+    .annals__year {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--accent);
+      min-width: 36px;
+      padding-top: 3px;
+      flex-shrink: 0;
+    }
+    .annals__detail { flex: 1; font-size: .94rem; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+    .tag {
+      font-family: var(--f-mono);
+      font-size: 8.5px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border: 1px solid var(--rule-strong);
+      color: var(--ink-muted);
+      border-radius: 2px;
+    }
+
+    /* --- Projects --- */
+    .projects { list-style: none; padding: 0; }
+    .projects__item {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--rule);
+      flex-wrap: wrap;
+    }
+    .projects__item:last-child { border-bottom: none; padding-bottom: 0; }
+    .projects__name { font-weight: 600; color: var(--ink); min-width: 120px; font-size: .95rem; }
+    .projects__desc { color: var(--ink-muted); font-size: .88rem; flex: 1; }
+    .projects__badge {
+      font-family: var(--f-mono);
+      font-size: 8.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-left: auto;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* --- Stack --- */
+    .stack-group + .stack-group { margin-top: 18px; }
+    .stack-label {
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 8px;
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pill {
+      font-family: var(--f-mono);
+      font-size: 10.5px;
+      padding: 3px 9px;
+      border: 1px solid var(--rule-strong);
+      color: var(--ink-soft);
+      border-radius: 2px;
+      letter-spacing: .5px;
+    }
+
+    /* --- Writing --- */
+    .posts { list-style: none; padding: 0; }
+    .posts__item { padding: 11px 0; border-bottom: 1px solid var(--rule); }
+    .posts__item:last-child { border-bottom: none; padding-bottom: 0; }
+    .post__kicker {
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 3px;
+    }
+    .post__title { font-size: .95rem; }
+
+    /* --- Contact --- */
+    .contact-rows { display: flex; flex-direction: column; gap: 13px; }
+    .contact-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .contact-key {
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      min-width: 72px;
+      flex-shrink: 0;
+    }
+    .contact-val { font-size: .95rem; color: var(--ink-soft); }
+    .available-badge {
+      font-family: var(--f-mono);
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: var(--accent);
+      color: var(--paper);
+      padding: 2px 7px;
+      border-radius: 1px;
+      animation: blink-badge 2.4s ease-in-out infinite;
+    }
+    @keyframes blink-badge { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+    /* --- Footer --- */
+    .footer {
+      text-align: center;
+      font-family: var(--f-mono);
+      font-size: 9.5px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-top: 52px;
+      line-height: 1.9;
+    }
+    .footer__links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2px 14px;
+      margin-bottom: 12px;
+    }
+    .footer__links a { border-bottom: none; opacity: .6; transition: opacity .2s; }
+    .footer__links a:hover { opacity: 1; }
+    .footer__rule { width: 48px; border: none; border-top: 1px solid var(--rule); margin: 14px auto; }
+
+    /* --- Responsive --- */
+    @media (max-width: 480px) {
+      .page { padding: 28px 18px 60px; }
+      .portrait-ring { width: 152px; height: 152px; }
+      .hero__name { font-size: 1.85rem; }
+      .topbar { margin-bottom: 36px; }
+    }
+  </style>
 </head>
 <body>
 
   <!-- Breaking news ticker -->
-  <div class="ticker" aria-label="Breaking news">
-    <div class="ticker__track"></div>
+  <div class="ticker" aria-label="Breaking news" role="marquee">
+    <div class="ticker__track">
+      <span>Full-Stack Developer &middot; Philippines</span>
+      <span>C# &middot; .NET &middot; TypeScript &middot; React</span>
+      <span>10+ Years Shipping Software</span>
+      <span>Available for Commissions</span>
+      <span>Open to Interesting Problems</span>
+      <span>The Oragon Gazette &middot; Est. MMXIV</span>
+      <span>Made with &#127798; in Camarines Norte</span>
+      <span>It Works on My Machine</span>
+      <span>Full-Stack Developer &middot; Philippines</span>
+      <span>C# &middot; .NET &middot; TypeScript &middot; React</span>
+      <span>10+ Years Shipping Software</span>
+      <span>Available for Commissions</span>
+      <span>Open to Interesting Problems</span>
+      <span>The Oragon Gazette &middot; Est. MMXIV</span>
+      <span>Made with &#127798; in Camarines Norte</span>
+      <span>It Works on My Machine</span>
+    </div>
   </div>
 
-  <!-- Mobile sticky top bar -->
-  <header class="mobilebar" id="mobilebar" aria-label="Mobile navigation">
-    <button class="mobilebar__btn" id="mbMenu" aria-label="Open section index" aria-expanded="false">☰</button>
-    <div class="mobilebar__title">The Oragon Gazette</div>
-    <button class="mobilebar__btn" id="mbSearch" aria-label="Search the Gazette">⌕</button>
-  </header>
-  <!-- Mobile drawer (Section Index) -->
-  <div class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawer__backdrop" data-close-drawer></div>
-    <aside class="drawer__panel" role="dialog" aria-modal="true" aria-label="Section Index">
-      <div class="drawer__masthead">
-        <div class="drawer__kicker">The Section Index</div>
-        <div class="drawer__name">The Oragon Gazette</div>
-        <button class="drawer__close" data-close-drawer aria-label="Close">✕</button>
+  <div class="page">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <a href="/" class="brand" aria-label="The Oragon Gazette homepage">The Oragon Gazette &middot; Est. MMXIV</a>
+      <button class="edition-btn" id="editionToggle" aria-label="Toggle evening / morning edition">&#9790; Evening</button>
+    </div>
+
+    <!-- Portrait (Three.js halftone animation) -->
+    <div class="portrait-wrap">
+      <div class="portrait-ring" id="portraitRing">
+        <canvas id="portrait-canvas" aria-hidden="true"></canvas>
+        <img class="portrait-fallback"
+             src="/img/pita.jpg"
+             alt="Dennis Pitallano"
+             width="184" height="184"
+             decoding="async" />
       </div>
+    </div>
 
-      <div class="drawer__search">
-        <input type="search" id="drawerSearch" placeholder="Search the Gazette…" aria-label="Search" autocomplete="off" />
-      </div>
-
-      <nav class="drawer__nav" aria-label="Sections">
-        <div class="drawer__heading">Front Matter</div>
-        <a href="#cover" data-article="about" data-close-drawer>Front Page — The Cover Story</a>
-        <a href="#tech" data-article="stack" data-close-drawer>Technology — Tools of the Trade</a>
-        <a href="#projects" data-article="projects" data-close-drawer>Field Reports — Selected Works</a>
-        <a href="#annals" data-close-drawer>The Annals — Career Record</a>
-        <a href="#editorial" data-article="blog" data-close-drawer>Editorial — Opinion</a>
-
-        <div class="drawer__heading">Features</div>
-        <a href="#obituaries" data-close-drawer>Obituaries — In Memoriam</a>
-        <a href="#history" data-close-drawer>On This Day in History</a>
-        <a href="#horoscope" data-close-drawer>Developer Horoscopes</a>
-        <a href="#comic" data-close-drawer>The Daily Glitch — Comic</a>
-        <a href="#puzzle" data-close-drawer>The Puzzle Page</a>
-
-        <div class="drawer__heading">Reference</div>
-        <a href="#archives" data-article="archives" data-close-drawer>Archives — Back Issues</a>
-        <a href="#manuals" data-article="manuals" data-close-drawer>Manuals — Reference Works</a>
-
-        <div class="drawer__heading">Dispatch</div>
-        <a href="#contact" data-article="contact" data-close-drawer>Dispatch Desk — Contact</a>
-        <a href="https://github.com/DennisPitallano" target="_blank" rel="noopener" data-close-drawer>GitHub ↗</a>
+    <!-- Hero -->
+    <div class="hero">
+      <h1 class="hero__name">Dennis Pitallano</h1>
+      <p class="hero__role">Full-Stack Developer &middot; Philippines</p>
+      <p class="hero__intro">
+        Building clean, durable software from Camarines Norte.
+        Ten years shipping full-stack applications in C#, .NET, TypeScript,
+        and whatever the project honestly needs.
+        Currently accepting interesting problems and polite arguments about semicolons.
+      </p>
+      <nav class="social" aria-label="External links">
+        <a href="https://github.com/DennisPitallano"           target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/dennispitallano/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:dpitallano@gmail.com">Email</a>
+        <a href="/resume.html">R&eacute;sum&eacute;</a>
       </nav>
-
-      <div class="drawer__footer">
-        <button class="drawer__edition" id="drawerEdition">☾ Evening Edition</button>
-        <div class="small center u-mt-10 u-muted">Made with 🌶 in the Philippines</div>
-      </div>
-    </aside>
-  </div>
-
-  <div class="paper">
-
-    <!-- Masthead -->
-    <header class="masthead">
-      <div class="masthead__top">
-        <span>Est. MMXIV · Camarines Norte Edition</span>
-        <span id="todayDate">—</span>
-        <span>Price: One Cup of Coffee ☕ · <span id="readersToday" class="readers-today" title="Page views today (GoatCounter)">Circulation: —</span></span>
-      </div>
-      <h1>The Oragon Gazette</h1>
-      <div class="masthead__sub">
-        <span>All the Code That’s Fit to Ship</span>
-        <span id="volumeNo">VOL. — · NO. —</span>
-        <span>Independent · Opinionated · Indented</span>
-      </div>
-      <button class="edition-toggle" id="editionToggle" title="Toggle Morning / Evening Edition">☾ Evening Ed.</button>
-    </header>
-
-    <!-- Section bar (nav) -->
-    <nav class="sectionbar" aria-label="Sections">
-      <a href="#cover" data-article="about">Front Page</a>
-      <a href="#tech" data-article="stack">Technology</a>
-      <a href="#projects" data-article="projects">Field Reports</a>
-      <a href="#annals">The Annals</a>
-      <a href="#editorial" data-article="blog">Editorial</a>
-      <a href="#archives" data-article="archives">Archives</a>
-      <a href="#manuals" data-article="manuals">Manuals</a>
-      <a href="#contact" data-article="contact">Dispatch</a>
-      <a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">GitHub ↗</a>
-      <div class="searchbar">
-        <input type="search" id="searchInput" placeholder="Search the Gazette…" aria-label="Search the Gazette" autocomplete="off" />
-        <div class="searchbar__results" id="searchResults" role="listbox" aria-label="Search results"></div>
-      </div>
-    </nav>
-
-    <!-- Main grid -->
-    <div class="grid">
-
-      <!-- ============ LEFT: LEAD STORY ============ -->
-      <div class="col">
-
-        <article class="article lead reveal" id="cover">
-          <div class="kicker">Front Page · Exclusive</div>
-          <h2 class="headline" data-article="about">Bicolano Developer Writes Code by Candlelight, Still Compiles</h2>
-          <div class="byline">By The Editor · Staff Correspondent · Camarines Norte</div>
-          <div class="deck">A full-stack dispatch from the provinces: one developer, several frameworks, and a suspicious amount of coffee.</div>
-
-          <aside class="editors-note" id="editorsNote" aria-label="Editor's note for today">
-            <span class="editors-note__label">✎ Editor’s Note —</span>
-            <span class="editors-note__body" id="editorsNoteText">The presses are warming. Today’s column will arrive shortly.</span>
-          </aside>
-
-          <figure class="photo photo--img" aria-label="Photograph of Dennis Pitallano">
-            <picture>
-              <source srcset="/img/pita.avif" type="image/avif" />
-              <source srcset="/img/pita.webp" type="image/webp" />
-              <img src="/img/pita.jpg" alt="Dennis Pitallano" width="600" height="600" loading="lazy" decoding="async" />
-            </picture>
-          </figure>
-          <div class="photo__caption">Above: Mr. Pitallano, photographed on assignment. Halftone by this newspaper.</div>
-
-          <p class="body">DENNIS PITALLANO, a full-stack software developer based in the Philippines, was once again observed this week shipping working software without issuing a press release. Sources close to the matter confirm that the output compiled on the first try — a claim this paper was initially reluctant to print.</p>
-          <p class="body">Mr. Pitallano’s daily instruments include <strong>C#</strong>, <strong>.NET</strong>, <strong>TypeScript</strong>, <strong>HTML</strong>, <strong>CSS</strong>, and <strong>SQL</strong>, deployed with equal parts rigor and pragmatism. When pressed for a motto, he offered only: “It works on my machine.”</p>
-          <p class="body">Colleagues describe him as unreasonably calm during production incidents and unreasonably particular about file naming. He is currently accepting interesting problems, polite arguments about semicolons, and freelance commissions of good conscience.</p>
-          <p class="body">Continued below, on the Technology and Field Reports pages. <a href="#" data-article="about">Read the full column &rsaquo;</a></p>
-        </article>
-
-        <div class="pullquote reveal">
-          Code is read far more often than it is written — a truism, worn smooth by repetition, and stubbornly unpracticed.
-        </div>
-
-        <article class="article reveal" id="tech">
-          <div class="kicker">Technology · Inventory</div>
-          <h3 class="headline" data-article="stack">The Tools of the Trade — An Unauthorized Inventory</h3>
-          <div class="byline">Filed from the Server Room</div>
-          <p class="body">Beyond the daily drivers, the subject maintains working familiarity with <strong>Vue</strong>, <strong>React</strong>, <strong>Next.js</strong>, <strong>NestJS</strong>, <strong>FastAPI</strong>, and <strong>Xamarin</strong>. Data handled across <strong>MSSQL</strong>, <strong>PostgreSQL</strong>, <strong>MongoDB</strong>, <strong>Redis</strong>, and <strong>SQLite</strong> — depending on which architect last held the pen.</p>
-          <p class="body">Operations-adjacent skills include <strong>Docker</strong>, <strong>Kubernetes</strong>, <strong>Nginx</strong>, and <strong>Jenkins</strong>. A full dossier is available upon request, or by following the citation trail to the GitHub bureau. <a href="#" data-article="stack">Read on &rsaquo;</a></p>
-        </article>
-
-        <div class="rule-divider rule-divider--svg rule-divider--inline" aria-hidden="true">
-          <svg viewBox="0 0 240 44" width="220" height="40" role="img" focusable="false">
-            <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-              <line x1="4" y1="22" x2="88" y2="22"/>
-              <line x1="152" y1="22" x2="236" y2="22"/>
-            </g>
-            <!-- Typewriter motif -->
-            <g fill="currentColor" transform="translate(100 6)">
-              <rect x="2" y="10" width="36" height="20" fill="none" stroke="currentColor" stroke-width="1.3" rx="2"/>
-              <rect x="6" y="14" width="28" height="2"/>
-              <rect x="8" y="18" width="24" height="2"/>
-              <rect x="10" y="22" width="20" height="2"/>
-              <rect x="12" y="4" width="16" height="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
-              <line x1="20" y1="30" x2="20" y2="34" stroke="currentColor" stroke-width="1.3"/>
-              <rect x="14" y="34" width="12" height="3"/>
-            </g>
-          </svg>
-        </div>
-
-        <article class="article reveal" id="projects">
-          <div class="kicker">Field Reports · Selected</div>
-          <h3 class="headline" data-article="projects">Selected Works &amp; Recent Dispatches</h3>
-          <div class="byline">From the Portfolio Desk</div>
-
-          <!-- Featured projects as mock-browser preview cards (CSS-only) -->
-          <div class="preview-grid">
-            <a class="preview" href="https://www.digibyte.org/" target="_blank" rel="noopener" data-hue="180" data-project="digibyte.org">
-              <div class="preview__chrome"><i></i><i></i><i></i><span>digibyte.org</span></div>
-              <div class="preview__shot">
-                <img class="preview__img" loading="lazy" decoding="async" alt="" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwww.digibyte.org%2F?w=600&h=420">
-                <div class="preview__title">DigiByte</div>
-                <div class="preview__deck">Official site for the blockchain</div>
-              </div>
-              <div class="preview__cap"><span class="preview__tag">Contribution</span><span>→ Visit</span></div>
-            </a>
-            <a class="preview" href="https://pay.dgbwallet.app/" target="_blank" rel="noopener" data-hue="32" data-project="pay.dgbwallet.app">
-              <div class="preview__chrome"><i></i><i></i><i></i><span>pay.dgbwallet.app</span></div>
-              <div class="preview__shot">
-                <img class="preview__img" loading="lazy" decoding="async" alt="" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fpay.dgbwallet.app%2F?w=600&h=420">
-                <div class="preview__title">DGB Pay</div>
-                <div class="preview__deck">Payment gateway for DigiByte</div>
-              </div>
-              <div class="preview__cap"><span class="preview__tag">Personal Work</span><span>→ Visit</span></div>
-            </a>
-            <a class="preview" href="https://clockinplus.com/" target="_blank" rel="noopener" data-hue="210" data-project="clockinplus.com">
-              <div class="preview__chrome"><i></i><i></i><i></i><span>clockinplus.com</span></div>
-              <div class="preview__shot">
-                <img class="preview__img" loading="lazy" decoding="async" alt="" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fclockinplus.com%2F?w=600&h=420">
-                <div class="preview__title">ClockIn+</div>
-                <div class="preview__deck">Time tracking &amp; attendance</div>
-              </div>
-              <div class="preview__cap"><span class="preview__tag">Personal Work</span><span>→ Visit</span></div>
-            </a>
-            <a class="preview" href="https://diskarte-production-10d2.up.railway.app/" target="_blank" rel="noopener" data-hue="12" data-project="diskarte">
-              <div class="preview__chrome"><i></i><i></i><i></i><span>diskarte</span></div>
-              <div class="preview__shot">
-                <img class="preview__img" loading="lazy" decoding="async" alt="" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fdiskarte-production-10d2.up.railway.app%2F?w=600&h=420">
-                <div class="preview__title">Diskarte</div>
-                <div class="preview__deck">Productivity, Filipino-flavored</div>
-              </div>
-              <div class="preview__cap"><span class="preview__tag"><span class="preview__live">● LIVE</span></span><span>→ Visit</span></div>
-            </a>
-            <a class="preview" href="https://the-daily-classifieds-production.up.railway.app/" target="_blank" rel="noopener" data-hue="45" data-project="classifieds">
-              <div class="preview__chrome"><i></i><i></i><i></i><span>the-daily-classifieds</span></div>
-              <div class="preview__shot">
-                <img class="preview__img" loading="lazy" decoding="async" alt="" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fthe-daily-classifieds-production.up.railway.app%2F?w=600&h=420">
-                <div class="preview__title">Daily Classifieds</div>
-                <div class="preview__deck">A classifieds board in newsprint spirit</div>
-              </div>
-              <div class="preview__cap"><span class="preview__tag"><span class="preview__live">● LIVE</span></span><span>→ Visit</span></div>
-            </a>
-            <a class="preview" href="https://www.agiletechops.com/" target="_blank" rel="noopener" data-hue="260" data-project="agiletechops">
-              <div class="preview__chrome"><i></i><i></i><i></i><span>agiletechops.com</span></div>
-              <div class="preview__shot">
-                <img class="preview__img" loading="lazy" decoding="async" alt="" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fwww.agiletechops.com%2F?w=600&h=420">
-                <div class="preview__title">AgileTechOps</div>
-                <div class="preview__deck">DevOps consultancy</div>
-              </div>
-              <div class="preview__cap"><span class="preview__tag">Contribution</span><span>→ Visit</span></div>
-            </a>
-          </div>
-
-          <div class="works">
-            <div class="works__group">
-              <div class="works__label">Contributions</div>
-              <ul class="works__list">
-                <li><img class="works__ico" src="https://www.google.com/s2/favicons?domain=agiletechops.com&sz=64" alt="" loading="lazy"><a href="https://www.agiletechops.com/" target="_blank" rel="noopener">AgileTechOps</a><span class="works__dot">·</span><em>DevOps consultancy — contributor</em></li>
-                <li><img class="works__ico" src="https://www.google.com/s2/favicons?domain=digibyte.org&sz=64" alt="" loading="lazy"><a href="https://www.digibyte.org/" target="_blank" rel="noopener">DigiByte.org</a><span class="works__dot">·</span><em>Official site for the DigiByte blockchain</em></li>
-                <li><img class="works__ico" src="https://www.google.com/s2/favicons?domain=digi-id.io&sz=64" alt="" loading="lazy"><a href="https://www.digi-id.io/" target="_blank" rel="noopener">Digi-ID</a><span class="works__dot">·</span><em>Open authentication protocol built on DigiByte</em></li>
-              </ul>
-            </div>
-
-            <div class="works__group">
-              <div class="works__label">Personal Works</div>
-              <ul class="works__list">
-                <li><img class="works__ico" src="/img/favicon-32x32.png" alt="" loading="lazy"><a href="https://pay.dgbwallet.app/" target="_blank" rel="noopener">pay.dgbwallet.app</a><span class="works__dot">·</span><em>DigiByte payment gateway</em></li>
-                <li><img class="works__ico" src="https://www.google.com/s2/favicons?domain=dgbwallet.app&sz=64" alt="" loading="lazy"><a href="https://dgbwallet.app/" target="_blank" rel="noopener">dgbwallet.app</a><span class="works__dot">·</span><em>Self-custody DGB wallet</em></li>
-                <li><img class="works__ico" src="https://www.google.com/s2/favicons?domain=clockinplus.com&sz=64" alt="" loading="lazy"><a href="https://clockinplus.com/" target="_blank" rel="noopener">ClockIn+</a><span class="works__dot">·</span><em>Time tracking &amp; attendance</em></li>
-              </ul>
-            </div>
-
-            <div class="works__group">
-              <div class="works__label">On the Press · In Development <span class="works__badge">LIVE</span></div>
-              <ul class="works__list">
-                <li><img class="works__ico" src="/img/favicon-32x32.png" alt="" loading="lazy"><a href="https://diskarte-production-10d2.up.railway.app/" target="_blank" rel="noopener">Diskarte</a><span class="works__dot">·</span><em>Productivity experiment, Filipino-flavored</em></li>
-                <li><img class="works__ico" src="/img/favicon-32x32.png" alt="" loading="lazy"><a href="https://the-daily-classifieds-production.up.railway.app/" target="_blank" rel="noopener">The Daily Classifieds</a><span class="works__dot">·</span><em>A classifieds board, in newsprint spirit</em></li>
-                <li class="works__more">…more to come</li>
-              </ul>
-            </div>
-          </div>
-
-          <p class="body u-mt-10"><strong>Open source —</strong> BSCSCAN .NET, CASH .NET, and Oragon Tutorials. Full archive available via the GitHub bureau. <a href="#" data-article="projects">Read the full field report &rsaquo;</a></p>
-        </article>
-
-        <article class="article reveal" id="editorial">
-          <div class="kicker">Editorial · Opinion</div>
-          <h4 class="headline" data-article="blog">On Writing Software That Other Humans Must Read</h4>
-          <div class="byline">Op-Ed · By D. Pitallano</div>
-          <p class="body">A function named <code>doStuff()</code> is not a function; it is a threat. Clear names, small functions, honest comments — the craft is unglamorous but durable. <a href="#" data-article="blog">Continue &rsaquo;</a></p>
-        </article>
-
-        <div class="rule-divider rule-divider--svg rule-divider--inline" aria-hidden="true">
-          <svg viewBox="0 0 240 48" width="220" height="42" role="img" focusable="false">
-            <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-              <line x1="4" y1="24" x2="88" y2="24"/>
-              <line x1="152" y1="24" x2="236" y2="24"/>
-            </g>
-            <!-- Coffee cup motif -->
-            <g fill="currentColor" transform="translate(102 6)">
-              <path d="M4 14 L4 30 Q4 36 10 36 L26 36 Q32 36 32 30 L32 14 Z" fill="none" stroke="currentColor" stroke-width="1.4"/>
-              <path d="M32 18 Q40 18 40 24 Q40 30 32 30" fill="none" stroke="currentColor" stroke-width="1.4"/>
-              <rect x="0" y="36" width="36" height="2"/>
-              <path d="M10 8 Q14 4 14 0 M18 8 Q22 4 22 0 M26 8 Q30 4 30 0" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-            </g>
-          </svg>
-        </div>
-
-        <article class="article reveal" id="annals">
-          <div class="kicker">The Annals · Career Record</div>
-          <h3 class="headline">An Abridged Chronicle of the Correspondent</h3>
-          <div class="byline">Compiled from the Archives · Camarines Norte</div>
-          <ol class="annals">
-            <li class="annals__item">
-              <span class="annals__year">2014</span>
-              <div>
-                <strong>First Byline</strong> — Began the profession in earnest as a Junior Developer. Shipped web forms with determination and questionable CSS.
-                <span class="annals__tag">HTML</span><span class="annals__tag">CSS</span><span class="annals__tag">JS</span>
-              </div>
-            </li>
-            <li class="annals__item">
-              <span class="annals__year">2016</span>
-              <div>
-                <strong>.NET Proper</strong> — Moved deeper into the .NET ecosystem. Wrote ASP.NET applications that handled real users with real complaints.
-                <span class="annals__tag">ASP.NET</span><span class="annals__tag">SQL Server</span>
-              </div>
-            </li>
-            <li class="annals__item">
-              <span class="annals__year">2018</span>
-              <div>
-                <strong>Full-Stack Correspondent</strong> — Joined a product team; owned features end to end — API, database, front-end, and the occasional production fire.
-                <span class="annals__tag">Vue</span><span class="annals__tag">.NET Core</span><span class="annals__tag">Docker</span>
-              </div>
-            </li>
-            <li class="annals__item">
-              <span class="annals__year">2020</span>
-              <div>
-                <strong>Open-Source Filings</strong> — Published <em>BscScan.NetCore</em> and <em>Cash.NetCore</em> on NuGet. Documentation typed, not generated.
-                <span class="annals__tag">NuGet</span><span class="annals__tag">BscScan</span><span class="annals__tag">Cash</span>
-              </div>
-            </li>
-            <li class="annals__item">
-              <span class="annals__year">2022</span>
-              <div>
-                <strong>Into the Chain</strong> — Contributed to <a href="https://www.digibyte.org/" target="_blank" rel="noopener">DigiByte</a> and <a href="https://www.digi-id.io/" target="_blank" rel="noopener">Digi-ID</a>; built <a href="https://dgbwallet.app/" target="_blank" rel="noopener">dgbwallet.app</a> and its payment gateway.
-                <span class="annals__tag">Blockchain</span><span class="annals__tag">DGB</span>
-              </div>
-            </li>
-            <li class="annals__item">
-              <span class="annals__year">2024</span>
-              <div>
-                <strong>Business Desk</strong> — Shipped <a href="https://clockinplus.com/" target="_blank" rel="noopener">ClockIn+</a>; began consulting with <a href="https://www.agiletechops.com/" target="_blank" rel="noopener">AgileTechOps</a>.
-                <span class="annals__tag">SaaS</span><span class="annals__tag">Consulting</span>
-              </div>
-            </li>
-            <li class="annals__item annals__item--now">
-              <span class="annals__year">2026</span>
-              <div>
-                <strong>Present Day</strong> — Writing this very Gazette. Building <em>Diskarte</em> and <em>The Daily Classifieds</em>. Still taking commissions of good conscience.
-                <span class="annals__tag">Today</span>
-              </div>
-            </li>
-          </ol>
-        </article>
-
-      </div>
-
-      <!-- ============ MIDDLE COLUMN ============ -->
-      <div class="col">
-
-        <div class="box box--double reveal">
-          <h5>At a Glance</h5>
-          <div class="stats">
-            <div class="stat"><span class="stat__num">10+</span><span class="stat__label">Years Shipping</span></div>
-            <div class="stat"><span class="stat__num">∞</span><span class="stat__label">Cups of Coffee</span></div>
-            <div class="stat"><span class="stat__num">30+</span><span class="stat__label">Technologies</span></div>
-            <div class="stat"><span class="stat__num">1</span><span class="stat__label">Philippines 🇵🇭</span></div>
-          </div>
-        </div>
-
-        <article class="article reveal">
-          <div class="kicker">Profile · Provincial Desk</div>
-          <h4 class="headline">Who Is the Man Behind the Terminal?</h4>
-          <div class="byline">A short biography, in miniature</div>
-          <p class="body">Born of the Bicol Region and raised on a steady diet of documentation, <strong>Dennis Pitallano</strong> — known in certain corners of the internet as <em>Oragon</em> — has spent his career turning business requirements into running software and, occasionally, the reverse.</p>
-          <p class="body">His work is characterized by an unfashionable preference for correctness, a willingness to read the stack trace in full, and the belief that a good commit message is worth two bad meetings.</p>
-          <p class="body"><a href="#" data-article="about">Full feature &rsaquo;</a></p>
-        </article>
-
-        <div class="box reveal">
-          <h5>Classifieds</h5>
-          <div class="classifieds__head">Three Cents per Line · Cash or Barter</div>
-          <div class="classifieds" id="classifieds">
-            <div class="ad"><strong>For Hire —</strong> Full-stack developer, .NET / JS / SQL. Ships on Fridays. References available. <a href="mailto:dpitallano@gmail.com">Inquire</a>.</div>
-            <div class="ad"><strong>Wanted —</strong> Interesting problems. Must compile. No cryptocurrency rug-pulls, please.</div>
-            <div class="ad"><strong>Lost —</strong> One semicolon. Last seen near line 247. Reward offered.</div>
-            <div class="ad"><strong>Services —</strong> Code reviews conducted with tact and occasional British understatement.</div>
-            <div class="ad"><strong>Found —</strong> Off-by-one error. Owner may claim at the production logs.</div>
-            <div class="ad"><strong>Notice —</strong> The tabs-vs-spaces debate remains ongoing. Letters to the editor welcome.</div>
-            <div class="ad"><strong>For Sale —</strong> One (1) perfectly good legacy codebase. Runs on Windows XP. All sales final.</div>
-            <div class="ad"><strong>Missing —</strong> Have you seen this senior developer? Last spotted muttering about microservices. Answers to "tech lead."</div>
-            <div class="ad"><strong>Trade —</strong> Will exchange one working Kubernetes cluster for two calm nights of sleep. Terms negotiable.</div>
-            <div class="ad"><strong>Public Notice —</strong> All stand-ups exceeding fifteen minutes are hereby declared illegal in this newspaper's jurisdiction.</div>
-            <div class="ad"><strong>Personals —</strong> SQL query seeks proper INDEX. Must be honest, unique, and willing to commit.</div>
-            <div class="ad"><strong>Estate Sale —</strong> Estate of a retired COBOL programmer. Includes one (1) 80-column punch card collection. Serious bidders only.</div>
-            <div class="ad u-hide" id="secretAd"><strong>⚑ Classified —</strong> You typed the sacred sequence. A cup of digital coffee, on the house. ☕</div>
-          </div>
-          <div class="classifieds__foot" id="classifiedsFoot">Ad of the Day · <span id="adOfDay">—</span></div>
-        </div>
-
-        <article class="article reveal">
-          <div class="kicker">Letters · To the Editor</div>
-          <h4 class="headline">On the Proper Use of the Console</h4>
-          <p class="body">Dear Editor, — I write to protest the growing practice of leaving <code>console.log('here')</code> in production code. Yours, with affection, <em>A Concerned Reader.</em></p>
-          <p class="body">EDITOR’S NOTE: The offender has been identified and forgiven.</p>
-        </article>
-
-        <article class="article reveal" id="obituaries">
-          <div class="kicker">Obituaries · In Memoriam</div>
-          <h4 class="headline">Final Respects — Technologies That Left Us Too Soon</h4>
-          <div class="byline">Filed from the Deprecation Desk</div>
-          <ul class="obit">
-            <li><strong>Internet Explorer</strong> <span class="obit__dates">(1995 – 2022)</span><br><em>Outlived by its users' trauma. Survived by Edge.</em></li>
-            <li><strong>Flash Player</strong> <span class="obit__dates">(1996 – 2020)</span><br><em>Took with it a generation of browser games and the phrase "please update your plugin."</em></li>
-            <li><strong>jQuery (in modern stacks)</strong> <span class="obit__dates">(2006 – whenever)</span><br><em>Still performing quietly in legacy systems. <code>$(document).ready</code> forever.</em></li>
-            <li><strong>AngularJS</strong> <span class="obit__dates">(2010 – 2022)</span><br><em>A pioneer. Remembered fondly, if not precisely.</em></li>
-            <li><strong>Windows XP (in production)</strong> <span class="obit__dates">(2001 – ????)</span><br><em>Refuses to die. Still running three ATMs and a hospital in New Jersey.</em></li>
-          </ul>
-        </article>
-
-        <article class="article reveal" id="history">
-          <div class="kicker">On This Day · Anniversaries</div>
-          <h4 class="headline" id="otdHeadline">On This Day in Computing History</h4>
-          <div class="byline" id="otdByline">From the Wire — Historical Desk</div>
-          <p class="body" id="otdBody">Loading the morning papers…</p>
-        </article>
-
-      </div>
-
-      <!-- ============ RIGHT SIDEBAR ============ -->
-      <div class="col">
-
-        <div class="box reveal">
-          <h5>Code Forecast</h5>
-          <div class="forecast">
-            <div class="forecast__big" id="fcIcon">☀</div>
-            <div class="forecast__label" id="fcLabel">CLEAR BUILDS</div>
-            <div class="small u-mt-4" id="fcDesc">24°C · merge chance 12%</div>
-            <div class="forecast__rows">
-              <div><span>Temperature</span><span id="fcTemp">— °C</span></div>
-              <div><span>Prod wind</span><span id="fcWind">— req/s</span></div>
-              <div><span>Coffee index</span><span id="fcCoffee">—</span></div>
-              <div><span>Sunset deploy</span><span id="fcSunset">—</span></div>
-            </div>
-            <div class="forecast__loc" id="fcLoc">Wire from the provinces…</div>
-          </div>
-        </div>
-
-        <div class="box reveal" id="deadDrop">
-          <h5>Dead Drop</h5>
-          <p class="small u-m0"><em>Anonymous tips to the Editor. 140 characters, no return address. Gentlemen’s agreement.</em></p>
-          <form class="dd-form" id="ddForm" data-endpoint="https://formspree.io/f/xreryonk" novalidate>
-            <textarea class="dd-text" id="ddText" maxlength="140" rows="3" placeholder="Whisper the truth, hand to the Editor…" aria-label="Your anonymous tip"></textarea>
-            <div class="dd-foot">
-              <span class="small u-muted-2"><span id="ddCount">0</span>/140</span>
-              <button type="submit" class="dd-btn" id="ddSend">Slip it under the door</button>
-            </div>
-            <div class="dd-status small" id="ddStatus" role="status" aria-live="polite"></div>
-          </form>
-        </div>
-
-        <div class="box reveal">
-          <h5>Tech Stock Index</h5>
-          <div class="stocks" id="stocks"></div>
-          <div class="small center u-mt-8 u-muted-2">Quotes delayed 0 ms · for amusement only</div>
-        </div>
-
-        <div class="box reveal">
-          <h5>Daily Crossword <span id="cwPuzzleNum" class="small u-muted" style="font-weight:400;font-size:.7em;"></span></h5>
-          <div class="crossword" id="crossword" aria-label="Interactive mini crossword"></div>
-          <dl class="cw-clues" id="cwClues"></dl>
-          <div class="cw-status" id="cwStatus" aria-live="polite"></div>
-          <div class="small center u-mt-6"><a href="puzzles.html" style="font-size:.78em;">More puzzles →</a> &middot; <a href="minesweeper.html" style="font-size:.78em;">Minesweeper →</a></div>
-        </div>
-
-        <div class="box reveal">
-          <h5>From the Archives</h5>
-          <ul class="works__list u-works-small">
-            <li><img class="works__ico" src="/img/favicon-32x32.png" alt="" loading="lazy"><a href="#archives" data-article="archives">Back Issues &amp; Morgue Files</a></li>
-            <li><img class="works__ico" src="/img/favicon-32x32.png" alt="" loading="lazy"><a href="#manuals" data-article="manuals">Technical Manuals</a></li>
-            <li><img class="works__ico" src="/img/favicon-32x32.png" alt="" loading="lazy"><a href="/blog/rss.xml" target="_blank" rel="noopener">RSS Feed</a></li>
-            <li><img class="works__ico" src="/img/favicon-32x32.png" alt="" loading="lazy"><a href="/blog/atom.xml" target="_blank" rel="noopener">Atom Feed</a></li>
-          </ul>
-        </div>
-
-        <div class="box reveal" id="wireService">
-          <h5>Wire Service</h5>
-          <p class="small u-m0 u-muted-2"><em>Dispatches from the GitHub bureau:</em></p>
-          <ul class="wire" id="wireList" aria-live="polite">
-            <li class="wire__item wire__loading">Tapping the telegraph…</li>
-          </ul>
-          <p class="small center u-mt-8 u-muted-2"><a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">Full bureau ↗</a></p>
-        </div>
-
-        <div class="box reveal">
-          <h5>The Rolodex</h5>
-          <p class="small u-m0">Correspondents &amp; contact cards:</p>
-          <ul class="small u-list-plain">
-            <li><a href="https://linkedin.com/in/dennis-pitallano-b8764434/" target="_blank" rel="noopener">LinkedIn</a></li>
-            <li><a href="https://stackoverflow.com/users/7022362/pitallano-dennis" target="_blank" rel="noopener">Stack Overflow</a></li>
-            <li><a href="https://www.facebook.com/dennis.pitallano/" target="_blank" rel="noopener">Facebook</a></li>
-            <li><a href="https://reddit.com/user/dpitallano" target="_blank" rel="noopener">Reddit</a></li>
-            <li><a href="mailto:dpitallano@gmail.com">dpitallano@gmail.com</a></li>
-          </ul>
-        </div>
-
-        <div class="box box--double reveal" id="letters">
-          <h5>Letters to the Editor</h5>
-          <p class="small center u-muted" style="font-family:var(--sans-label);font-size:.7em;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;">Recommendations &amp; Client Dispatches</p>
-
-          <figure class="testimonial">
-            <blockquote class="pullquote">
-              Dennis delivered a clean, well-architected solution ahead of schedule. His .NET expertise and attention to detail made the whole engagement effortless.
-            </blockquote>
-            <figcaption class="testimonial__byline">
-              <strong>— A.R.</strong> · Engineering Lead, Fintech Startup · via LinkedIn
-            </figcaption>
-          </figure>
-
-          <figure class="testimonial">
-            <blockquote class="pullquote">
-              One of the most dependable contractors I've worked with. Translated vague requirements into a working product without constant hand-holding.
-            </blockquote>
-            <figcaption class="testimonial__byline">
-              <strong>— M.T.</strong> · CTO, SaaS Platform · via Upwork
-            </figcaption>
-          </figure>
-
-          <figure class="testimonial">
-            <blockquote class="pullquote">
-              Excellent communication, solid TypeScript skills, and he actually reads the ticket before starting. Rare.
-            </blockquote>
-            <figcaption class="testimonial__byline">
-              <strong>— J.K.</strong> · Product Manager · via Direct Contract
-            </figcaption>
-          </figure>
-
-          <p class="small center u-mt-10 u-muted-2">
-            <a href="https://www.linkedin.com/in/dennispitallano/" target="_blank" rel="noopener">Read more on LinkedIn ↗</a>
-          </p>
-        </div>
-
-        <div class="box box--double reveal" id="contact">
-          <h5>Dispatch Desk</h5>
-          <p class="small center">Hire the correspondent:</p>
-          <p class="center"><a href="mailto:dpitallano@gmail.com" data-article="contact"><strong>dpitallano@gmail.com</strong></a></p>
-          <p class="center"><a href="/resume.html">📰 Curriculum Vitae — Read Online</a></p>
-          <p class="center small"><a href="/assets/files/DennisPitallano.pdf" target="_blank" rel="noopener">📜 Download PDF</a></p>
-        </div>
-
-        <div class="box reveal hiring" id="hiring" data-status="available">
-          <h5>Hiring Signal</h5>
-          <div class="hiring__light" aria-hidden="true"></div>
-          <div class="hiring__status" id="hiringStatus">AVAILABLE FOR COMMISSIONS</div>
-          <p class="small center u-m0" id="hiringSub">Accepting: interesting problems &middot; freelance dispatches &middot; polite arguments about semicolons</p>
-          <p class="small center u-mt-8"><a href="mailto:dpitallano@gmail.com">✉ Send a telegram ›</a></p>
-        </div>
-
-        <div class="box reveal" id="horoscope">
-          <h5>Developer Horoscopes</h5>
-          <p class="small center u-m0-8">Consult the stars. Or the compiler.</p>
-          <select id="signSelect" class="sign-select" aria-label="Choose your sign">
-            <option value="c">♈ C — The Original</option>
-            <option value="java">♉ Java — The Enterprise</option>
-            <option value="python" selected>♊ Python — The Indented</option>
-            <option value="js">♋ JavaScript — The Eternal</option>
-            <option value="csharp">♌ C# — The Elegant</option>
-            <option value="ts">♍ TypeScript — The Strict</option>
-            <option value="rust">♎ Rust — The Borrower</option>
-            <option value="go">♏ Go — The Gopher</option>
-            <option value="php">♐ PHP — The Misunderstood</option>
-            <option value="ruby">♑ Ruby — The Lyrical</option>
-            <option value="cpp">♒ C++ — The Powerful</option>
-            <option value="sql">♓ SQL — The Eternal Query</option>
-          </select>
-          <p class="body small u-mt-10 u-italic" id="horoReading">The stars align over your merge request today…</p>
-        </div>
-
-        <div class="box reveal" id="comic">
-          <h5>The Daily Glitch</h5>
-          <div class="comic" id="comicStrip">
-            <div class="comic__panel">
-              <div class="comic__bubble">It works on my machine.</div>
-              <div class="comic__figure">◔_◔</div>
-              <div class="comic__label">PANEL 1 — THE CLAIM</div>
-            </div>
-            <div class="comic__panel">
-              <div class="comic__bubble comic__bubble--r">Then we shall ship your machine.</div>
-              <div class="comic__figure">⊙▂⊙</div>
-              <div class="comic__label">PANEL 2 — THE ULTIMATUM</div>
-            </div>
-            <div class="comic__panel">
-              <div class="comic__bubble">…I’ll write a Dockerfile.</div>
-              <div class="comic__figure">◉︵◉</div>
-              <div class="comic__label">PANEL 3 — THE COMPROMISE</div>
-            </div>
-          </div>
-          <p class="small center u-m8-0 u-muted-2"><button id="comicNext" class="link-btn">Next strip &rsaquo;</button></p>
-        </div>
-
-        <div class="box reveal" id="vintageAd">
-          <div class="vad">
-            <div class="vad__top">★ ★ ★  ADVERTISEMENT  ★ ★ ★</div>
-            <div class="vad__head">DOES YOUR CODE <span class="vad__shout">AIL?</span></div>
-            <div class="vad__sub">Try the remarkable new</div>
-            <div class="vad__brand">RUBBER&nbsp;DUCK<sup>®</sup></div>
-            <div class="vad__sub">Debugging Compound — <em>as prescribed by leading engineers!</em></div>
-            <ul class="vad__list">
-              <li>✓ No dependencies</li>
-              <li>✓ Zero network calls</li>
-              <li>✓ Works offline &amp; in the rain</li>
-              <li>✓ Fluent in every language</li>
-            </ul>
-            <div class="vad__price">ONLY <span>₱0.99</span> OR FREE FROM A KIND FRIEND</div>
-            <div class="vad__fine">Not a substitute for proper testing. Results may quack.</div>
-          </div>
-        </div>
-
-        <div class="box reveal" id="letters">
-          <h5>Letters to the Editor</h5>
-          <p class="small center letters__intro">Correspondence from our faithful readers</p>
-          <ol class="letters__list" id="lettersList" aria-live="polite">
-            <li class="letters__loading">Awaiting the morning post…</li>
-          </ol>
-          <p class="small center letters__foot">
-            <a href="https://github.com/DennisPitallano/dennispitallano.github.io/issues/new?labels=letter&amp;title=To+the+Editor%3A+&amp;body=Dear+Editor%2C%0A%0A"
-               target="_blank" rel="noopener">✉ Post a letter</a>
-          </p>
-        </div>
-
-        <div class="box reveal" id="puzzle">
-          <h5>The Puzzle Page</h5>
-          <p class="small center u-m0-6">Classic diversion · use arrow keys or tap</p>
-          <canvas id="snake" width="220" height="220"></canvas>
-          <div class="snake-ctrl">
-            <div></div>
-            <button data-dir="up" aria-label="Up">▲</button>
-            <div></div>
-            <button data-dir="left" aria-label="Left">◀</button>
-            <button id="snakeStart">Play</button>
-            <button data-dir="right" aria-label="Right">▶</button>
-            <div></div>
-            <button data-dir="down" aria-label="Down">▼</button>
-            <div></div>
-          </div>
-          <p class="small center u-m6-0">Score: <strong id="snakeScore">0</strong> · Best: <strong id="snakeBest">0</strong></p>
-        </div>
-
-      </div>
     </div>
 
-    <div class="rule-divider rule-divider--svg" aria-hidden="true">
-      <svg viewBox="0 0 240 56" width="240" height="56" role="img" focusable="false">
-        <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
-          <line x1="4" y1="28" x2="92" y2="28"/>
-          <line x1="148" y1="28" x2="236" y2="28"/>
-        </g>
-        <!-- Printing press motif -->
-        <g fill="currentColor" transform="translate(100 10)">
-          <rect x="2" y="6" width="36" height="22" fill="none" stroke="currentColor" stroke-width="1.4"/>
-          <rect x="6" y="10" width="28" height="4"/>
-          <rect x="6" y="17" width="20" height="2"/>
-          <rect x="6" y="21" width="24" height="2"/>
-          <circle cx="10" cy="34" r="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
-          <circle cx="30" cy="34" r="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
-          <line x1="20" y1="2" x2="20" y2="6" stroke="currentColor" stroke-width="1.4"/>
-          <circle cx="20" cy="2" r="1.5"/>
-        </g>
-      </svg>
-    </div>
+    <hr class="divider" />
 
-    <!-- Colophon / footer -->
-    <footer class="colophon">
-      <div>Printed &amp; Published by Dennis Pitallano · Set in Playfair, Old Standard, UnifrakturCook &amp; Special Elite</div>
-      <div class="u-mt-6">
-        <a href="#archives" data-article="archives">Archives</a> ·
-        <a href="#manuals" data-article="manuals">Manuals</a> ·
-        <a href="/comics/">Comics Archive</a> ·
-        <a href="puzzles.html">Puzzles</a> ·
-        <a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">GitHub</a> ·
-        <a href="/blog/rss.xml">RSS</a> ·
-        <button id="sfxToggle" class="link-btn" type="button" aria-pressed="true">🔊 Sound</button>
+    <!-- ABOUT -->
+    <details class="section" id="s-about">
+      <summary><span>About</span><span class="s-arrow">&#8250;</span></summary>
+      <div class="section__body">
+        <p>
+          <strong>Dennis Pitallano</strong> &mdash; known in certain corners of the internet as <em>Oragon</em> &mdash; is a
+          full-stack software developer based in the Philippines, spending his career turning business
+          requirements into running software and, occasionally, the reverse.
+        </p>
+        <p>
+          Born of the Bicol Region, he has worked across web, mobile, and blockchain, with a career-long
+          preference for correctness over cleverness and a willingness to read the stack trace in full.
+        </p>
+        <p>
+          His work is characterised by an unfashionable belief that a good commit message is worth two
+          bad meetings, and that naming things well is the hardest and most important part of the craft.
+        </p>
       </div>
-      <div class="u-mt-10">© <span id="yr"></span> The Oragon Gazette — All Rights Reserved · Made with 🌶 in the Philippines</div>
-      <div class="colophon__edition">Edition <code id="editionHash">———————</code> · printed <span id="editionDate">—</span></div>
-      <div class="small u-mt-6 u-muted">Psst. Try the ↑↑↓↓←→←→BA on your keyboard. Or press <kbd>?</kbd> for shortcuts.</div>
+    </details>
+
+    <!-- CAREER -->
+    <details class="section" id="s-career">
+      <summary><span>Career</span><span class="s-arrow">&#8250;</span></summary>
+      <div class="section__body">
+        <ol class="annals" aria-label="Career timeline">
+          <li class="annals__item">
+            <span class="annals__year">2014</span>
+            <div class="annals__detail">
+              <strong>First Byline</strong> &mdash; Began as a Junior Developer. Shipped web forms with determination and questionable CSS.
+              <div class="tag-row"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span></div>
+            </div>
+          </li>
+          <li class="annals__item">
+            <span class="annals__year">2016</span>
+            <div class="annals__detail">
+              <strong>.NET Proper</strong> &mdash; Moved deeper into the .NET ecosystem; built ASP.NET applications that handled real users with real complaints.
+              <div class="tag-row"><span class="tag">ASP.NET</span><span class="tag">SQL Server</span></div>
+            </div>
+          </li>
+          <li class="annals__item">
+            <span class="annals__year">2018</span>
+            <div class="annals__detail">
+              <strong>Full-Stack</strong> &mdash; Owned features end to end: API, database, front-end, and the occasional production fire.
+              <div class="tag-row"><span class="tag">Vue</span><span class="tag">.NET Core</span><span class="tag">Docker</span></div>
+            </div>
+          </li>
+          <li class="annals__item">
+            <span class="annals__year">2020</span>
+            <div class="annals__detail">
+              <strong>Open Source</strong> &mdash; Published <a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">BscScan.NetCore</a> and Cash.NetCore on NuGet. Documentation typed, not generated.
+              <div class="tag-row"><span class="tag">NuGet</span><span class="tag">Open Source</span></div>
+            </div>
+          </li>
+          <li class="annals__item">
+            <span class="annals__year">2022</span>
+            <div class="annals__detail">
+              <strong>Into the Chain</strong> &mdash; Contributed to <a href="https://www.digibyte.org/" target="_blank" rel="noopener">DigiByte</a> and <a href="https://www.digi-id.io/" target="_blank" rel="noopener">Digi-ID</a>; built <a href="https://dgbwallet.app/" target="_blank" rel="noopener">dgbwallet.app</a> and its <a href="https://pay.dgbwallet.app/" target="_blank" rel="noopener">payment gateway</a>.
+              <div class="tag-row"><span class="tag">Blockchain</span><span class="tag">DGB</span></div>
+            </div>
+          </li>
+          <li class="annals__item">
+            <span class="annals__year">2024</span>
+            <div class="annals__detail">
+              <strong>Business Desk</strong> &mdash; Shipped <a href="https://clockinplus.com/" target="_blank" rel="noopener">ClockIn+</a>; consulting with <a href="https://www.agiletechops.com/" target="_blank" rel="noopener">AgileTechOps</a>.
+              <div class="tag-row"><span class="tag">SaaS</span><span class="tag">Consulting</span></div>
+            </div>
+          </li>
+          <li class="annals__item">
+            <span class="annals__year">2026</span>
+            <div class="annals__detail">
+              <strong>Present</strong> &mdash; Building <em>Diskarte</em> and <em>The Daily Classifieds</em>. Still taking commissions of good conscience.
+              <div class="tag-row"><span class="tag">Now</span></div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </details>
+
+    <!-- WORKS -->
+    <details class="section" id="s-works">
+      <summary><span>Works</span><span class="s-arrow">&#8250;</span></summary>
+      <div class="section__body">
+        <ul class="projects" aria-label="Selected works">
+          <li class="projects__item">
+            <span class="projects__name"><a href="https://clockinplus.com/" target="_blank" rel="noopener">ClockIn+</a></span>
+            <span class="projects__desc">Time tracking &amp; attendance SaaS</span>
+            <span class="projects__badge">Personal</span>
+          </li>
+          <li class="projects__item">
+            <span class="projects__name"><a href="https://diskarte-production-10d2.up.railway.app/" target="_blank" rel="noopener">Diskarte</a></span>
+            <span class="projects__desc">Productivity experiment, Filipino-flavored</span>
+            <span class="projects__badge">&#9679; Live</span>
+          </li>
+          <li class="projects__item">
+            <span class="projects__name"><a href="https://the-daily-classifieds-production.up.railway.app/" target="_blank" rel="noopener">Daily Classifieds</a></span>
+            <span class="projects__desc">A classifieds board in newsprint spirit</span>
+            <span class="projects__badge">&#9679; Live</span>
+          </li>
+          <li class="projects__item">
+            <span class="projects__name"><a href="https://pay.dgbwallet.app/" target="_blank" rel="noopener">DGB Pay</a></span>
+            <span class="projects__desc">DigiByte payment gateway</span>
+            <span class="projects__badge">Personal</span>
+          </li>
+          <li class="projects__item">
+            <span class="projects__name"><a href="https://dgbwallet.app/" target="_blank" rel="noopener">dgbwallet.app</a></span>
+            <span class="projects__desc">Self-custody DGB wallet</span>
+            <span class="projects__badge">Personal</span>
+          </li>
+          <li class="projects__item">
+            <span class="projects__name"><a href="https://www.digibyte.org/" target="_blank" rel="noopener">DigiByte.org</a></span>
+            <span class="projects__desc">Official site for the DigiByte blockchain</span>
+            <span class="projects__badge">Contribution</span>
+          </li>
+          <li class="projects__item">
+            <span class="projects__name"><a href="https://www.agiletechops.com/" target="_blank" rel="noopener">AgileTechOps</a></span>
+            <span class="projects__desc">DevOps consultancy</span>
+            <span class="projects__badge">Contribution</span>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- STACK -->
+    <details class="section" id="s-stack">
+      <summary><span>Stack</span><span class="s-arrow">&#8250;</span></summary>
+      <div class="section__body">
+        <div class="stack-group">
+          <div class="stack-label">Primary</div>
+          <div class="pills">
+            <span class="pill">C#</span>
+            <span class="pill">.NET / ASP.NET</span>
+            <span class="pill">TypeScript</span>
+            <span class="pill">SQL</span>
+            <span class="pill">HTML / CSS</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-label">Front-End</div>
+          <div class="pills">
+            <span class="pill">React</span>
+            <span class="pill">Next.js</span>
+            <span class="pill">Vue</span>
+            <span class="pill">Tailwind</span>
+            <span class="pill">Xamarin</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-label">Back-End &amp; Data</div>
+          <div class="pills">
+            <span class="pill">Node.js</span>
+            <span class="pill">NestJS</span>
+            <span class="pill">FastAPI</span>
+            <span class="pill">MSSQL</span>
+            <span class="pill">PostgreSQL</span>
+            <span class="pill">MongoDB</span>
+            <span class="pill">Redis</span>
+            <span class="pill">SQLite</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-label">Infrastructure</div>
+          <div class="pills">
+            <span class="pill">Docker</span>
+            <span class="pill">Kubernetes</span>
+            <span class="pill">Azure</span>
+            <span class="pill">Nginx</span>
+            <span class="pill">Jenkins</span>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- WRITING -->
+    <details class="section" id="s-writing">
+      <summary><span>Writing</span><span class="s-arrow">&#8250;</span></summary>
+      <div class="section__body">
+        <ul class="posts" aria-label="Blog posts">
+          <li class="posts__item">
+            <div class="post__kicker">Op-Ed &middot; By D. Pitallano</div>
+            <div class="post__title"><a href="/blog/">On Writing Software That Other Humans Must Read</a></div>
+          </li>
+          <li class="posts__item">
+            <div class="post__kicker">Dispatches &middot; Front-Page</div>
+            <div class="post__title"><a href="/blog/first-blog-post.html">First Dispatch &mdash; Notes from the Wire</a></div>
+          </li>
+          <li class="posts__item">
+            <div class="post__kicker">Archive</div>
+            <div class="post__title"><a href="/blog/">All dispatches from the editorial desk &rsaquo;</a></div>
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- CONTACT -->
+    <details class="section" id="s-contact">
+      <summary><span>Contact</span><span class="s-arrow">&#8250;</span></summary>
+      <div class="section__body">
+        <div class="contact-rows">
+          <div class="contact-row">
+            <span class="contact-key">Email</span>
+            <span class="contact-val"><a href="mailto:dpitallano@gmail.com">dpitallano@gmail.com</a></span>
+            <span class="available-badge">Available</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-key">GitHub</span>
+            <span class="contact-val"><a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">DennisPitallano</a></span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-key">LinkedIn</span>
+            <span class="contact-val"><a href="https://www.linkedin.com/in/dennispitallano/" target="_blank" rel="noopener">dennispitallano</a></span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-key">R&eacute;sum&eacute;</span>
+            <span class="contact-val">
+              <a href="/resume.html">Read online</a>
+              <span style="margin:0 6px;opacity:.4;">&middot;</span>
+              <a href="/assets/files/DennisPitallano.pdf" target="_blank" rel="noopener">Download PDF &#8599;</a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <hr class="divider" />
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer__links">
+        <a href="/blog/">Blog</a>
+        <a href="/puzzles.html">Puzzles</a>
+        <a href="/minesweeper.html">Minesweeper</a>
+        <a href="/oragon.html">Gazette</a>
+        <a href="/docs/intro.html">Docs</a>
+        <a href="/blog/rss.xml">RSS</a>
+        <a href="https://github.com/DennisPitallano" target="_blank" rel="noopener">GitHub &#8599;</a>
+      </div>
+      <hr class="footer__rule" />
+      <div>The Oragon Gazette &middot; Made with &#127798; in the Philippines</div>
+      <div id="footer-date" style="margin-top:3px;opacity:.45;"></div>
     </footer>
 
   </div>
 
-  <!-- Modal (article reader) -->
-  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <article class="modal__paper">
-      <button class="modal__close" id="modalClose" aria-label="Close article">✕</button>
-      <div id="modalBody"></div>
-    </article>
-  </div>
+  <!-- Three.js (defer so layout renders before WebGL init) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.min.js" defer></script>
 
-  <!-- Keyboard shortcuts modal -->
-  <div class="modal" id="kbModal" role="dialog" aria-modal="true" aria-labelledby="kbTitle" hidden>
-    <article class="modal__paper kb-modal">
-      <button class="modal__close" id="kbClose" aria-label="Close shortcuts">✕</button>
-      <div class="kicker">Reference Desk · Typesetters’ Manual</div>
-      <h3 id="kbTitle" class="headline">Keyboard Shortcuts</h3>
-      <div class="byline">Compiled for the modern correspondent.</div>
-      <dl class="kb-list">
-        <dt><kbd>?</kbd></dt><dd>Open this reference desk.</dd>
-        <dt><kbd>/</kbd></dt><dd>Focus the Gazette search bar.</dd>
-        <dt><kbd>e</kbd></dt><dd>Flip between Morning &amp; Evening Edition.</dd>
-        <dt><kbd>g</kbd> &nbsp;<kbd>h</kbd></dt><dd>Go to the Front Page.</dd>
-        <dt><kbd>g</kbd> &nbsp;<kbd>b</kbd></dt><dd>Go to the Editorial Desk (blog).</dd>
-        <dt><kbd>g</kbd> &nbsp;<kbd>c</kbd></dt><dd>Go to the Comics Archive.</dd>
-        <dt><kbd>g</kbd> &nbsp;<kbd>r</kbd></dt><dd>Read the Curriculum Vitae.</dd>
-        <dt><kbd>Esc</kbd></dt><dd>Close any open article or dialog.</dd>
-        <dt><kbd>↑↑↓↓←→←→BA</kbd></dt><dd>Summon a newsflash. Try it.</dd>
-      </dl>
-      <p class="small u-muted-2"><em>Shortcuts are disabled while typing in form fields.</em></p>
-    </article>
-  </div>
+  <script>
+    /* Edition toggle */
+    (function () {
+      var btn  = document.getElementById('editionToggle');
+      var html = document.documentElement;
+      function apply(ed) {
+        html.dataset.edition = ed;
+        btn.textContent = ed === 'evening' ? '\u2600 Morning' : '\u263E Evening';
+        try { localStorage.setItem('gazette-edition', ed); } catch (_) {}
+      }
+      var saved;
+      try { saved = localStorage.getItem('gazette-edition'); } catch (_) {}
+      apply(saved || (matchMedia('(prefers-color-scheme:dark)').matches ? 'evening' : 'morning'));
+      btn.addEventListener('click', function () {
+        apply(html.dataset.edition === 'evening' ? 'morning' : 'evening');
+      });
+    })();
 
-  <!-- Newsflash overlay (konami + manual) -->
-  <div class="newsflash" id="newsflash" role="alert" aria-live="assertive" hidden>
-    <div class="newsflash__paper">
-      <div class="newsflash__kicker">★ STOP THE PRESSES ★ SPECIAL EDITION ★</div>
-      <div class="newsflash__head" id="newsflashHead">KONAMI SEQUENCE DETECTED</div>
-      <div class="newsflash__deck" id="newsflashDeck">The Editor salutes you. A cup of digital coffee has been poured — see the Classifieds for details.</div>
-      <button class="newsflash__close" id="newsflashClose">Continue reading</button>
-    </div>
-  </div>
+    /* Footer date */
+    (function () {
+      var el = document.getElementById('footer-date');
+      if (el) el.textContent = new Date().toLocaleDateString('en-US',
+        { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    })();
 
-  <!-- Press clipboard toast (email copy, etc.) -->
-  <div class="toast" id="pressToast" role="status" aria-live="polite" hidden>
-    <span class="toast__mark">✓</span>
-    <span class="toast__msg" id="pressToastMsg">Copied to the press clipboard.</span>
-  </div>
+    /* Three.js halftone portrait */
+    function initPortrait() {
+      if (typeof THREE === 'undefined') return;
 
-  <script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
-  <script src="/assets/newsprint/main.js" defer></script>
+      var ring   = document.getElementById('portraitRing');
+      var canvas = document.getElementById('portrait-canvas');
+      var CSS    = ring.offsetWidth || 184;
+      var DPR    = Math.min(window.devicePixelRatio || 1, 2);
+      var PX     = CSS * DPR;
+
+      var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+      renderer.setSize(PX, PX, false);
+      canvas.style.width  = CSS + 'px';
+      canvas.style.height = CSS + 'px';
+
+      var scene  = new THREE.Scene();
+      var camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+      var texture = new THREE.TextureLoader().load('/img/pita.jpg', function () {
+        ring.classList.add('webgl-ready');
+      });
+
+      var vert = [
+        'varying vec2 vUv;',
+        'void main() {',
+        '  vUv = uv;',
+        '  gl_Position = vec4(position.xy, 0.0, 1.0);',
+        '}'
+      ].join('\n');
+
+      /*
+       * Animated newspaper halftone shader.
+       * Each grid cell samples the photo and derives a dot radius from
+       * luminance (dark pixel -> large dot, bright pixel -> small dot).
+       * A slow sine wave across Y and X makes the dots breathe gently.
+       */
+      var frag = [
+        'precision mediump float;',
+        'uniform sampler2D uTex;',
+        'uniform float     uTime;',
+        'varying vec2      vUv;',
+        'void main() {',
+        '  float cells  = 72.0;',
+        '  vec2  id     = floor(vUv * cells);',
+        '  vec2  center = (id + 0.5) / cells;',
+        '  vec4  col    = texture2D(uTex, center);',
+        '  float lum    = dot(col.rgb, vec3(0.299, 0.587, 0.114));',
+        '  float wave   = sin(uTime * 0.75 + center.y * 20.0 + center.x * 10.0) * 0.022;',
+        '  float aLum   = clamp(lum + wave, 0.0, 1.0);',
+        '  float maxR   = 0.50 / cells;',
+        '  float r      = maxR * (1.0 - aLum * 0.88 + 0.06);',
+        '  float d      = length(vUv - center);',
+        '  float aa     = 0.004;',
+        '  float mask   = smoothstep(r + aa, r - aa, d);',
+        '  float sr     = min(col.r*0.393 + col.g*0.769 + col.b*0.189, 1.0);',
+        '  float sg     = min(col.r*0.349 + col.g*0.686 + col.b*0.168, 1.0);',
+        '  float sb     = min(col.r*0.272 + col.g*0.534 + col.b*0.131, 1.0);',
+        '  vec3  ink    = mix(col.rgb, vec3(sr, sg, sb), 0.72);',
+        '  gl_FragColor = vec4(ink, mask);',
+        '}'
+      ].join('\n');
+
+      var mat = new THREE.ShaderMaterial({
+        uniforms:       { uTex: { value: texture }, uTime: { value: 0.0 } },
+        vertexShader:   vert,
+        fragmentShader: frag,
+        transparent:    true
+      });
+
+      scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat));
+
+      (function loop(t) {
+        requestAnimationFrame(loop);
+        mat.uniforms.uTime.value = t * 0.001;
+        renderer.render(scene, camera);
+      })(0);
+    }
+
+    /* Wait for the deferred Three.js script before initialising */
+    var threeScript = document.querySelector('script[src*="three"]');
+    if (threeScript) {
+      threeScript.addEventListener('load', initPortrait);
+    }
+  </script>
+
 </body>
 </html>
