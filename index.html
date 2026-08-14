@@ -219,6 +219,7 @@
       border: 1.5px solid var(--rule-strong);
       box-shadow: 0 2px 24px rgba(0,0,0,.10);
       transition: border-color .4s var(--ease);
+      cursor: pointer;
     }
     #portrait-canvas { display: block; }
     .portrait-fallback {
@@ -846,7 +847,7 @@
       var CSS   = ring.offsetWidth || 184;
       var DPR   = Math.min(window.devicePixelRatio || 1, 2);
       var SIZE  = Math.round(CSS * DPR);
-      var CELLS = 80;               // halftone grid resolution
+      var CELLS = 80;
       var CELL  = SIZE / CELLS;
 
       canvas.width  = SIZE;
@@ -854,16 +855,38 @@
       canvas.style.width  = CSS + 'px';
       canvas.style.height = CSS + 'px';
 
+      /* rt: reveal progress — 0 = halftone/sepia, 1 = original photo */
+      var isHover = false;
+      var rt = 0;
+      ring.addEventListener('mouseenter', function () { isHover = true; });
+      ring.addEventListener('mouseleave', function () { isHover = false; });
+      ring.addEventListener('touchstart',  function () { isHover = !isHover; }, { passive: true });
+
       var img = new Image();
       img.onload = function () {
-        /* Downsample the photo to the grid resolution once */
         var off = document.createElement('canvas');
         off.width = off.height = CELLS;
         var oc = off.getContext('2d');
         oc.drawImage(img, 0, 0, CELLS, CELLS);
         var px = oc.getImageData(0, 0, CELLS, CELLS).data;
 
-        ring.classList.add('webgl-ready'); /* fade out the static fallback */
+        /* Pre-compute sepia and original colors per cell (avoids per-frame math) */
+        var n = CELLS * CELLS;
+        var orig  = new Uint8Array(n * 3);
+        var sepia = new Uint8Array(n * 3);
+        for (var k = 0; k < n; k++) {
+          var b4 = k << 2;
+          var r = px[b4], g = px[b4 + 1], b = px[b4 + 2];
+          orig[k*3] = r;  orig[k*3+1] = g;  orig[k*3+2] = b;
+          var sr = Math.min(r*0.393 + g*0.769 + b*0.189, 255) | 0;
+          var sg = Math.min(r*0.349 + g*0.686 + b*0.168, 255) | 0;
+          var sb = Math.min(r*0.272 + g*0.534 + b*0.131, 255) | 0;
+          sepia[k*3]   = (r*0.28 + sr*0.72) | 0;
+          sepia[k*3+1] = (g*0.28 + sg*0.72) | 0;
+          sepia[k*3+2] = (b*0.28 + sb*0.72) | 0;
+        }
+
+        ring.classList.add('webgl-ready');
 
         var t = 0;
         (function draw() {
@@ -871,26 +894,27 @@
           ctx.clearRect(0, 0, SIZE, SIZE);
           t += 0.016;
 
+          /* Ease rt toward hover target */
+          rt += ((isHover ? 1 : 0) - rt) * 0.08;
+
           for (var row = 0; row < CELLS; row++) {
             for (var col = 0; col < CELLS; col++) {
-              var i = (row * CELLS + col) << 2;
-              var r = px[i], g = px[i + 1], b = px[i + 2];
+              var k  = row * CELLS + col;
+              var c3 = k * 3;
 
-              /* luminance */
-              var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+              /* Interpolate sepia → original color */
+              var fr = (sepia[c3]   + (orig[c3]   - sepia[c3])   * rt) | 0;
+              var fg = (sepia[c3+1] + (orig[c3+1] - sepia[c3+1]) * rt) | 0;
+              var fb = (sepia[c3+2] + (orig[c3+2] - sepia[c3+2]) * rt) | 0;
 
-              /* sepia blend */
-              var sr = Math.min(r * 0.393 + g * 0.769 + b * 0.189, 255) | 0;
-              var sg = Math.min(r * 0.349 + g * 0.686 + b * 0.168, 255) | 0;
-              var sb = Math.min(r * 0.272 + g * 0.534 + b * 0.131, 255) | 0;
-              var fr = (r * 0.28 + sr * 0.72) | 0;
-              var fg = (g * 0.28 + sg * 0.72) | 0;
-              var fb = (b * 0.28 + sb * 0.72) | 0;
+              /* Luminance for dot sizing */
+              var lum = (0.299*orig[c3] + 0.587*orig[c3+1] + 0.114*orig[c3+2]) / 255;
 
-              /* breathing wave: dark areas = large dots, bright = small */
-              var wave   = Math.sin(t * 0.75 + (row / CELLS) * 20 + (col / CELLS) * 10) * 0.022;
-              var aLum   = Math.max(0, Math.min(1, lum + wave));
-              var radius = Math.max(0.5, CELL * 0.5 * (1 - aLum * 0.88 + 0.06));
+              /* Breathing wave fades out as reveal progresses */
+              var wave  = Math.sin(t*0.75 + (row/CELLS)*20 + (col/CELLS)*10) * 0.022 * (1 - rt);
+              var aLum  = Math.max(0, Math.min(1, lum + wave));
+              var htR   = CELL * 0.5 * (1 - aLum * 0.88 + 0.06); /* halftone radius */
+              var radius = Math.max(0.5, htR + (CELL * 0.62 - htR) * rt); /* blooms to fill cell */
 
               ctx.beginPath();
               ctx.arc((col + 0.5) * CELL, (row + 0.5) * CELL, radius, 0, 6.2832);
